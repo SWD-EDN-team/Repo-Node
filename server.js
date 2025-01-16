@@ -1,13 +1,20 @@
+require("dotenv").config();
 const express = require("express");
-const path = require("path");
 const app = express();
+const configViewEngine = require("./src/config/viewEngine");
 
-app.use(express.json());
+const port = process.env.PORT || 8080;
+const hostname = process.env.HOST_NAME || "localhost";
+
+// config template engine
+configViewEngine(app);
 
 app.get("/", (req, res) => {
-  res.send("ĐÃ STARTINGs");
+  res.render("sample");
 });
 
-app.listen(3000, async () => {
-  console.log("App listening on http://localhost:3000");
+// khái báo routers
+
+app.listen(port, hostname, () => {
+  console.log(`Example app listening on port ${port}`);
 });
