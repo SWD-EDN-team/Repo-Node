@@ -4,12 +4,12 @@ import {
   getAddressbyId,
   createAddress,
   updateAddress,
-  deleteAddress
+  deleteAddress,
 } from "../controllers/addressController.js";
 
 const router = express.Router();
 
-router.get("/",getAddress);
+router.get("/", getAddress);
 router.get("/:id", getAddressbyId);
 router.post("/", createAddress);
 router.put("/:id", updateAddress);

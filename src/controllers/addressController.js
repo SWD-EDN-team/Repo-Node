@@ -26,23 +26,26 @@ export const createAddress = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-}
+};
 export const updateAddress = async (req, res) => {
   try {
-    const updatedAddress = await Address.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedAddress = await Address.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     if (!updatedAddress) res.status(404).json({ message: "Address not found" });
     res.status(200).json(updatedAddress);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-}
+};
 export const deleteAddress = async (req, res) => {
   try {
     const deletedAddress = await Address.findByIdAndDelete(req.params.id);
     if (!deletedAddress) res.status(404).json({ message: "Address not found" });
-    res.status(200).json({message: "Address deleted successfull" });
+    res.status(200).json({ message: "Address deleted successfull" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
-
+};

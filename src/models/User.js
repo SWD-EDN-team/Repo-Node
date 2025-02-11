@@ -1,31 +1,32 @@
-import mongoose,{Schema} from 'mongoose';
+import mongoose, { Schema } from "mongoose";
 
-const userSchema = new Schema({
-    email :{
+const userSchema = new Schema(
+  {
+    email: {
       type: String,
       required: true,
       unique: true,
     },
-    password:{
+    password: {
       type: String,
       required: true,
       minLenght: 6,
       maxlenght: 30,
     },
-    name:{
+    name: {
       type: String,
       required: true,
-      minLenght:3,
-      maxlenght:30,
+      minLenght: 3,
+      maxlenght: 30,
     },
-    role:{
+    role: {
       type: String,
-      enum: ['admin', 'user'],
-      default: 'user'
+      enum: ["admin", "user"],
+      default: "user",
     },
-    avatar:{
+    avatar: {
       type: String,
-      default: '../upload/avatar.jpg',
+      default: "../upload/avatar.jpg",
     },
     refreshToken: { type: String },
     dateOfBirth: {
@@ -33,24 +34,28 @@ const userSchema = new Schema({
     },
     gender: {
       type: String,
-      enum: ['male', 'female', 'other'],
-      default:'male',
+      enum: ["male", "female", "other"],
+      default: "male",
     },
     phoneNumber: {
       type: String,
-      match: /^\+\d{1,3}\s\(\d{3}\)\s\d{3}-\d{4}$/
+      match: /^\+\d{1,3}\s\(\d{3}\)\s\d{3}-\d{4}$/,
     },
     address: {
-       type: Schema.Types.ObjectId, ref: "Address" 
+      type: Schema.Types.ObjectId,
+      ref: "Address",
     },
     voucher: {
-       type: Schema.Types.ObjectId, ref: "Voucher"
+      type: Schema.Types.ObjectId,
+      ref: "Voucher",
     },
     status: {
       type: String,
-      enum: ['active', 'inactive', 'deleted'],
-      default: 'active'
-    }
-},{timestamps: true,versionKey: false })
+      enum: ["active", "inactive", "deleted"],
+      default: "active",
+    },
+  },
+  { timestamps: true, versionKey: false }
+);
 
 export default mongoose.model("User", userSchema);
