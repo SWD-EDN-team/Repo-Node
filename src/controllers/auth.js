@@ -204,14 +204,14 @@ export const getAll = async (req, res) => {
 
 export const getByEmail = async (req, res) => {
   const { email } = await req.body;
-  const { error } = await emailSchema.validate(req.body, {
+  const { error } = emailSchema.validate(req.body, {
     abortEarly: false,
   });
   if (error) {
     const message = error.details.map((err) => err.message);
     return res.status(StatusCode.BAD_REQUEST).json({ message });
   }
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).populate();;
   if (!user) {
     return res
       .status(StatusCode.NOT_FOUND)
@@ -321,3 +321,30 @@ export const logout = async (req, res) => {
     return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: "An error occurred during logout" });
   }
 };
+export const updateUser = async (req,res) => {
+  const { email } = req.params;
+  const user =  await User.findOne({email})
+  if (!user) {
+    return res.status(StatusCode.NOT_FOUND).json({ message: "User not found" });
+  }
+  const { error } = singupSchema.validate(req.body, {
+    abortEarly: false,
+  });
+
+  if (error) {
+    const message = error.details.map((err) => err.message);
+    return res.status(StatusCode.BAD_REQUEST).json({ message });
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true });
+
+  if (!updatedUser) {
+    return res.status(StatusCode.NOT_FOUND).json({ message: "User not found" });
+  }
+
+  res.json({ user: updatedUser });
+  if (error) {
+    const message = error.details.map((err) => err.message);
+    return res.status(StatusCode.BAD_REQUEST).json({ message });
+  }
+}
