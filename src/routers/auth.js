@@ -20,6 +20,6 @@ router.get("/auth/getByEmail", admin, getByEmail);
 router.get("/auth/getCurrentUser", getCurrentUser);
 router.post("/auth/refreshToken", refreshToken);
 router.post("/auth/logout", logout);
-router.put("/auth/update/:email", user, updateUser);
+router.put("/auth/update", user, updateUser);
 
 export default router;

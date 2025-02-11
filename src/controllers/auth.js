@@ -56,8 +56,8 @@ const emailSchema = Joi.object({
 
 export const signup = async (req, res) => {
   try {
-    const { email, password, name, avatar, confirmPassword } = await req.body;//lấy dữ liệu
-    const { error } =  singupSchema.validate(req.body, {
+    const { email, password, name, avatar, confirmPassword } = await req.body; //lấy dữ liệu
+    const { error } = singupSchema.validate(req.body, {
       abortEarly: false,
     });
     if (error) {
@@ -91,7 +91,6 @@ export const signup = async (req, res) => {
       { id: newUser._id },
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: process.env.TIME_REFRESHTOKEN_EXPIRATION }
-
     );
 
     const hashedRefreshToken = await bcryptjs.hash(refreshToken, 10);
@@ -139,12 +138,12 @@ export const signin = async (req, res) => {
   const accessToken = jwt.sign(
     { id: user._id, email: user.email, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn:  process.env.TIME_TOKEN_EXPIRATION }
+    { expiresIn: process.env.TIME_TOKEN_EXPIRATION }
   );
   const refreshToken = jwt.sign(
     { id: user._id },
     process.env.JWT_REFRESH_SECRET,
-    { expiresIn:  process.env.TIME_REFRESHTOKEN_EXPIRATION }
+    { expiresIn: process.env.TIME_REFRESHTOKEN_EXPIRATION }
   );
 
   const hashedRefreshToken = await bcryptjs.hash(refreshToken, 10);
@@ -165,7 +164,7 @@ export const getAll = async (req, res) => {
   try {
     // Lấy token từ header Authorization
     const token = req.headers.authorization?.split(" ")[1];
-    console.log("token",token);
+    console.log("token", token);
 
     if (!token) {
       return res.status(StatusCode.UNAUTHORIZED).json({
@@ -176,7 +175,7 @@ export const getAll = async (req, res) => {
     // Giải mã token để lấy thông tin người dùng
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log("decoded",decoded);
+    console.log("decoded", decoded);
 
     // Lấy tất cả người dùng từ cơ sở dữ liệu
     const users = await User.find();
@@ -211,7 +210,7 @@ export const getByEmail = async (req, res) => {
     const message = error.details.map((err) => err.message);
     return res.status(StatusCode.BAD_REQUEST).json({ message });
   }
-  const user = await User.findOne({ email }).populate();;
+  const user = await User.findOne({ email }).populate();
   if (!user) {
     return res
       .status(StatusCode.NOT_FOUND)
@@ -257,23 +256,28 @@ export const refreshToken = async (req, res) => {
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
     const user = await User.findById(decoded.id);
-    console.log("user,decoded",user,decoded);
+    console.log("user,decoded", user, decoded);
 
     console.log(!user || !user.refreshToken);
-    
-    if (!user || !user.refreshToken ) {
-      return res.status(403).json({ message: "Invalid or expired refresh token" });
+
+    if (!user || !user.refreshToken) {
+      return res
+        .status(403)
+        .json({ message: "Invalid or expired refresh token" });
     }
 
     // Tạo accessToken mới
     const newAccessToken = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn:  process.env.TIME_REFRESHTOKEN_EXPIRATION }
+      { expiresIn: process.env.TIME_REFRESHTOKEN_EXPIRATION }
     );
 
     // Tạo refreshToken mới nếu cần
-    const newRefreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET);
+    const newRefreshToken = jwt.sign(
+      { id: user._id },
+      process.env.JWT_REFRESH_SECRET
+    );
 
     user.refreshToken = newRefreshToken;
     await user.save();
@@ -288,24 +292,27 @@ export const refreshToken = async (req, res) => {
 export const logout = async (req, res) => {
   // Lấy token từ header Authorization
   const token = req.headers.authorization?.split(" ")[1];
-  
+
   if (!token) {
-    return res.status(StatusCode.BAD_REQUEST).json({ message: "No token provided" });
+    return res
+      .status(StatusCode.BAD_REQUEST)
+      .json({ message: "No token provided" });
   }
 
   try {
-
     // Giải mã token để lấy userId
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("decoded",decoded);
-    
+    console.log("decoded", decoded);
+
     const userId = decoded.id;
 
     // Lấy thông tin người dùng từ cơ sở dữ liệu
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(StatusCode.NOT_FOUND).json({ message: "User not found" });
+      return res
+        .status(StatusCode.NOT_FOUND)
+        .json({ message: "User not found" });
     }
 
     // Xóa refresh token trong cơ sở dữ liệu (có thể lưu trữ refresh token trong cơ sở dữ liệu)
@@ -318,33 +325,58 @@ export const logout = async (req, res) => {
     res.status(StatusCode.OK).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Error during logout:", error);
-    return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: "An error occurred during logout" });
+    return res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "An error occurred during logout" });
   }
 };
-export const updateUser = async (req,res) => {
-  const { email } = req.params;
-  const user =  await User.findOne({email})
-  if (!user) {
-    return res.status(StatusCode.NOT_FOUND).json({ message: "User not found" });
-  }
-  const { error } = singupSchema.validate(req.body, {
-    abortEarly: false,
-  });
+export const updateUser = async (req, res) => {
+  try {
 
-  if (error) {
-    const message = error.details.map((err) => err.message);
-    return res.status(StatusCode.BAD_REQUEST).json({ message });
-  }
+    const token = req.headers.authorization?.split(" ")[1]; // Lấy token từ header
 
-  const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true });
+    if (!token) {
+      return res
+        .status(StatusCode.UNAUTHORIZED)
+        .json({ message: "No token provided" });
+    }
+  
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user) {
+      return res
+        .status(StatusCode.NOT_FOUND)
+        .json({ message: "User not found" });
+    }
+    const { error } = singupSchema.validate(req.body, {
+      abortEarly: false,
+    });
 
-  if (!updatedUser) {
-    return res.status(StatusCode.NOT_FOUND).json({ message: "User not found" });
-  }
+    if (error) {
+      const message = error.details.map((err) => err.message);
+      return res.status(StatusCode.BAD_REQUEST).json({ message });
+    }
 
-  res.json({ user: updatedUser });
-  if (error) {
-    const message = error.details.map((err) => err.message);
-    return res.status(StatusCode.BAD_REQUEST).json({ message });
+    const updatedUser = await User.findByIdAndUpdate(user._id, req.body, {
+      new: true,
+    });
+
+    if (!updatedUser) {
+      return res
+        .status(StatusCode.NOT_FOUND)
+        .json({ message: "User not found" });
+    }
+
+    res.json({ user: updatedUser });
+    if (error) {
+      const message = error.details.map((err) => err.message);
+      return res.status(StatusCode.BAD_REQUEST).json({ message });
+    }
+  } catch (error) {
+    console.error("Error during update user:", error);
+    return res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "An error occurred during update user" });
   }
-}
+};
