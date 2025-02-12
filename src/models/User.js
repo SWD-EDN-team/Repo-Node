@@ -41,7 +41,7 @@ const userSchema = new Schema({
       match: /^\+\d{1,3}\s\(\d{3}\)\s\d{3}-\d{4}$/
     },
     address: {
-       type: Schema.Types.ObjectId, ref: "Address" 
+       type: [Schema.Types.ObjectId], ref: "Address" 
     },
     voucher: {
        type: Schema.Types.ObjectId, ref: "Voucher"
