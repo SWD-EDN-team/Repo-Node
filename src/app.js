@@ -7,6 +7,7 @@ import addressRouter from "./routers/addressRouter.js";
 import voucherRouter from "./routers/voucherRouter.js";
 import configViewEngine from "./config/viewEngine.js";
 import connection from "./config/db.js";
+import rootRouter from "./routers/index.routers.js";
 
 const app = express();
 dotenv.config();
@@ -22,17 +23,20 @@ const hostname = process.env.HOST_NAME || "localhost";
 // app.use(fileUpload());
 
 // config template engine
-configViewEngine(app);
+// app.use(cors());
+// configViewEngine(app);
+
+app.get("/", (req, res) => {
+  res.json({ success: true, message: "Welcome to the" });
+});
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", (req, res) => {
-  return res.send("Hello, world!");
-});
+app.use("/api/v1", routerAuth);
+app.use("/api/v1/address", addressRouter);
+app.use("/api/v1/voucher", voucherRouter);
 
-// connect db
-// connectDB(process.env.DB_URI)(
-// connectDB(process.env.DB_URI)
+app.use("/v1/api", rootRouter);
 
 (async () => {
   try {
@@ -48,12 +52,8 @@ app.use("/", (req, res) => {
 })();
 
 // routes
-app.use("/api/v1", routerAuth);
-app.use("/api/v1/address", addressRouter);
-app.use("/api/v1/voucher", voucherRouter);
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
-);
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () =>
+//   console.log(`Server running on http://localhost:${PORT}`)
+// );

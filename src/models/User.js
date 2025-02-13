@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const userSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -10,14 +10,14 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-      minLenght: 6,
-      maxlenght: 30,
+      minlength: 6,
+      minlength: 30,
     },
     name: {
       type: String,
       required: true,
-      minLenght: 3,
-      maxlenght: 30,
+      minlength: 3,
+      minlength: 30,
     },
     role: {
       type: String,
@@ -58,4 +58,8 @@ const userSchema = new Schema(
   { timestamps: true, versionKey: false }
 );
 
-export default mongoose.model("User", userSchema);
+const User = mongoose.model("user", userSchema);
+
+export default User;
+
+//ok

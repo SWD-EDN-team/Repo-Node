@@ -1,6 +1,6 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
-import User from "../models/User.js";
+import User from "../models/user.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
