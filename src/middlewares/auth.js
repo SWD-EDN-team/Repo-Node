@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import StatusCode from "http-status-codes";
-import User from "../models/user.js";
+import User from "../models/User.js";
 
 export const admin = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1]; // Lấy token từ header

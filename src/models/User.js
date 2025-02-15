@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema(
       match: /^\+\d{1,3}\s\(\d{3}\)\s\d{3}-\d{4}$/,
     },
     address: {
-      type: Schema.Types.ObjectId,
+      type: [Schema.Types.ObjectId],
       ref: "Address",
     },
     voucher: {

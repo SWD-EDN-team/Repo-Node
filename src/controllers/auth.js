@@ -1,6 +1,6 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
-import User from "../models/user.js";
+import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -117,7 +117,7 @@ export const signin = async (req, res) => {
   const { error } = await loginSchema.validate(req.body, {
     abortEarly: false,
   });
-  // sử lí nếu gặp lỗi
+  // xử lí nếu gặp lỗi
   if (error) {
     const message = error.details.map((err) => err.message);
     return res.status(StatusCode.BAD_REQUEST).json({ message });

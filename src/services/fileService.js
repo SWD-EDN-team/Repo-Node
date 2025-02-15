@@ -1,7 +1,7 @@
 import path from "path";
 
 export const uploadSingleFile = async (fileObject) => {
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+
   console.log("__dirname1:", __dirname);
 
   let uploadPath = path.resolve(__dirname, "../public/images/upload/");
@@ -33,7 +33,6 @@ export const uploadSingleFile = async (fileObject) => {
 
 export const uploadMultipleFiles = async (filesArr) => {
   try {
-    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
     let uploadPath = path.resolve(__dirname, "../public/images/upload/");
     let resultArr = [];
     let countSuccess = 0;
