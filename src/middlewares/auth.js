@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import StatusCode from "http-status-codes";
-import User from "../models/User.js";
+import User from "../models/user.js";
 
 export const admin = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1]; // Lấy token từ header
@@ -54,7 +54,7 @@ export const user = async (req, res, next) => {
       });
     }
 
-    req.user = decoded; // Gắn thông tin user vào req để sử dụng sau
+    req.user = decoded;
     next();
   } catch (err) {
     return res.status(StatusCode.FORBIDDEN).json({ message: "Invalid token" });

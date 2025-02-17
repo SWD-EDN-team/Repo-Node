@@ -1,6 +1,6 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
-import User from "../models/User.js";
+import User from "../models/user.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -377,5 +377,14 @@ export const updateUser = async (req, res) => {
     return res
       .status(StatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: "An error occurred during update user" });
+  }
+};
+
+export const verify_code = async (req, res) => {
+  try {
+    res.status(200).send("verify_code");
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send("An error occurred while updating the user.");
   }
 };

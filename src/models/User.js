@@ -11,13 +11,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
-      minlength: 30,
+      // maxlength: 6,
     },
     name: {
       type: String,
       required: true,
       minlength: 3,
-      minlength: 30,
+      maxlength: 30,
     },
     role: {
       type: String,
@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
     },
     phoneNumber: {
       type: String,
-      match: /^\+\d{1,3}\s\(\d{3}\)\s\d{3}-\d{4}$/,
+      match: /^\+?\d{1,3}?\s?(\(\d{1,4}\))?\s?\d{3,4}-?\d{4}$/,
     },
     address: {
       type: [Schema.Types.ObjectId],
@@ -54,12 +54,13 @@ const userSchema = new mongoose.Schema(
       enum: ["active", "inactive", "deleted"],
       default: "active",
     },
+    verified: {
+      type: Boolean,
+      default: false,
+      require: true,
+    },
   },
   { timestamps: true, versionKey: false }
 );
 
-const User = mongoose.model("user", userSchema);
-
-export default User;
-
-//ok
+export default mongoose.models.User || mongoose.model("User", userSchema);

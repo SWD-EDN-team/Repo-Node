@@ -2,10 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
-import routerAuth from "./routers/auth.js";
+import routerAuth from "./routers/authRouter.js";
 import addressRouter from "./routers/addressRouter.js";
 import voucherRouter from "./routers/voucherRouter.js";
-import configViewEngine from "./config/viewEngine.js";
 import connection from "./config/db.js";
 import rootRouter from "./routers/index.routers.js";
 
@@ -24,7 +23,6 @@ const hostname = process.env.HOST_NAME || "localhost";
 
 // config template engine
 // app.use(cors());
-// configViewEngine(app);
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Welcome to the" });
