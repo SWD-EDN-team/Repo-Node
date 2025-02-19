@@ -300,7 +300,6 @@ export const logout = async (req, res) => {
   }
 
   try {
-    // Giải mã token để lấy userId
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("decoded", decoded);
 
