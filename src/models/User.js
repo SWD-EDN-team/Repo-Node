@@ -1,5 +1,6 @@
-import mongoose, { Schema } from "mongoose";
-
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+//ss
 const userSchema = new mongoose.Schema(
   {
     email: {
