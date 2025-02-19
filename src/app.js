@@ -7,13 +7,15 @@ import addressRouter from "./routers/addressRouter.js";
 import voucherRouter from "./routers/voucherRouter.js";
 import connection from "./config/db.js";
 import rootRouter from "./routers/index.routers.js";
-
+import bodyParser from "body-parser";
 const app = express();
 dotenv.config();
 
+var jsonParser = bodyParser.json();
+
 // middleware
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
 app.use(morgan("tiny"));
 
 const port = process.env.PORT || 8080;
@@ -22,7 +24,11 @@ const hostname = process.env.HOST_NAME || "localhost";
 // app.use(fileUpload());
 
 // config template engine
-// app.use(cors());
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+app.use(jsonParser);
+app.use(urlencodedParser);
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Welcome to the" });

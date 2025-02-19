@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import ForgotPassword from "../models/forgotPassword.js";
 import bcrypt from "bcrypt";
 import {
   generateOpt,
@@ -44,6 +45,7 @@ export const createUserApi = async (req, res) => {
     let results = await createUserService(data);
     return res.status(200).json({
       errorCode: 0,
+      message: "",
       data: results,
     });
   } else {
@@ -56,23 +58,28 @@ export const createUserApi = async (req, res) => {
 };
 
 export const verifyEmail = async (req, res) => {
-  const { userId, otp } = req.body;
-  if (!userId || !otp.trim())
-    return sendError(res, "Invalid request , missing parameters!");
+  const { email, otp } = req.body;
 
-  if (!isValidObjectId(userId)) return sendError(res, "Invalid user Id!");
+  console.log("Received email:", email);
+  console.log("Received otp:", otp);
 
-  const user = await User.findById(userId);
-  if (!user) return sendError(res, "Sorry , user not found!");
+  if (!email || !otp.trim())
+    return sendError(res, "Invalid request, missing parameters!");
+
+  const user = await User.findOne({ email });
+  if (!user) return sendError(res, "Sorry, user not found!");
 
   if (user.verified) return sendError(res, "This account is already verified");
 
   const token = await VerificationToken.findOne({ owner: user._id });
+  if (!token) return sendError(res, "Sorry, verification token not found");
 
-  if (!token) return sendError(res, "Sorry , user not found");
+  console.log("Verification token:", token);
 
   const isMatched = await token.compareToken(otp);
-  if (!isMatched) return sendError(res, "PLEASE provide a valied token!");
+  console.log("Token comparison result:", isMatched);
+
+  if (!isMatched) return sendError(res, "PLEASE provide a valid token!");
 
   user.verified = true;
 
@@ -82,15 +89,26 @@ export const verifyEmail = async (req, res) => {
 
   mailTransport({
     email: user.email,
-    subject: "MÃ OTP Verification",
+    subject: "Email Verification",
     html: generateEmailTemplate(
       "Email verified Successfully",
       "Thanks for connecting with us"
     ),
   });
+
   res.json({
     success: true,
-    message: "Your email verified successfully",
+    message: "Your email has been verified successfully",
     user: { name: user.name, email: user.email, id: user._id },
   });
+};
+
+export const reset_Password = async (req, res) => {
+  let { userId, resetPassword, newPassWord } = req.body;
+
+  // ForgotPassword.find({ userId }).then((result) => {
+  //    if(result.length > 0) {
+
+  //    })
+  // });
 };

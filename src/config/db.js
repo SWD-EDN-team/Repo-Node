@@ -43,16 +43,21 @@ const dbState = [
 ];
 
 const connection = async () => {
-  console.log("ckeconnection");
+  console.log("Connecting to MongoDB...");
   const options = {
     user: process.env.DB_USER,
     pass: process.env.DB_PASSWORD,
     dbName: process.env.DB_NAME,
   };
-  await mongoose.connect(process.env.DB_HOST, options);
-  const state = Number(mongoose.connection.readyState);
-  console.log(dbState.find((f) => f.value == state).label, "to db");
-  console.log("connection successfully");
+
+  try {
+    await mongoose.connect(process.env.DB_HOST, options);
+    const state = Number(mongoose.connection.readyState);
+    console.log(dbState.find((f) => f.value === state).label, "to db");
+    console.log("Connection successfully");
+  } catch (err) {
+    console.error("Failed to connect to MongoDB:", err);
+  }
 };
 
 export default connection;
