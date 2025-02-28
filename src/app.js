@@ -8,6 +8,7 @@ import voucherRouter from "./routers/voucherRouter.js";
 import connection from "./config/db.js";
 import rootRouter from "./routers/index.routers.js";
 import bodyParser from "body-parser";
+import configViewEngine from "./config/viewEngine.js";
 const app = express();
 dotenv.config();
 
@@ -15,7 +16,7 @@ var jsonParser = bodyParser.json();
 
 // middleware
 app.use(express.json());
-// app.use(cors());
+app.use(cors());
 app.use(morgan("tiny"));
 
 const port = process.env.PORT || 8080;
@@ -24,14 +25,24 @@ const hostname = process.env.HOST_NAME || "localhost";
 // app.use(fileUpload());
 
 // config template engine
+configViewEngine(app);
+
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(jsonParser);
 app.use(urlencodedParser);
 app.use(cors());
 
+app.use(
+  cors({
+    origin: "http://192.168.1.17:8081",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.get("/", (req, res) => {
-  res.json({ success: true, message: "Welcome to the" });
+  res.render("homePage.ejs");
 });
 
 app.use(express.urlencoded({ extended: true }));
@@ -54,10 +65,3 @@ app.use("/v1/api", rootRouter);
     console.log("Failed connecting to server", error);
   }
 })();
-
-// routes
-
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () =>
-//   console.log(`Server running on http://localhost:${PORT}`)
-// );
