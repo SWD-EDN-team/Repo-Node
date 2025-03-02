@@ -1,0 +1,14 @@
+<div class="orders-container">
+    <div class="flex row" style="justify-content: space-between;">
+        <h1>My Orders</h1>
+        <div>
+          <input type="text" placeholder="Search">
+          <button class="filter-btn">Filter</button>
+        </div>
+    </div>
+  
+
+    {{#each orders}}
+    {{> order-item this}}
+    {{/each}}
+</div>

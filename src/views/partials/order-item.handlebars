@@ -1,0 +1,43 @@
+<div class="order-item flex row" style="align-items: center;">
+  <div class="flex col" style="margin-right : 120px">
+    <div class="flex row ju-content" style="align-items: center; gap : 10px">
+      <img
+        style="width: 60px; height : 60px"
+        src="/assets/images/dress.png"
+        alt="{{name}}"
+      />
+      <div class="item-info">
+        <h3>{{name}}</h3>
+        <p>Size: {{size}}</p>
+        <p>Qty: {{qty}}</p>
+      </div>
+    </div>
+    <div class="item-status {{statusClass}}">
+     <button
+  style="padding: 5px 6px; border-radius: 10px; 
+    background-color: {{#if (eq status 'Delivered') }}#3CD139{{else}}#E3B231{{/if}}; 
+    color: white; margin-right: 5px;">
+  {{status}}
+   </button>
+
+
+      <p style="color: black;">Your product has been {{status}}</p>
+    </div>
+  </div>
+  <div class="item-price" style="margin-right : 60px">
+    <strong>${{price}}</strong>
+  </div>
+  <div class="order-actions row ">
+  <button class="view-btn" style="padding: 8px 16px; border-radius: 10px; border: 2px solid black;">
+  View Order
+</button>
+   <div >
+     {{#if showReview}}
+      <button class="review-btn " style="padding: 10px 6px; border-radius: 10px;">Write A Review</button>
+    {{/if}}
+    {{#if showCancel}}
+      <button class="cancel-btn" style="padding: 10px 12px;  border-radius: 10px;">Cancel Order</button>
+    {{/if}}
+   </div>
+  </div>
+</div>
