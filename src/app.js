@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from 'cors';
@@ -13,19 +13,17 @@ import CartRoutter from './routers/CartRouter.js';
 import WishlistRouter from './routers/WishlistRouter.js'
 import { connectDB } from './config/db.js';
 import { create } from "express-handlebars";
-import axios from "axios";
 import { fileURLToPath } from "url";
 import path from "path";
 
-
 const app = express();
-dotenv.config()
+dotenv.config();
 
 const hbs = create({
   helpers: {
-    eq:  (a, b) => a === b,
+    eq: (a, b) => a === b,
     ternary: (condition, value1, value2) => (condition ? value1 : value2),
-    inputdata: (value,newValue) => value(...newValue)
+    inputdata: (value, newValue) => value(...newValue),
   },
 });
 
@@ -37,13 +35,15 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "../src/public/")));
 console.log("Static files served from:", path.join(__dirname, "../src/public/"));
 
-// middleware
+// Middleware
 app.use(express.json());
 app.use(cors());
-app.use(morgan("tiny"))
+app.use(morgan("tiny"));
+
+// Cấu hình Handlebars
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "views")); // ✅ Đúng
 
 // connect db
 connectDB(process.env.DB_URI)
@@ -60,7 +60,7 @@ app.use('/api/v1/category',CategoryRouter)
 app.use('/api/v1/review',ReviewRouter)
 app.use('/api/v1/cart',CartRoutter)
 app.use('/api/v1/wishlist',WishlistRouter)
-app.use('/view', (req, res) =>{
+app.use('/', (req, res) =>{
   res.render('home/home')
 })
 
