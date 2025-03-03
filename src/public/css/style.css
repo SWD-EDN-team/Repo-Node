@@ -20,6 +20,10 @@ body {
     justify-content: center;
 }
 
+.dec {
+    text-decoration: none;
+    color: black;
+}
 
 .container {
     display: flex;
@@ -41,7 +45,7 @@ body {
 }
 
 .sidebar ul li.active {
-    background: black;
+    /* background: green; */
     color: white;
 }
 
