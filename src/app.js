@@ -11,6 +11,7 @@ import CategoryRouter from './routers/CategoryRouter.js';
 import ReviewRouter from './routers/ReviewRouter.js';
 import CartRoutter from './routers/CartRouter.js';
 import WishlistRouter from './routers/WishlistRouter.js'
+import PaymentMethodRouter from './routers/PaymentMethodRouter.js'
 import { connectDB } from './config/db.js';
 import { create } from "express-handlebars";
 import { fileURLToPath } from "url";
@@ -60,6 +61,7 @@ app.use('/api/v1/category',CategoryRouter)
 app.use('/api/v1/review',ReviewRouter)
 app.use('/api/v1/cart',CartRoutter)
 app.use('/api/v1/wishlist',WishlistRouter)
+app.use('/api/v1/paymentMethod',PaymentMethodRouter)
 app.use('/', (req, res) =>{
   res.render('home/home')
 })
