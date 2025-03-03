@@ -3,8 +3,14 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from 'cors';
 import routerAuth from './routers/auth.js'
-import addressRouter from './routers/addressRouter.js';
-import voucherRouter from './routers/voucherRouter.js'
+import addressRouter from './routers/AddressRouter.js';
+import voucherRouter from './routers/VoucherRouter.js';
+import SellerRouter from './routers/SellerRouter.js';
+import ProductRouter from './routers/ProductRouter.js';
+import CategoryRouter from './routers/CategoryRouter.js';
+import ReviewRouter from './routers/ReviewRouter.js';
+import CartRoutter from './routers/CartRouter.js';
+import WishlistRouter from './routers/WishlistRouter.js'
 import { connectDB } from './config/db.js';
 import { create } from "express-handlebars";
 import axios from "axios";
@@ -28,8 +34,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Khai báo thư mục chứa file tĩnh (CSS, JS, images)
-app.use(express.static(path.join(__dirname, "../public")));
-console.log("Static files served from:", path.join(__dirname, "../public"));
+app.use(express.static(path.join(__dirname, "../src/public/")));
+console.log("Static files served from:", path.join(__dirname, "../src/public/"));
 
 // middleware
 app.use(express.json());
@@ -43,14 +49,20 @@ app.set("views", path.join(__dirname, "views"));
 connectDB(process.env.DB_URI)
 // connectDB(process.env.DB_URI)
 
-app.use('/', (req, res) =>{
-  res.render('home/home')
-})
+
 // routes
 app.use('/api/v1',routerAuth)
 app.use('/api/v1/address',addressRouter)
 app.use('/api/v1/voucher',voucherRouter)
-
+app.use('/api/v1/seller',SellerRouter)
+app.use('/api/v1/product',ProductRouter)
+app.use('/api/v1/category',CategoryRouter)
+app.use('/api/v1/review',ReviewRouter)
+app.use('/api/v1/cart',CartRoutter)
+app.use('/api/v1/wishlist',WishlistRouter)
+app.use('/view', (req, res) =>{
+  res.render('home/home')
+})
 
 // Start Server
 const PORT = process.env.PORT || 5000;
