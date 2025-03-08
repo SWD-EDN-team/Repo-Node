@@ -19,11 +19,14 @@ import path from "path";
 
 const app = express();
 dotenv.config();
+dotenv.config();
 
 const hbs = create({
   helpers: {
     eq: (a, b) => a === b,
+    eq: (a, b) => a === b,
     ternary: (condition, value1, value2) => (condition ? value1 : value2),
+    inputdata: (value, newValue) => value(...newValue),
     inputdata: (value, newValue) => value(...newValue),
   },
 });
@@ -47,7 +50,7 @@ app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views")); // ✅ Đúng
 
 // connect db
-connectDB(process.env.DB_URI)
+connectDB(process.env.DB_URI);
 // connectDB(process.env.DB_URI)
 
 
