@@ -1,8 +1,9 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
-import User from "../models/user.js";
+import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Customer from "../models/Customer.js";
 
 const singupSchema = Joi.object({
   email: Joi.string().email().required().messages({
@@ -74,7 +75,7 @@ export const signup = async (req, res) => {
     }
 
     const hashPassword = await bcryptjs.hash(password, 10);
-    const role = (await User.countDocuments({})) === 0 ? "admin" : "user";
+    const role = (await User.countDocuments({})) === 0 ? "admin" : "customer";
 
     const newUser = await User.create({
       ...req.body,
@@ -82,6 +83,12 @@ export const signup = async (req, res) => {
       role,
     });
 
+    if (role === "customer") {
+      const newCustomer = await Customer.create({
+        customer_id: newUser._id,
+      });
+      await newCustomer.save();
+    }
     const accessToken = jwt.sign(
       { id: newUser._id, email: newUser.email, role: newUser.role },
       process.env.JWT_SECRET,
@@ -114,7 +121,7 @@ export const signup = async (req, res) => {
 
 export const signin = async (req, res) => {
   const { email, password } = await req.body;
-  const { error } = await loginSchema.validate(req.body, {
+  const { error } = loginSchema.validate(req.body, {
     abortEarly: false,
   });
   // xử lí nếu gặp lỗi

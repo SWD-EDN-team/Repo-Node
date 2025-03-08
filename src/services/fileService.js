@@ -1,7 +1,6 @@
 import path from "path";
 
 export const uploadSingleFile = async (fileObject) => {
-
   console.log("__dirname1:", __dirname);
 
   let uploadPath = path.resolve(__dirname, "../public/images/upload/");

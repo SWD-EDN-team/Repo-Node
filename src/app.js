@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
+
 import cors from "cors";
 import routerAuth from "./routers/authRouter.js";
 import connection from "./config/db.js";
@@ -9,6 +10,13 @@ import bodyParser from "body-parser";
 import configViewEngine from "./config/viewEngine.js";
 import addressRouter from "./routers/addressRouter.js";
 import voucherRouter from "./routers/voucherRouter.js";
+import SellerRouter from "./routers/SellerRouter.js";
+import ProductRouter from "./routers/ProductRouter.js";
+import CategoryRouter from "./routers/CategoryRouter.js";
+import ReviewRouter from "./routers/ReviewRouter.js";
+import CartRoutter from "./routers/CartRouter.js";
+import WishlistRouter from "./routers/WishlistRouter.js";
+import PaymentMethodRouter from "./routers/PaymentMethodRouter.js";
 import { create } from "express-handlebars";
 import { fileURLToPath } from "url";
 import path from "path";
@@ -18,31 +26,45 @@ dotenv.config();
 
 var jsonParser = bodyParser.json();
 
+const hbs = create({
+  helpers: {
+    eq: (a, b) => a === b,
+    ternary: (condition, value1, value2) => (condition ? value1 : value2),
+    inputdata: (value, newValue) => value(...newValue),
+  },
+});
+
 // Định nghĩa __dirname trong ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 console.log("__dirname>>>>>>>", __dirname);
 
-const hbs = create({
-  helpers: {
-    eq: (a, b) => a === b,
-    ternary: (condition, value1, value2) => (condition ? value1 : value2),
-  },
-});
-
 // Khai báo thư mục chứa file tĩnh (CSS, JS, images)
+
 app.use(express.static(path.join(__dirname, "./public")));
 
 console.log("Static files served from:", path.join(__dirname, "./public"));
 
-// middleware
+// app.use(express.static(path.join(__dirname, "../src/public/")));
+console.log(
+  "Static files served from:",
+  path.join(__dirname, "../src/public/")
+);
+
+// Middleware
 app.use(express.json());
 app.use(cors());
 app.use(morgan("tiny"));
+
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "../src/views"));
+
+// Cấu hình Handlebars
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
+app.set("views", path.join(__dirname, "views"));
 
 const port = process.env.PORT || 8080;
 const hostname = process.env.HOST_NAME || "localhost";
@@ -50,13 +72,10 @@ const hostname = process.env.HOST_NAME || "localhost";
 // config file upload
 // app.use(fileUpload());
 
-// configViewEngine(app);
-
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(jsonParser);
 app.use(urlencodedParser);
-app.use(cors());
 
 app.use(
   cors({
@@ -114,6 +133,22 @@ app.use("/api/v1/voucher", voucherRouter);
 
 app.use("/v1/api", rootRouter);
 
+// routes
+app.use("/api/v1", routerAuth);
+app.use("/api/v1/address", addressRouter);
+app.use("/api/v1/voucher", voucherRouter);
+app.use("/api/v1/seller", SellerRouter);
+app.use("/api/v1/product", ProductRouter);
+app.use("/api/v1/category", CategoryRouter);
+app.use("/api/v1/review", ReviewRouter);
+app.use("/api/v1/cart", CartRoutter);
+app.use("/api/v1/wishlist", WishlistRouter);
+app.use("/api/v1/paymentMethod", PaymentMethodRouter);
+
+app.use("/", (req, res) => {
+  res.render("home/home");
+});
+
 (async () => {
   try {
     await connection();
@@ -125,3 +160,9 @@ app.use("/v1/api", rootRouter);
     console.log("Failed connecting to server", error);
   }
 })();
+
+// // Start Server
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () =>
+//   console.log(`Server running on http://localhost:${PORT}`)
+// );

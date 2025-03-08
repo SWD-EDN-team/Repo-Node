@@ -1,21 +1,55 @@
-<aside class="sidebar">
-  <div class="flex row" style="gap :10px ; align-items: center; ">
-    <img
-      src="/assets/images/avt.png"
-      style="border-radius: 50%; width: 60px; height: 60px;"
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
     />
-    <div class="flex col" style="align-items: center;">
-      <h7 style=" margin-bottom : 5px">Hello</h7>
-      <span style="font-weight: bold; font-size:20px">JSON</span>
+  </head>
+  <body>
+    <div class="container my-4 d-flex" >
+      <aside
+        class="sidebar p-3 border rounded shadow-sm me-4"
+        style="width: 250px;"
+      >
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <img
+            src="/assets/images/avt.png"
+            class="rounded-circle"
+            style="width: 60px; height: 60px;"
+          />
+          <div class="text-center">
+            <h6 class="mb-1">Hello</h6>
+            <span class="fw-bold fs-5">JSON</span>
+          </div>
+        </div>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-decoration-none d-block py-2">Personal
+              Information</a></li>
+          <li class="active bg-light p-2 rounded"><a
+              href="#"
+              class="text-decoration-none"
+            >My Orders</a></li>
+          <li><a href="#" class="text-decoration-none d-block py-2">My Wishlists</a></li>
+          <li><a href="#" class="text-decoration-none d-block py-2">Manage
+              Addresses</a></li>
+          <li><a href="#" class="text-decoration-none d-block py-2">Saved Cards</a></li>
+          <li><a
+              href="#"
+              class="text-decoration-none d-block py-2"
+            >Notifications</a></li>
+          <li><a
+              href="#"
+              class="text-decoration-none d-block py-2"
+            >Settings</a></li>
+        </ul>
+      </aside>
     </div>
-  </div>
-  <ul>
-    <li><a href="#" class="dec">Personal Information</a></li>
-    <li class="active dec"><a href="#" class="dec">My Orders</a></li>
-    <li><a href="# " class="dec">My Wishlists</a></li>
-    <li><a href="#" class="dec">Manage Addresses</a></li>
-    <li><a href="#" class="dec">Saved Cards</a></li>
-    <li><a href="#" class="dec">Notifications</a></li>
-    <li><a href="#" class="dec">Settings</a></li>
-  </ul>
-</aside>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+  </body>
+</html>

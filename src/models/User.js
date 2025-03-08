@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
+
 const userSchema = new mongoose.Schema(
   {
     email: {
@@ -11,7 +12,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
-      // maxlength: 6,
     },
     name: {
       type: String,
@@ -21,8 +21,8 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "user"],
-      default: "user",
+      enum: ["admin", "customer"],
+      default: "customer",
     },
     avatar: {
       type: String,
@@ -57,10 +57,12 @@ const userSchema = new mongoose.Schema(
     verified: {
       type: Boolean,
       default: false,
-      require: true,
+      required: true,
     },
   },
   { timestamps: true, versionKey: false }
 );
 
-export default mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+export default User;

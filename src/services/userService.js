@@ -1,7 +1,7 @@
 import path from "path";
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import User from "../models/user.js";
+import User from "../models/User.js";
 import {
   generateOpt,
   mailTransport,
@@ -61,5 +61,21 @@ export const createUserService = async (data) => {
   } catch (error) {
     console.log(error);
     return null;
+  }
+};
+
+export const changeInfoAccountService = async (email, updateData) => {
+  try {
+    const user = await User.findOneAndUpdate({ email }, updateData, {
+      new: true,
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (error) {
+    throw new Error(error.message);
   }
 };

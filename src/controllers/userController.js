@@ -1,4 +1,4 @@
-import User from "../models/user.js";
+import User from "../models/User.js";
 import ForgotPassword from "../models/forgotPassword.js";
 import bcrypt from "bcrypt";
 import {
@@ -8,7 +8,11 @@ import {
 } from "../utils/mail.js";
 import VerificationToken from "../models/verificationToken.js";
 
-import { getUserService, createUserService } from "../services/userService.js";
+import {
+  getUserService,
+  createUserService,
+  changeInfoAccountService,
+} from "../services/userService.js";
 import { sendError } from "../utils/helper.js";
 import { isValidObjectId } from "mongoose";
 
@@ -29,30 +33,29 @@ export const getUserApi = async (req, res) => {
 };
 
 export const createUserApi = async (req, res) => {
-  let {
-    name,
-    email,
-    password,
-    phoneNumber,
-    dateOfBirth,
-    gender = "male",
-    role = "user",
-  } = req.body;
+  try {
+    const { name, email, password, phoneNumber, dateOfBirth, gender, role } =
+      req.body;
 
-  let data = { name, email, password, phoneNumber, dateOfBirth, gender, role };
-
-  if (data) {
-    let results = await createUserService(data);
-    return res.status(200).json({
-      errorCode: 0,
-      message: "",
-      data: results,
+    const newUser = await createUserService({
+      name,
+      email,
+      password,
+      phoneNumber,
+      dateOfBirth,
+      gender,
+      role,
     });
-  } else {
-    return res.status(500).json({
-      errorCode: 2,
-      message: "Internal server error",
-      error: error.message,
+
+    return res.status(201).json({
+      errorCode: 0,
+      message: "User created successfully",
+      data: newUser,
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      errorCode: 1,
+      message: error.message || "Internal server error",
     });
   }
 };
@@ -101,6 +104,32 @@ export const verifyEmail = async (req, res) => {
     message: "Your email has been verified successfully",
     user: { name: user.name, email: user.email, id: user._id },
   });
+};
+
+export const changeInfoAccountApi = async (req, res) => {
+  try {
+    const { id } = req.user; // Lấy ID từ token
+    const { name, phoneNumber, dateOfBirth, gender } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { name, phoneNumber, dateOfBirth, gender },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ errorCode: 1, message: "User not found" });
+    }
+
+    res.status(200).json({
+      errorCode: 0,
+      message: "User info updated successfully",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ errorCode: 1, message: error.message });
+  }
 };
 
 export const reset_Password = async (req, res) => {
