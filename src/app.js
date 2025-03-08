@@ -42,13 +42,32 @@ app.set("views", path.join(__dirname, "views"));
 connectDB(process.env.DB_URI);
 // connectDB(process.env.DB_URI)
 
-app.use("/", (req, res) => {
-  res.render("saveCard/saveCard");
-});
 // routes
 app.use("/api/v1", routerAuth);
 app.use("/api/v1/address", addressRouter);
 app.use("/api/v1/voucher", voucherRouter);
+
+app.get("/detailProduct", (req, res) => {
+  res.render("detailProduct", { title: "Giới thiệu", layout: "productPage" });
+});
+
+app.get("/detailProduct", (req, res) => {
+  res.render("detailProduct", { title: "Giới thiệu", layout: "productPage" });
+});
+
+app.use("/manageAddress", (req, res) => {
+  res.render("manageAddress/manageAddress", {
+    title: "Giới thiệu",
+    layout: "productPage",
+  });
+});
+
+app.use("/saveCard", (req, res) => {
+  res.render("saveCard/saveCard", {
+    title: "Giới thiệu",
+    layout: "productPage",
+  });
+});
 
 // Start Server
 const PORT = process.env.PORT || 5000;

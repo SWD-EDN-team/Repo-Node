@@ -1,0 +1,95 @@
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-white p-10">
+    <div class="grid grid-cols-2 gap-10 max-w-5xl mx-auto">
+      <!-- Hình ảnh sản phẩm -->
+      <div>
+        <img
+          id="mainImage"
+          src="https://m.media-amazon.com/images/I/51JpA4Olu4L._AC_UL1157_.jpg"
+          class="w-full rounded-lg shadow-md"
+          alt="Main Product"
+        />
+        <div class="flex mt-4 gap-2">
+          <img
+            src="https://m.media-amazon.com/images/I/51JpA4Olu4L._AC_UL1157_.jpg"
+            class="w-20 cursor-pointer border rounded-lg"
+            onclick="changeImage(this)"
+          />
+          <img
+            src="https://m.media-amazon.com/images/I/51JpA4Olu4L._AC_UL1157_.jpg"
+            class="w-20 cursor-pointer border rounded-lg"
+            onclick="changeImage(this)"
+          />
+          <img
+            src="https://m.media-amazon.com/images/I/51JpA4Olu4L._AC_UL1157_.jpg"
+            class="w-20 cursor-pointer border rounded-lg"
+            onclick="changeImage(this)"
+          />
+        </div>
+      </div>
+
+      <!-- Thông tin sản phẩm -->
+      <div>
+        <h2 class="text-2xl font-bold">YK Disney</h2>
+        <p class="text-gray-600">Girls Pink Moana Printed Dress</p>
+        <div class="flex items-center mt-2">
+          <span class="text-yellow-400 text-lg">★★★★★</span>
+          <span class="text-gray-500 text-sm ml-2">5.0 (121 Reviews)</span>
+        </div>
+        <div class="mt-2 text-lg">
+          <span class="text-black font-semibold">$80.00</span>
+          <span class="text-gray-400 line-through">$100.00</span>
+        </div>
+
+        <!-- Mô tả -->
+        <p class="mt-4 text-gray-500">This dress is designed for little
+          princesses with high-quality fabric and beautiful color options.</p>
+
+        <!-- Màu sắc -->
+        <div class="mt-4">
+          <h4 class="font-semibold">Color</h4>
+          <div class="flex gap-2 mt-2">
+            <div class="w-6 h-6 bg-red-500 rounded-full cursor-pointer"></div>
+            <div class="w-6 h-6 bg-blue-500 rounded-full cursor-pointer"></div>
+            <div class="w-6 h-6 bg-black rounded-full cursor-pointer"></div>
+            <div
+              class="w-6 h-6 bg-yellow-500 rounded-full cursor-pointer"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Size -->
+        <div class="mt-4">
+          <h4 class="font-semibold">Size</h4>
+          <div class="flex gap-2 mt-2">
+            <button class="border px-4 py-1 rounded-lg">S</button>
+            <button class="border px-4 py-1 rounded-lg">M</button>
+            <button class="border px-4 py-1 rounded-lg">L</button>
+            <button class="border px-4 py-1 rounded-lg">XL</button>
+          </div>
+        </div>
+
+        <!-- Nút thêm vào giỏ hàng -->
+        <div class="mt-6 flex items-center gap-4">
+          <div class="flex border p-2 rounded-lg items-center">
+            <button class="px-3">-</button>
+            <span class="px-4">1</span>
+            <button class="px-3">+</button>
+          </div>
+          <button class="bg-black text-white px-6 py-2 rounded-lg">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function changeImage(img) { document.getElementById("mainImage").src =
+      img.src; }
+    </script>
+  </body>
+</html>
