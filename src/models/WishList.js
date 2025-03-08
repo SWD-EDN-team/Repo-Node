@@ -4,14 +4,14 @@ const wishlistSchema = new Schema(
   {
     product_id: {
       type: Schema.Types.ObjectId,
-      ref: 'Product',
+      ref: "Product",
       required: true,
     },
-    user_id:{
+    user_id: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
-    }
+    },
   },
   { timestamps: true, versionKey: false }
 );

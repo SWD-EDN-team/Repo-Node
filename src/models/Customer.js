@@ -3,12 +3,12 @@ import mongoose, { Schema } from "mongoose";
 
 const customerSchema = new Schema(
   {
-    customer_id:{
+    customer_id: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       unique: true,
-    }
+    },
   },
   { timestamps: false, versionKey: false }
 );
