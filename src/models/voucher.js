@@ -7,7 +7,7 @@ const voucherSchema = new Schema({
     type: String,
     required: true,
   },
-  expiredAt: { type: Date, required: true},
+  expiredAt: { type: Date, required: true },
   isActive: { type: Boolean, required: true, default: true },
 });
 export default mongoose.model("Voucher", voucherSchema);

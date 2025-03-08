@@ -4,7 +4,7 @@ const cartSchema = new Schema(
   {
     product_id: {
       type: Schema.Types.ObjectId,
-      ref: 'Product',
+      ref: "Product",
       required: true,
     },
     quantity: {
@@ -12,11 +12,11 @@ const cartSchema = new Schema(
       required: true,
       default: 1,
     },
-    user_id:{
+    user_id: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
-    }
+    },
   },
   { timestamps: true, versionKey: false }
 );

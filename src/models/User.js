@@ -1,31 +1,32 @@
-import mongoose,{Schema} from 'mongoose';
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
-const userSchema = new Schema({
-    email :{
+const userSchema = new mongoose.Schema(
+  {
+    email: {
       type: String,
       required: true,
       unique: true,
     },
-    password:{
+    password: {
       type: String,
       required: true,
-      minLenght: 6,
-      maxlenght: 30,
+      minlength: 6,
     },
-    name:{
+    name: {
       type: String,
       required: true,
-      minLenght:3,
-      maxlenght:30,
+      minlength: 3,
+      maxlength: 30,
     },
-    role:{
+    role: {
       type: String,
-      enum: ['admin', 'customer'],
-      default: 'customer'
+      enum: ["admin", "customer"],
+      default: "customer",
     },
-    avatar:{
+    avatar: {
       type: String,
-      default: '../upload/avatar.jpg',
+      default: "../upload/avatar.jpg",
     },
     refreshToken: { type: String },
     dateOfBirth: {
@@ -33,24 +34,35 @@ const userSchema = new Schema({
     },
     gender: {
       type: String,
-      enum: ['male', 'female', 'other'],
-      default:'male',
+      enum: ["male", "female", "other"],
+      default: "male",
     },
     phoneNumber: {
       type: String,
-      match: /^\+\d{1,3}\s\(\d{3}\)\s\d{3}-\d{4}$/
+      match: /^\+?\d{1,3}?\s?(\(\d{1,4}\))?\s?\d{3,4}-?\d{4}$/,
     },
     address: {
-       type: [Schema.Types.ObjectId], ref: "Address" 
+      type: [Schema.Types.ObjectId],
+      ref: "Address",
     },
     voucher: {
-       type: Schema.Types.ObjectId, ref: "Voucher"
+      type: Schema.Types.ObjectId,
+      ref: "Voucher",
     },
     status: {
       type: String,
-      enum: ['active', 'inactive', 'deleted'],
-      default: 'active'
-    }
-},{timestamps: true,versionKey: false })
+      enum: ["active", "inactive", "deleted"],
+      default: "active",
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+  },
+  { timestamps: true, versionKey: false }
+);
 
-export default mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+export default User;
