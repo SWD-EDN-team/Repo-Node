@@ -62,6 +62,13 @@ app.use("/manageAddress", (req, res) => {
   });
 });
 
+app.use("/myWishList", (req, res) => {
+  res.render("myWishList/myWishList", {
+    title: "Giới thiệu",
+    layout: "productPage",
+  });
+});
+
 app.use("/saveCard", (req, res) => {
   res.render("saveCard/saveCard", {
     title: "Giới thiệu",
