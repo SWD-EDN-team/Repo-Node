@@ -1,13 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
-
 import cors from "cors";
 import routerAuth from "./routers/authRouter.js";
 import connection from "./config/db.js";
 import rootRouter from "./routers/index.routers.js";
 import bodyParser from "body-parser";
-import configViewEngine from "./config/viewEngine.js";
 import addressRouter from "./routers/addressRouter.js";
 import voucherRouter from "./routers/voucherRouter.js";
 import SellerRouter from "./routers/SellerRouter.js";
@@ -29,7 +27,9 @@ var jsonParser = bodyParser.json();
 const hbs = create({
   helpers: {
     eq: (a, b) => a === b,
+    eq: (a, b) => a === b,
     ternary: (condition, value1, value2) => (condition ? value1 : value2),
+    inputdata: (value, newValue) => value(...newValue),
     inputdata: (value, newValue) => value(...newValue),
   },
 });
@@ -145,8 +145,29 @@ app.use("/api/v1/cart", CartRoutter);
 app.use("/api/v1/wishlist", WishlistRouter);
 app.use("/api/v1/paymentMethod", PaymentMethodRouter);
 
-app.use("/", (req, res) => {
-  res.render("home/home");
+app.get("/detailProduct", (req, res) => {
+  res.render("detailProduct", { title: "Giới thiệu", layout: "productPage" });
+});
+
+app.use("/manageAddress", (req, res) => {
+  res.render("manageAddress/manageAddress", {
+    title: "Giới thiệu",
+    layout: "productPage",
+  });
+});
+
+app.use("/myWishList", (req, res) => {
+  res.render("myWishList/myWishList", {
+    title: "Giới thiệu",
+    layout: "productPage",
+  });
+});
+
+app.use("/saveCard", (req, res) => {
+  res.render("saveCard/saveCard", {
+    title: "Giới thiệu",
+    layout: "productPage",
+  });
 });
 
 (async () => {

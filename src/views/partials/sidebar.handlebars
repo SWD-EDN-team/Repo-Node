@@ -1,55 +1,89 @@
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sidebar UI</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
+    <style>
+      .sidebar { width: 280px; height: 100vh; background: #f8f9fa; padding:
+      20px; } .sidebar a { color: #333; font-weight: 500; display: block;
+      padding: 10px; text-decoration: none; border-radius: 5px; transition:
+      0.3s; } .sidebar a:hover, .sidebar .active { background: black; color:
+      white !important; border-radius: 5px; } .menu-item.active { border-color:
+      #007bff; background-color: #333; box-shadow: 0px 0px 10px rgba(0, 123,
+      255, 0.5); }
+    </style>
   </head>
   <body>
-    <div class="container my-4 d-flex" >
-      <aside
-        class="sidebar p-3 border rounded shadow-sm me-4"
-        style="width: 250px;"
-      >
-        <div class="d-flex align-items-center gap-2 mb-3">
+
+    <div class="d-flex">
+      <!-- Sidebar -->
+      <div class="sidebar d-flex flex-column shadow-sm">
+        <!-- Avatar -->
+        <div class="d-flex align-items-center gap-3 mb-4">
           <img
-            src="/assets/images/avt.png"
+            src="https://i.pravatar.cc/60"
             class="rounded-circle"
             style="width: 60px; height: 60px;"
           />
-          <div class="text-center">
-            <h6 class="mb-1">Hello</h6>
-            <span class="fw-bold fs-5">JSON</span>
+          <div>
+            <h6 class="mb-1">Hello 👋</h6>
+            <span class="fw-bold fs-5">Robert Fox</span>
           </div>
         </div>
+        <!-- Sidebar Menu -->
         <ul class="list-unstyled">
-          <li><a href="#" class="text-decoration-none d-block py-2">Personal
-              Information</a></li>
-          <li class="active bg-light p-2 rounded"><a
-              href="#"
-              class="text-decoration-none"
-            >My Orders</a></li>
-          <li><a href="#" class="text-decoration-none d-block py-2">My Wishlists</a></li>
-          <li><a href="#" class="text-decoration-none d-block py-2">Manage
-              Addresses</a></li>
-          <li><a href="#" class="text-decoration-none d-block py-2">Saved Cards</a></li>
-          <li><a
-              href="#"
-              class="text-decoration-none d-block py-2"
-            >Notifications</a></li>
-          <li><a
-              href="#"
-              class="text-decoration-none d-block py-2"
-            >Settings</a></li>
+          <li><a href="#" class="menu-item"><i class="bi bi-person"></i>
+              Personal Information</a></li>
+          <li><a href="#" class="menu-item"><i class="bi bi-box"></i>
+              My Orders</a></li>
+          <li><a href="/myWishList" class="menu-item"><i
+                class="bi bi-heart"
+              ></i>
+              My Wishlists</a></li>
+          <li><a href="/manageAddress" class="menu-item"><i
+                class="bi bi-geo-alt"
+              ></i>
+              Manage Addresses</a></li>
+          <li><a href="/saveCard" class="menu-item">
+              <i class="bi bi-credit-card"></i>
+              Saved Cards</a></li>
         </ul>
-      </aside>
+      </div>
     </div>
 
+    <!-- Thêm Bootstrap -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     ></script>
+
+    <!-- JavaScript xử lý sự kiện -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+      console.log(">>>>", document.querySelectorAll('.menu-item')); function
+      setActive(element) { // Xóa class active khỏi tất cả menu-item
+      document.querySelectorAll('.menu-item').forEach(item => {
+      item.classList.remove('active'); }); // Thêm class active vào item được
+      click element.classList.add('active'); // Lưu trạng thái active vào
+      localStorage localStorage.setItem("activeMenu",
+      element.getAttribute("href")); } const activeLink =
+      localStorage.getItem("activeMenu"); if (activeLink) {
+      document.querySelectorAll('.menu-item').forEach(item => { if
+      (item.getAttribute("href") === activeLink) { item.classList.add("active");
+      } }); } // Gán sự kiện click cho tất cả menu-item
+      document.querySelectorAll('.menu-item').forEach(item => {
+      item.addEventListener('click', function (event) { event.preventDefault();
+      // Ngăn trang tải lại setActive(this); window.location.href =
+      this.getAttribute("href"); // Chuyển hướng thủ công }); }); });
+
+    </script>
+
   </body>
 </html>
