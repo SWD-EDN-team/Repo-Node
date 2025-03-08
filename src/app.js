@@ -51,10 +51,6 @@ app.get("/detailProduct", (req, res) => {
   res.render("detailProduct", { title: "Giới thiệu", layout: "productPage" });
 });
 
-app.get("/detailProduct", (req, res) => {
-  res.render("detailProduct", { title: "Giới thiệu", layout: "productPage" });
-});
-
 app.use("/manageAddress", (req, res) => {
   res.render("manageAddress/manageAddress", {
     title: "Giới thiệu",

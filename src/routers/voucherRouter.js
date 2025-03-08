@@ -5,7 +5,7 @@ import {
   createVoucher,
   deleteVoucher,
   updateVoucher,
-} from "../controllers/voucherController.js";
+} from "../controllers/VoucherController.js";
 
 const router = express.Router();
 

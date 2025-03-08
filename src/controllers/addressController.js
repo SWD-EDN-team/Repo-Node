@@ -1,4 +1,4 @@
-import Address from "../models/address.js";
+import Address from "../models/Address.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
