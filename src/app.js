@@ -43,7 +43,7 @@ connectDB(process.env.DB_URI);
 // connectDB(process.env.DB_URI)
 
 app.use("/", (req, res) => {
-  res.render("manageAddress/manageAddress");
+  res.render("saveCard/saveCard");
 });
 // routes
 app.use("/api/v1", routerAuth);
