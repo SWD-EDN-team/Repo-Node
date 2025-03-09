@@ -83,6 +83,7 @@ app.use("/saveCard", (req, res) => {
   });
 });
 
+
 app.get("/home", (req, res) => {
   res.render("home/home", {  // Nếu file là views/home/home.handlebars
     title: "Trang chủ",
