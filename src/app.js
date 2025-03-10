@@ -87,14 +87,14 @@ app.get("/home", (req, res) => {
   res.render("home/home", {  
     title: "Trang chủ",
     products: [
-        { name: "Roadstar", image: "IMAGE_URL", description: "Printed Cotton T-Shirt", price: 38, oldPrice: 40 },
-        { name: "Allen Solly", image: "IMAGE_URL", description: "Women Textured Bag", price: 80, oldPrice: 100 },
-        { name: "Louis Philippe", image: "IMAGE_URL", description: "Polo Collar T-Shirt", price: 50, oldPrice: 65 },
-        { name: "Adidas", image: "IMAGE_URL", description: "Men Running Shoes", price: 60, oldPrice: 75 },
-        { name: "Trendyol", image: "IMAGE_URL", description: "Floral Embroidered Dress", price: 35, oldPrice: 45 },
-        { name: "YK Disney", image: "IMAGE_URL", description: "Girls Pink Moana Dress", price: 80, oldPrice: 100 },
-        { name: "US Polo", image: "IMAGE_URL", description: "Tailored Cotton Shirt", price: 40, oldPrice: 50 },
-        { name: "Zyla", image: "IMAGE_URL", description: "Women Sandals", price: 35, oldPrice: 40 }
+        { name: "Roadstar", image: "https://5.imimg.com/data5/VU/PH/FZ/SELLER-71697535/ladies-fashion-hand-bag-500x500.jpg", description: "Printed Cotton T-Shirt", price: 38, oldPrice: 40 },
+        { name: "Allen Solly", image: "https://5.imimg.com/data5/VU/PH/FZ/SELLER-71697535/ladies-fashion-hand-bag-500x500.jpg", description: "Women Textured Bag", price: 80, oldPrice: 100 },
+        { name: "Louis Philippe", image: "https://5.imimg.com/data5/VU/PH/FZ/SELLER-71697535/ladies-fashion-hand-bag-500x500.jpg", description: "Polo Collar T-Shirt", price: 50, oldPrice: 65 },
+        { name: "Adidas", image: "https://5.imimg.com/data5/VU/PH/FZ/SELLER-71697535/ladies-fashion-hand-bag-500x500.jpg", description: "Men Running Shoes", price: 60, oldPrice: 75 },
+        { name: "Trendyol", image: "https://5.imimg.com/data5/VU/PH/FZ/SELLER-71697535/ladies-fashion-hand-bag-500x500.jpg", description: "Floral Embroidered Dress", price: 35, oldPrice: 45 },
+        { name: "YK Disney", image: "https://5.imimg.com/data5/VU/PH/FZ/SELLER-71697535/ladies-fashion-hand-bag-500x500.jpg", description: "Girls Pink Moana Dress", price: 80, oldPrice: 100 },
+        { name: "US Polo", image: "https://5.imimg.com/data5/VU/PH/FZ/SELLER-71697535/ladies-fashion-hand-bag-500x500.jpg", description: "Tailored Cotton Shirt", price: 40, oldPrice: 50 },
+        { name: "Zyla", image: "https://5.imimg.com/data5/VU/PH/FZ/SELLER-71697535/ladies-fashion-hand-bag-500x500.jpg", description: "Women Sandals", price: 35, oldPrice: 40 }
     ],
     categories: [
       { name: "Casual Wear", image: "https://img.freepik.com/premium-photo/style-everyday-mens-casual-shirt-photoshoot-poses-boys-shirt_463958-96.jpg" },
@@ -127,7 +127,40 @@ app.get("/home", (req, res) => {
           image: "https://randomuser.me/api/portraits/women/68.jpg",
           review: "Contrary to popular belief, Lorem Ipsum is not simply random text.",
           rating: 5
-      }
+      },
+      {
+        name: "Michael Scott",
+        role: "Manager",
+        image: "https://randomuser.me/api/portraits/men/45.jpg",
+        review: "Amazing experience! The service was top-notch and exceeded my expectations.",
+        rating: 4
+      },
+      {
+        name: "Daniel Carter",
+        role: "Software Engineer",
+        image: "https://randomuser.me/api/portraits/men/50.jpg",
+        review: "A very well-thought-out product. Customer service was also very responsive!",
+        rating: 4
+    },
+    {
+        name: "Sophia Martinez",
+        role: "Entrepreneur",
+        image: "https://randomuser.me/api/portraits/women/30.jpg",
+        review: "Exceeded my expectations! Will definitely be purchasing again.",
+        rating: 5
+    }
+    ],
+    instagramStories: [
+      { image: "/images/story1.jpg", alt: "Story 1" },
+      { image: "/images/story2.jpg", alt: "Story 2" },
+      { image: "/images/story3.jpg", alt: "Story 3" },
+      { image: "/images/story4.jpg", alt: "Story 4" }
+    ],
+    delivery: [
+      { icon: "fa-solid fa-truck", title: "Free Shipping", description: "Free shipping for orders above $150" },
+      { icon: "fa-solid fa-hand-holding-dollar", title: "Money Guarantee", description: "Within 30 days for an exchange" },
+      { icon: "fa-solid fa-headset", title: "Online Support", description: "24 hours a day, 7 days a week" },
+      { icon: "fa-solid fa-credit-card", title: "Flexible Payment", description: "Pay with multiple credit cards" }
     ]
   });
 });
