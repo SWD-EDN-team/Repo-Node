@@ -137,7 +137,6 @@
 <div class="checkout-container">
     <h1>Checkout</h1>
     <div class="checkout-content">
-        <!-- Bảng sản phẩm -->
         <table class="checkout-table">
             <thead>
                 <tr>
@@ -177,17 +176,16 @@
             </tbody>
         </table>
 
-        <!-- Tổng tiền -->
         <div class="summary-box">
-            <h3>Subtotal: <span>${{calculateSubtotal cart}}</span></h3>
-            <p>Delivery Charge: <span>$5.00</span></p>
-            <hr>
-            <h2>Grand Total: <span>${{add (calculateSubtotal cart) 5}}</span></h2>
+            <h5>Subtotal: <span id="subtotal-value">$0.00</span></h5>
+            <p>Delivery Charge: <span id="delivery-charge">$5.00</span></p>
             <div class="discount-box">
                 <input type="text" placeholder="Enter Discount Code">
                 <button class="apply-btn">Apply</button>
             </div>
             <button class="checkout-btn">Proceed to Checkout</button>
+            <hr>
+            <h2>Grand Total: <span id="grand-total">$0.00</span></h2>
         </div>
     </div>
 </div>
@@ -195,51 +193,47 @@
 </body>
 </html>
 <script>
-    (function () {
-        const quantityContainer = document.querySelector(".quantity");
+document.addEventListener("DOMContentLoaded", function () {
+    const quantityContainers = document.querySelectorAll(".quantity");
+    const subtotalElement = document.querySelector(".summary-box h5 span");
+    const grandTotalElement = document.querySelector(".summary-box h2 span");
+    const deliveryCharge = 5.00; // Phí giao hàng cố định
+
+    quantityContainers.forEach(quantityContainer => {
         const minusBtn = quantityContainer.querySelector(".minus");
         const plusBtn = quantityContainer.querySelector(".plus");
         const inputBox = quantityContainer.querySelector(".input-box");
 
-        updateButtonStates();
+        minusBtn.addEventListener("click", () => updateQuantity(inputBox, -1));
+        plusBtn.addEventListener("click", () => updateQuantity(inputBox, 1));
+        inputBox.addEventListener("input", () => updateSubtotal());
+    });
 
-        quantityContainer.addEventListener("click", handleButtonClick);
-        inputBox.addEventListener("input", handleQuantityChange);
+    function updateQuantity(inputBox, change) {
+        let value = parseInt(inputBox.value);
+        let maxValue = parseInt(inputBox.max);
+        let newValue = isNaN(value) ? 1 : Math.min(Math.max(value + change, 1), maxValue);
+        inputBox.value = newValue;
+        updateSubtotal();
+    }
 
-        function updateButtonStates() {
-            const value = parseInt(inputBox.value);
-            minusBtn.disabled = value <= 1;
-            plusBtn.disabled = value >= parseInt(inputBox.max);
-        }
+    function updateSubtotal() {
+        let subtotal = 0;
+        document.querySelectorAll("tbody tr").forEach(row => {
+            const price = parseFloat(row.querySelector("td:nth-child(2)").textContent.replace("$", ""));
+            const quantity = parseInt(row.querySelector(".input-box").value);
+            const rowSubtotal = price * quantity;
+            row.querySelector("td:nth-child(4)").textContent = `$${rowSubtotal.toFixed(2)}`;
+            subtotal += rowSubtotal;
+        });
 
-        function handleButtonClick(event) {
-            if (event.target.classList.contains("minus")) {
-            decreaseValue();
-            } else if (event.target.classList.contains("plus")) {
-            increaseValue();
-            }
-        }
+        // Cập nhật tổng tiền
+        subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+        grandTotalElement.textContent = `$${(subtotal + deliveryCharge).toFixed(2)}`;
+    }
 
-        function decreaseValue() {
-            let value = parseInt(inputBox.value);
-            value = isNaN(value) ? 1 : Math.max(value - 1, 1);
-            inputBox.value = value;
-            updateButtonStates();
-            handleQuantityChange();
-        }
+    updateSubtotal(); // Gọi lần đầu để cập nhật giá trị ban đầu
+});
 
-        function increaseValue() {
-            let value = parseInt(inputBox.value);
-            value = isNaN(value) ? 1 : Math.min(value + 1, parseInt(inputBox.max));
-            inputBox.value = value;
-            updateButtonStates();
-            handleQuantityChange();
-        }
-
-        function handleQuantityChange() {
-            let value = parseInt(inputBox.value);
-            value = isNaN(value) ? 1 : value;
-        }
-        })();
 
 </script>
