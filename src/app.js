@@ -26,6 +26,9 @@ const hbs = create({
       }
       return result;
     },
+    multiply: (a, b) => a * b,
+    calculateSubtotal: (cart) => cart.reduce((total, item) => total + (item.price * item.quantity), 0),
+    add: (a, b) => a + b
   },
 });
 
@@ -34,8 +37,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Khai báo thư mục chứa file tĩnh (CSS, JS, images)
-app.use(express.static(path.join(__dirname, "../public")));
-console.log("Static files served from:", path.join(__dirname, "../public"));
+app.use(express.static(path.join(__dirname, "public")));
+console.log("Static files served from:", path.join(__dirname, "public"));
 
 // middleware
 app.use(express.json());
@@ -81,6 +84,16 @@ app.use("/saveCard", (req, res) => {
     title: "Giới thiệu",
     layout: "productPage",
   });
+});
+
+app.get("/checkout", (req, res) => {
+  // Giả sử giỏ hàng được lưu trong session hoặc database
+  const cartItems = [
+      { id: 1, name: "Girls Pink Moana Printed Dress", size: "S", price: 80, quantity: 1, image: "dress.jpg" },
+      { id: 2, name: "Women Textured Handheld Bag", size: "Regular", price: 80, quantity: 1, image: "bag.jpg" },
+      { id: 3, name: "Tailored Cotton Casual Shirt", size: "M", price: 40, quantity: 1, image: "shirt.jpg" }
+  ];
+  res.render("checkout/checkout", { cart: cartItems });
 });
 
 app.get("/home", (req, res) => {
