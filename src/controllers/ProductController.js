@@ -1,6 +1,7 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
 import Product from "../models/product.js";
+import { uploadSingleFile } from "../services/fileService.js";
 
 const productSchema = Joi.object({
   product_name: Joi.string().required().messages({
@@ -36,6 +37,10 @@ export const getAllProducts = async (req, res) => {
   }
 };
 export const createProduct = async (req, res) => {
+
+  console.log("Received files:", req.files); // Log file nhận được
+    console.log("Received body:", req.body);   // Log dữ liệu khác
+
   const { error } = productSchema.validate(req.body);
   if (error) {
     const message = error.details.map((err) => err.message);
@@ -43,10 +48,23 @@ export const createProduct = async (req, res) => {
       message,
     });
   }
-  try {
-    const product = new Product({ ...req.body, seller_id: req.seller._id });
+  let imagePaths = [];
+  if (req.files && req.files.image) {
+      const files = Array.isArray(req.files.image) ? req.files.image : [req.files.image];
 
-    await product.save();
+      for (let file of files) {
+        const uploadResult = await uploadSingleFile(file);
+        console.log("File uploaded result: ", uploadResult);
+        if (uploadResult.status === "success") {
+          imagePaths.push(uploadResult.path);
+        }
+      }
+    }
+
+  try {
+    const product = new Product({ ...req.body, seller_id: req.seller._id,image: imagePaths });
+
+    // await product.save();
     res.status(StatusCode.CREATED).json(product);
   } catch (error) {
     res

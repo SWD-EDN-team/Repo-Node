@@ -1,23 +1,38 @@
 import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const uploadSingleFile = async (fileObject) => {
   console.log("__dirname1:", __dirname);
 
   let uploadPath = path.resolve(__dirname, "../public/images/upload/");
 
+  // ✅ Kiểm tra và tạo thư mục nếu chưa tồn tại
+  if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true });
+  }
+
   let extName = path.extname(fileObject.name);
   let baseName = path.basename(fileObject.name, extName);
 
   let finalName = `${baseName}-${Date.now()}${extName}`;
-  let finalPath = `${uploadPath}/${finalName}`;
-
-  // Use the mv() method to place the file somewhere on your server
+  let finalPath = path.join(uploadPath, finalName);
 
   try {
-    await fileObject.mv(finalPath);
+    // ✅ Chuyển file vào thư mục (bọc .mv() trong Promise)
+    await new Promise((resolve, reject) => {
+      fileObject.mv(finalPath, (err) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+
     return {
       status: "success",
-      path: finalName,
+      path: `/images/upload/${finalName}`, // ✅ Trả về đường dẫn hợp lý
       error: null,
     };
   } catch (error) {
@@ -25,7 +40,7 @@ export const uploadSingleFile = async (fileObject) => {
     return {
       status: "failed",
       path: null,
-      error: JSON.stringify(error),
+      error: error.toString(),
     };
   }
 };

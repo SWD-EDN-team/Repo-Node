@@ -16,8 +16,9 @@ import CartRoutter from "./routers/CartRouter.js";
 import WishlistRouter from "./routers/WishlistRouter.js";
 import PaymentMethodRouter from "./routers/PaymentMethodRouter.js";
 import { create } from "express-handlebars";
-import { fileURLToPath } from "url";
-import path from "path";
+import { fileURLToPath } from 'url';
+import path from 'path';
+import fileUpload from "express-fileupload";
 
 const app = express();
 dotenv.config();
@@ -35,10 +36,11 @@ const hbs = create({
 });
 
 // Định nghĩa __dirname trong ES module
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log("__dirname>>>>>>>", __dirname);
+console.log("__dirname1:", __dirname);
 
 // Khai báo thư mục chứa file tĩnh (CSS, JS, images)
 
@@ -56,6 +58,12 @@ console.log(
 app.use(express.json());
 app.use(cors());
 app.use(morgan("tiny"));
+app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload()); 
+app.use((req, res, next) => {
+  console.log("Content-Type:", req.headers["content-type"]);
+  next();
+});
 
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
@@ -168,6 +176,9 @@ app.use("/saveCard", (req, res) => {
     title: "Giới thiệu",
     layout: "productPage",
   });
+});
+app.use("/home", (req, res) => {
+  res.render("home/home", );
 });
 
 (async () => {
