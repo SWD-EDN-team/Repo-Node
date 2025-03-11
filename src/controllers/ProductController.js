@@ -64,7 +64,7 @@ export const createProduct = async (req, res) => {
   try {
     const product = new Product({ ...req.body, seller_id: req.seller._id,image: imagePaths });
 
-    // await product.save();
+    await product.save();
     res.status(StatusCode.CREATED).json(product);
   } catch (error) {
     res

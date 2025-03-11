@@ -1,6 +1,7 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
+import { v4 as uuidv4 } from "uuid"; // ✅ Import uuid
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,13 +17,12 @@ export const uploadSingleFile = async (fileObject) => {
   }
 
   let extName = path.extname(fileObject.name);
-  let baseName = path.basename(fileObject.name, extName);
+  let uniqueId = uuidv4(); // ✅ Tạo ID ngẫu nhiên
 
-  let finalName = `${baseName}-${Date.now()}${extName}`;
+  let finalName = `${uniqueId}${extName}`; // ✅ Đổi tên file theo ID
   let finalPath = path.join(uploadPath, finalName);
 
   try {
-    // ✅ Chuyển file vào thư mục (bọc .mv() trong Promise)
     await new Promise((resolve, reject) => {
       fileObject.mv(finalPath, (err) => {
         if (err) reject(err);
@@ -32,7 +32,8 @@ export const uploadSingleFile = async (fileObject) => {
 
     return {
       status: "success",
-      path: `/images/upload/${finalName}`, // ✅ Trả về đường dẫn hợp lý
+      id: uniqueId, // ✅ Trả về ID của file
+      path: `/images/upload/${finalName}`, // ✅ Đường dẫn file
       error: null,
     };
   } catch (error) {
