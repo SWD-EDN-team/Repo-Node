@@ -27,7 +27,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Khai báo thư mục chứa file tĩnh (CSS, JS, images)
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, 'public')));
 console.log("Static files served from:", path.join(__dirname, "../public"));
 
 // middleware
@@ -76,8 +76,24 @@ app.use("/saveCard", (req, res) => {
   });
 });
 
+app.get("/login", (req, res) => {
+  res.render("login/login");
+});
+app.get("/signup", (req, res) => {
+  res.render("signup/signup");
+});
+
+app.get('/forgot-password', (req, res) => {
+  res.render('forgotPassword/forgot-password');
+});
+app.get('/otp', (req, res) => {
+  res.render('otp/otp');
+});
+app.get('/successful', (req, res) => {
+  res.render('successful/successful');
+});
 // Start Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );
