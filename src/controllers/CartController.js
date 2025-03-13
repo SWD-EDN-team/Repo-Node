@@ -1,6 +1,7 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
 import Cart from "../models/Cart.js";
+import Product from "../models/Product.js";
 
 const cartSchema = Joi.object({
   product_id: Joi.string().required().messages({
@@ -11,20 +12,27 @@ const cartSchema = Joi.object({
     "any.required": "quantity is required",
     "number.min": "Quantity must be at least 1",
   }),
-})
+});
 
-export const getCartbyToken = async (req, res) =>{
+export const getCartbyToken = async (req, res) => {
   try {
-    const cart = await Cart.find({user_id:req.user.id}).populate({
-      path: 'product_id',
-      populate: { path: 'category_id' }
-    }).populate("user_id");
-    if (!cart) res.status(StatusCode.NOT_FOUND).json({ message: "Wishlist not found" });
-    res.status(StatusCode.OK).json({ message: "Get all cart in cart with token" ,cart});
+    const cart = await Cart.find({ user_id: req.user.id })
+      .populate({
+        path: "product_id",
+        populate: { path: "category_id" },
+      })
+      .populate("user_id");
+    if (!cart)
+      res.status(StatusCode.NOT_FOUND).json({ message: "Wishlist not found" });
+    res
+      .status(StatusCode.OK)
+      .json({ message: "Get all cart in cart with token", cart });
   } catch (error) {
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
   }
-}
+};
 // export const getAllCart = async (req, res) =>{
 //   try {
 //     const cart = await Cart.find();
@@ -33,7 +41,7 @@ export const getCartbyToken = async (req, res) =>{
 //     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
 //   }
 // }
-export const createCart = async (req, res) =>{
+export const createCart = async (req, res) => {
   try {
     const { error } = cartSchema.validate(req.body);
     if (error) {
@@ -42,10 +50,24 @@ export const createCart = async (req, res) =>{
         message,
       });
     }
-    const cart = new Cart({...req.body, user_id: req.user.id});
+    const cart = new Cart({ ...req.body, user_id: req.user.id });
     await cart.save();
     res.status(StatusCode.CREATED).json(cart);
   } catch (error) {
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
   }
-}
+};
+// xoá product trong cart
+export const deleteProductInCart = async (req, res) => {
+  try {
+    if (1 == 1) {
+      alert("mkk");
+    }
+  } catch (error) {
+    res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
+  }
+};
