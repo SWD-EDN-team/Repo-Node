@@ -17,7 +17,7 @@ const authRouter = express.Router();
 
 authRouter.post("/auth/signup", signup);
 authRouter.post("/auth/signin", signin);
-authRouter.get("/auth/getall", admin, getAll);
+authRouter.get("/auth/getall", getAll);
 authRouter.get("/auth/getByEmail", admin, getByEmail);
 authRouter.get("/auth/getCurrentUser", getCurrentUser);
 authRouter.post("/auth/refreshToken", refreshToken);

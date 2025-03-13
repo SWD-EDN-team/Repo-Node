@@ -1,23 +1,38 @@
 import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const uploadSingleFile = async (fileObject) => {
   console.log("__dirname1:", __dirname);
 
   let uploadPath = path.resolve(__dirname, "../public/images/upload/");
 
+  if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true });
+  }
+
   let extName = path.extname(fileObject.name);
-  let baseName = path.basename(fileObject.name, extName);
+  let uniqueId = uuidv4();
 
-  let finalName = `${baseName}-${Date.now()}${extName}`;
-  let finalPath = `${uploadPath}/${finalName}`;
-
-  // Use the mv() method to place the file somewhere on your server
+  let finalName = `${uniqueId}${extName}`;
+  let finalPath = path.join(uploadPath, finalName);
 
   try {
-    await fileObject.mv(finalPath);
+    await new Promise((resolve, reject) => {
+      fileObject.mv(finalPath, (err) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+
     return {
       status: "success",
-      path: finalName,
+      id: uniqueId,
+      path: `/images/upload/${finalName}`,
       error: null,
     };
   } catch (error) {
@@ -25,7 +40,7 @@ export const uploadSingleFile = async (fileObject) => {
     return {
       status: "failed",
       path: null,
-      error: JSON.stringify(error),
+      error: error.toString(),
     };
   }
 };

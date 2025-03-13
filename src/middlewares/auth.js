@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import StatusCode from "http-status-codes";
-import User from "../models/user.js";
+import User from "../models/User.js";
 import Seller from "../models/Seller.js";
 
 export const admin = async (req, res, next) => {

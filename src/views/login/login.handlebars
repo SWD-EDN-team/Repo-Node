@@ -1,0 +1,44 @@
+<style>
+  .sidebar {
+    display: none !important;
+  }
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+  <link rel="stylesheet" href="/assets/css/login.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Cột trái: Hình ảnh -->
+        <div class="image">
+           <img src="/assets/images/login-image.jpg" alt="Login Image">
+        </div>
+        
+        <!-- Cột phải: Form đăng nhập -->
+        <div class="form-container">
+            <h2>Welcome 👋</h2>
+            <p>Please login here</p>
+            <form>
+                <label>Email Address</label>
+                <input type="email" placeholder="example@email.com" required>
+                
+                <label>Password</label>
+                <input type="password" placeholder="********" required>
+                
+                <div class="options">
+                    <label>
+                        <input type="checkbox"> Remember Me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
