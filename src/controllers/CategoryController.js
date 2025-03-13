@@ -1,5 +1,6 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
+import { uploadSingleFile } from "../services/fileService.js";
 import Category from "../models/Category.js";
 
 const categorySchema = Joi.object({
@@ -30,9 +31,21 @@ export const createCategory = async (req, res) => {
       message,
     });
   }
+  let imagePaths = [];
+    if (req.files && req.files.image) {
+        const files = Array.isArray(req.files.image) ? req.files.image : [req.files.image];
+  
+        for (let file of files) {
+          const uploadResult = await uploadSingleFile(file);
+          console.log("File uploaded result: ", uploadResult);
+          if (uploadResult.status === "success") {
+            imagePaths.push(uploadResult.path);
+          }
+        }
+      }
 
   try {
-    const category = new Category(req.body);
+    const category = new Category({...req.body,image: imagePaths});
     await category.save();
     res.status(StatusCode.CREATED).json(category);
   } catch (error) {
