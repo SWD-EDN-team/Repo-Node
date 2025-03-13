@@ -1,71 +1,104 @@
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import cors from 'cors';
-import routerAuth from './routers/auth.js'
-import addressRouter from './routers/AddressRouter.js';
-import voucherRouter from './routers/VoucherRouter.js';
-import SellerRouter from './routers/SellerRouter.js';
-import ProductRouter from './routers/ProductRouter.js';
-import CategoryRouter from './routers/CategoryRouter.js';
-import ReviewRouter from './routers/ReviewRouter.js';
-import CartRoutter from './routers/CartRouter.js';
-import WishlistRouter from './routers/WishlistRouter.js'
-import { connectDB } from './config/db.js';
+import cors from "cors";
+import connection from "./config/db.js";
+import rootRouter from "./routers/index.routers.js";
+import bodyParser from "body-parser";
+import ViewRouter from "./routers/ViewRouter.js";
 import { create } from "express-handlebars";
-import { fileURLToPath } from "url";
-import path from "path";
+import { fileURLToPath } from 'url';
+import path from 'path';
+import fileUpload from "express-fileupload";
 
 const app = express();
 dotenv.config();
 
+var jsonParser = bodyParser.json();
+
 const hbs = create({
   helpers: {
     eq: (a, b) => a === b,
+    eq: (a, b) => a === b,
     ternary: (condition, value1, value2) => (condition ? value1 : value2),
     inputdata: (value, newValue) => value(...newValue),
+    times: function (n, block) {
+      let result = "";
+      for (let i = 0; i < n; i++) {
+        result += block.fn(i);
+      }
+      return result;
+    },
   },
 });
 
-// Định nghĩa __dirname trong ES module
+const port = process.env.PORT || 8080;
+const hostname = process.env.HOST_NAME || "localhost";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Khai báo thư mục chứa file tĩnh (CSS, JS, images)
-app.use(express.static(path.join(__dirname, "../src/public/")));
-console.log("Static files served from:", path.join(__dirname, "../src/public/"));
+app.use(express.static(path.join(__dirname, "./public")));
+console.log("Static files served from:", path.join(__dirname, "./public"));
 
 // Middleware
 app.use(express.json());
 app.use(cors());
 app.use(morgan("tiny"));
+app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload()); 
 
-// Cấu hình Handlebars
+// app.use((req, res, next) => {
+//   console.log("Content-Type:", req.headers["content-type"]);
+//   next();
+// });
+
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
-app.set("views", path.join(__dirname, "views")); // ✅ Đúng
-
-// connect db
-connectDB(process.env.DB_URI)
-// connectDB(process.env.DB_URI)
+app.set("views", path.join(__dirname, "views"));
 
 
-// routes
-app.use('/api/v1',routerAuth)
-app.use('/api/v1/address',addressRouter)
-app.use('/api/v1/voucher',voucherRouter)
-app.use('/api/v1/seller',SellerRouter)
-app.use('/api/v1/product',ProductRouter)
-app.use('/api/v1/category',CategoryRouter)
-app.use('/api/v1/review',ReviewRouter)
-app.use('/api/v1/cart',CartRoutter)
-app.use('/api/v1/wishlist',WishlistRouter)
-app.use('/', (req, res) =>{
-  res.render('home/home')
-})
+// config file upload
+// app.use(fileUpload());
+
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+app.use(jsonParser);
+app.use(urlencodedParser);
+
+// app.use(
+//   cors({
+//     origin: "http://192.168.1.17:8081",
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//   })
+// );
+
+(async () => {
+  try {
+    await connection();
+
+    app.listen(port, hostname, () => {
+      console.log(`Backend zero app listening on port ${port}`);
+    });
+  } catch (error) {
+    console.log("Failed connecting to server", error);
+  }
+})();
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/view",ViewRouter)
+app.use("/api/v1", rootRouter);
+
+// // Start Server
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () =>
+//   console.log(`Server running on http://localhost:${PORT}`)
+// );
 
 // Start Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );

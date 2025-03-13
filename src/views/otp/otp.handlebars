@@ -1,0 +1,162 @@
+<style>
+  .sidebar {
+    display: none !important;
+  }
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+        }
+
+        .container {
+            display: flex;
+            width: 900px;
+            height: 550px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .image {
+            width: 50%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .form-section {
+            width: 50%;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            background: white;
+        }
+
+        .form-section a {
+            font-size: 14px;
+            color: #555;
+            text-decoration: none;
+            margin-bottom: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.3s;
+        }
+
+        .form-section a:hover {
+            color: black;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        p {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+
+        .otp-input {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .otp-input input {
+            width: 55px;
+            height: 55px;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.3s;
+            background: #f8f8f8;
+        }
+
+        .otp-input input:focus {
+            border-color: #000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .verify-button {
+            width: 100%;
+            padding: 14px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .verify-button:hover {
+            background: #333;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image">
+            <img src="/assets/images/login-image.jpg" alt="OTP Verification">
+        </div>
+        
+        <div class="form-section">
+           <a href="/login" class="back-link">← Back</a>
+            <h2>Enter OTP</h2>
+            <p>We have sent a code to your registered email</p>
+            <p><strong>robertfox@example.com</strong></p>
+
+            <div class="otp-input">
+                <input type="text" maxlength="1">
+                <input type="text" maxlength="1">
+                <input type="text" maxlength="1">
+                <input type="text" maxlength="1">
+                <input type="text" maxlength="1">
+            </div>
+
+            <button class="verify-button">Verify</button>
+        </div>
+    </div>
+</body>
+</html>

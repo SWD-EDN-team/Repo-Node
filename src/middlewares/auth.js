@@ -43,18 +43,19 @@ export const user = async (req, res, next) => {
       .status(StatusCode.UNAUTHORIZED)
       .json({ message: "No token provided" });
   }
+  
+console.log(token);
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Xác thực token
 
     const user = await User.findById(decoded.id);
-    // console.log("user", user);
+    console.log("user", user);
     if (user.refreshToken === undefined) {
       return res.status(StatusCode.UNAUTHORIZED).json({
         message: "Token has expired, please login again",
       });
     }
-
     req.user = decoded; // Gắn thông tin user vào req để sử dụng sau
     next();
   } catch (err) {
@@ -72,16 +73,34 @@ export const verifySeller = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token
     if (!decoded) {
-      return res.status(StatusCode.UNAUTHORIZED).json({ message:"loi"})
+      return res.status(StatusCode.UNAUTHORIZED).json({ message: "loi" });
     }
-    const seller = await Seller.findOne({seller_id: decoded.id})
+    const seller = await Seller.findOne({ seller_id: decoded.id });
     if (!seller) {
-      return res.status(StatusCode.UNAUTHORIZED).json({ message: 'Seller not found' });
+      return res
+        .status(StatusCode.UNAUTHORIZED)
+        .json({ message: "Seller not found" });
     }
     req.seller = seller;
-    next()
-    
+    next();
   } catch (error) {
     return res.status(StatusCode.INTERNAL_SERVER_ERROR).json(error);
+  }
+};
+
+export const authMiddleware = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ errorCode: 1, message: "Unauthorized" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // Gán user vào req
+    next();
+  } catch (error) {
+    return res.status(403).json({ errorCode: 1, message: "Invalid token" });
   }
 };

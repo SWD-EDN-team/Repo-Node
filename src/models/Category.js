@@ -11,6 +11,11 @@ const caregorySchema = new Schema(
       type: String,
       required: true,
     },
+    image:{
+      type: [String],
+      required: true,
+      default: 'default_category_image.jpg'
+    }
   },
   { timestamps: false, versionKey: false }
 );

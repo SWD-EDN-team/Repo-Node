@@ -1,8 +1,8 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
+import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
 import Customer from "../models/Customer.js";
 
 const singupSchema = Joi.object({
@@ -124,7 +124,7 @@ export const signin = async (req, res) => {
   const { error } = loginSchema.validate(req.body, {
     abortEarly: false,
   });
-  // sử lí nếu gặp lỗi
+  // xử lí nếu gặp lỗi
   if (error) {
     const message = error.details.map((err) => err.message);
     return res.status(StatusCode.BAD_REQUEST).json({ message });
@@ -307,7 +307,6 @@ export const logout = async (req, res) => {
   }
 
   try {
-    // Giải mã token để lấy userId
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("decoded", decoded);
 
@@ -384,5 +383,14 @@ export const updateUser = async (req, res) => {
     return res
       .status(StatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: "An error occurred during update user" });
+  }
+};
+
+export const verify_code = async (req, res) => {
+  try {
+    res.status(200).send("verify_code");
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send("An error occurred while updating the user.");
   }
 };

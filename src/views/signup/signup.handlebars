@@ -1,0 +1,170 @@
+<style>
+  .sidebar {
+    display: none !important;
+  }
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            display: flex;
+            width: 1000px;
+            height: 600px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .image-container {
+            flex: 1;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 30px;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: gray;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            gap: 8px;
+        }
+
+        .checkbox-container input {
+            width: 16px;
+            height: 16px;
+            margin: 0;
+        }
+
+        .checkbox-container label {
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            <img src="/assets/images/login-image.jpg" alt="Signup Image">
+        </div>
+        <div class="form-container">
+            <h2>Create New Account</h2>
+            <p>Please enter details</p>
+                <label>Email Address</label>
+                <input id="email" type="email" placeholder="Enter email">
+                
+                <label>Use name</label>
+                <input id="userName" type="text" placeholder="Enter your user name">
+                
+                <label>Password</label>
+                <input id="password" type="password" placeholder="Enter password">
+                
+                <label>Password</la>
+                <input id="confirmPassword" type="password" placeholder="Enter confirm password">
+
+                <div class="checkbox-container">
+                    <input type="checkbox" id="terms">
+                    <label for="terms">I agree to the <strong>Terms & Conditions</strong></label>
+                </div>
+                <button onclick="signup()">Signup</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function signup(){
+            const email = document.getElementById("email").value;
+            const name = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const terms = document.getElementById("terms").checked;
+            if(password!== confirmPassword){
+                alert("Passwords do not match");
+                return;
+            }
+            if(!terms){
+                alert("Please agree to the terms and conditions");
+            }
+            // call API to signup user
+            try{
+                const response = await axios.post("http://localhost:8081/api/v1/auth/signup",{email, name, password, confirmPassword},{ headers: { "Content-Type": "application/json" } })
+                if(response.status === 201){
+                    alert("Signup successful. Please log in.");
+                    window.location.href = "view/login";
+                }
+            }catch(error){
+                console.error(error);
+                alert("Failed to signup. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>

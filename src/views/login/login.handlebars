@@ -1,0 +1,60 @@
+<style>
+  .sidebar {
+    display: none !important;
+  }
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+  <link rel="stylesheet" href="/assets/css/login.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Cột trái: Hình ảnh -->
+        <div class="image">
+           <img src="/assets/images/login-image.jpg" alt="Login Image">
+        </div>
+        
+        <!-- Cột phải: Form đăng nhập -->
+        <div class="form-container">
+            <h2>Welcome 👋</h2>
+            <p>Please login here</p>
+                <label>Email Address</label>
+                <input id="email" type="email" placeholder="Enter Email" required>
+                
+                <label>Password</label>
+                <input id="password" type="password" placeholder="Enter password" required>
+                
+                <div class="options">
+                    <label>
+                        <input type="checkbox"> Remember Me
+                    </label>
+                    <a href="/view/forgotpassword">Forgot Password?</a>
+                </div>
+
+                <button onclick="handleLogin()">Login</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function handleLogin() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById('password').value;
+            console.log(email, password)
+
+            try{
+                const response = await axios.post('/api/v1/auth/signin', { email, password });
+                localStorage.setItem('token', response.data.accessToken);
+                window.location.href = "/view/home";
+            }
+            catch(error){
+                console.error(error);
+                alert("login error pls login again")
+            }
+        }
+    </script>
+</body>
+</html>
