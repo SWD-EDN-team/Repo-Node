@@ -36,6 +36,7 @@ export const getAllProducts = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -45,12 +46,14 @@ export const getProductById = async (req, res) => {
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
   }
 }
+
 export const getProductByPage = async (req, res) => {
   try {
     const page = await req.params.page
     const limit = 5,
     startIndex = (+page - 1) * limit;
     const products = await Product.find().skip(startIndex).limit(limit);
+    if (!product) res.status(StatusCode.NOT_FOUND).json({ message: "Product not found" });
     res.status(StatusCode.OK).json(products);
   } catch (error) {
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
