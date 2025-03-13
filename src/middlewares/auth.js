@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import StatusCode from "http-status-codes";
-import User from "../models/user.js";
+import User from "../models/User.js";
 import Seller from "../models/Seller.js";
 
 export const admin = async (req, res, next) => {
@@ -43,6 +43,8 @@ export const user = async (req, res, next) => {
       .status(StatusCode.UNAUTHORIZED)
       .json({ message: "No token provided" });
   }
+  
+console.log(token);
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Xác thực token

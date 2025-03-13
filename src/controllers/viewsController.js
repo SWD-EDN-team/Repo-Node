@@ -1,19 +1,19 @@
 import { product, reviews } from "../utils/api.js";
 
 export const viewLogin = (req, res) => {
-  res.render("login/login");
+  res.render("login/login",{layout: "auth"});
 };
 export const viewSignup = (req, res) => {
-  res.render("signup/signup");
+  res.render("signup/signup",{layout: "auth"});
 };
 export const viewForgotPassword = (req, res) => {
-  res.render("forgotPassword/forgot-password");
+  res.render("forgotPassword/forgot-password",{layout: "auth"});
 };
 export const viewOTP = (req, res) => {
-  res.render("otp/otp");
+  res.render("otp/otp",{layout: "auth"});
 };
 export const viewSuccessful = (req, res) => {
-  res.render("successful/successful");
+  res.render("successful/successful",{layout: "auth"});
 };
 
 const orders = [
