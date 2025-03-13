@@ -48,10 +48,10 @@ app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload()); 
 
-app.use((req, res, next) => {
-  console.log("Content-Type:", req.headers["content-type"]);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log("Content-Type:", req.headers["content-type"]);
+//   next();
+// });
 
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
@@ -66,13 +66,13 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(jsonParser);
 app.use(urlencodedParser);
 
-app.use(
-  cors({
-    origin: "http://192.168.1.17:8081",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// app.use(
+//   cors({
+//     origin: "http://192.168.1.17:8081",
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//   })
+// );
 
 (async () => {
   try {
