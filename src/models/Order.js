@@ -2,34 +2,34 @@ import mongoose, { Schema } from "mongoose";
 
 const orderSchema = new Schema(
   {
-    customer_id:{
+    customer_id: {
       type: Schema.Types.ObjectId,
-      ref: 'Customer',
+      ref: "Customer",
       required: true,
     },
     total_price: {
       type: Number,
       required: true,
     },
-    order_status:{
+    order_status: {
       type: String,
-      enum: ['Pending', 'Canceled', 'Completed'],
-      default: 'Pending',
+      enum: ["Pending", "Canceled", "Completed"],
+      default: "Pending",
     },
-    payment_id:{
+    payment_id: {
       type: Schema.Types.ObjectId,
-      ref: 'Payment',
+      ref: "Payment",
       required: true,
     },
-    order_date:{
+    order_date: {
       type: Date,
       default: Date.now,
     },
-    shipping_address:{
+    shipping_address: {
       type: Schema.Types.ObjectId,
-      ref: 'Address',
+      ref: "Address",
       required: true,
-    }
+    },
   },
   { timestamps: false, versionKey: false }
 );

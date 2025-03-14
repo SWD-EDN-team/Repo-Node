@@ -1,0 +1,10 @@
+{{#extends "layouts/main"}}
+  {{#block "body"}}
+    <h2>Hoàn tiền giao dịch</h2>
+    <form action="/payment/refund" method="post">
+      <label for="txnRef">Mã giao dịch:</label>
+      <input type="text" id="txnRef" name="txnRef" required />
+      <button type="submit">Hoàn tiền</button>
+    </form>
+  {{/block}}
+{{/extends}}

@@ -1,0 +1,10 @@
+{{#extends "layouts/main"}}
+  {{#block "body"}}
+    <h2>Truy vấn kết quả thanh toán</h2>
+    <form action="/payment/query" method="post">
+      <label for="txnRef">Mã giao dịch:</label>
+      <input type="text" id="txnRef" name="txnRef" required />
+      <button type="submit">Truy vấn</button>
+    </form>
+  {{/block}}
+{{/extends}}

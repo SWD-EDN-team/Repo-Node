@@ -1,0 +1,10 @@
+{{#extends "layouts/main"}}
+  {{#block "body"}}
+    <h2>Kết quả thanh toán</h2>
+    <p>Mã giao dịch: {{transactionId}}</p>
+    <p>Số tiền: {{amount}} VND</p>
+    <p>Ngân hàng: {{bankCode}}</p>
+    <p>Thời gian thanh toán: {{paymentTime}}</p>
+    <p>Trạng thái: {{message}}</p>
+  {{/block}}
+{{/extends}}

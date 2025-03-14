@@ -1,7 +1,7 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
 import Cart from "../models/Cart.js";
-import Product from "../models/Product.js";
+// import Product from "../models/Product.js";
 
 const cartSchema = Joi.object({
   product_id: Joi.string().required().messages({
@@ -33,14 +33,7 @@ export const getCartbyToken = async (req, res) => {
       .json({ message: error.message });
   }
 };
-// export const getAllCart = async (req, res) =>{
-//   try {
-//     const cart = await Cart.find();
-//     res.status(StatusCode.OK).json({ message: "Get all products in cart" ,Cart});
-//   } catch (error) {
-//     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
-//   }
-// }
+
 export const createCart = async (req, res) => {
   try {
     const { error } = cartSchema.validate(req.body);
@@ -59,12 +52,60 @@ export const createCart = async (req, res) => {
       .json({ message: error.message });
   }
 };
-// xoá product trong cart
-export const deleteProductInCart = async (req, res) => {
+
+export const updateCartProduct = async (req, res) => {
   try {
-    if (1 == 1) {
-      alert("mkk");
+    const { product_id, quantity } = req.body;
+    const user_id = req.user.id; // Lấy user_id từ token
+
+    if (quantity <= 0) {
+      return res
+        .status(StatusCode.BAD_REQUEST)
+        .json({ message: "Quantity must be greater than 0" });
     }
+
+    const cartItem = await Cart.findOne({ user_id, product_id });
+
+    if (!cartItem) {
+      return res
+        .status(StatusCode.NOT_FOUND)
+        .json({ message: "Product not found in cart" });
+    }
+
+    cartItem.quantity = quantity;
+
+    await cartItem.save();
+
+    return res
+      .status(StatusCode.OK)
+      .json({ message: "Cart updated successfully", cart: cartItem });
+  } catch (error) {
+    console.error("Error updating cart:", error);
+    res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
+  }
+};
+
+export const deleteCartProduct = async (req, res) => {
+  try {
+    const { product_id } = req.params;
+    // Lấy user_id từ token (req.user đã được gán từ middleware)
+    const user_id = req.user.id;
+
+    // const cartItem = await Cart.findOne({ user_id, product_id });
+    const cartItem = await Cart.find({ user_id: req.user.id });
+    console.log("cartItem", cartItem);
+
+    if (!cartItem) {
+      return res
+        .status(StatusCode.NOT_FOUND)
+        .json({ message: "Product not found in cart" });
+    }
+    await Cart.deleteOne({ _id: cartItem._id });
+    return res
+      .status(StatusCode.OK)
+      .json({ message: "Product removed from cart" });
   } catch (error) {
     res
       .status(StatusCode.INTERNAL_SERVER_ERROR)
