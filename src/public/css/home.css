@@ -1,10 +1,15 @@
+.container{
+    padding-left: 0;
+    padding-right: 0;
+}
 .sidebar {
     display: none !important;
 }
 .hero-section {
     background: url("https://plus.unsplash.com/premium_photo-1682096556408-c7ee01d2ac81?q=80&w=1967&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat center center;
     background-size: cover;
-    height: 25%; 
+    min-height: 90vh;
+    min-width: 180vw;
     display: flex;
     align-items: center;
     color: white; 
@@ -15,6 +20,15 @@
 .hero-section .container {
     position: relative; 
     z-index: 1;
+    
+}
+
+.containercate {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    width: 100%;
+
 }
 .categories-wrapper {
     position: relative;
@@ -36,12 +50,13 @@ display: flex;
 align-items: center;
 justify-content: space-between; 
 margin-bottom: 20px; 
+/* gap: 500px */
 }
 
 .category-card {
     flex: 1 1 25%;
     text-align: center;
-    min-width: 22%; 
+    min-width: 16%; 
 }
 
 .category-card img {
@@ -126,10 +141,15 @@ max-width: 100%;
 }
 
 .rating-section {
+    display: flex;
+    flex-direction: column;
     margin-top: 50px; 
     position: relative; 
     background-color: #f8f9fa; 
-    padding: 50px 0;
+    padding: 50px 5px;
+    width: 100%;
+    margin-bottom: 100px;
+    border-radius: 5%;
 }
 
 .rating-wrapper {
@@ -152,6 +172,7 @@ align-items: center;
 width: 100%;
 padding: 0 20px;
 position: relative;
+margin-bottom: 25px;
 }
 
 .slider-controls {
@@ -174,15 +195,21 @@ transition: background 0.3s, transform 0.2s;
     background-color: #111;
     color: white;
 }
-
 .rating {
-    min-width: 300px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Đảm bảo phần avatar luôn ở dưới */
+    min-height: 180px; /* Chiều cao tối thiểu để các card đồng đều */
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.rating p {
+    flex-grow: 1; /* Mở rộng phần comment để đẩy avatar xuống */
+    margin-bottom: 10px; /* Khoảng cách giữa comment và avatar */
+}
 .stars {
     color: #FFA500;
     font-size: 20px;
@@ -191,7 +218,12 @@ transition: background 0.3s, transform 0.2s;
 .customer-info {
     display: flex;
     align-items: center;
-    margin-top: 10px;
+    gap: 10px;
+}
+.customer-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
 }
 
 .customer-info img {
@@ -199,9 +231,10 @@ transition: background 0.3s, transform 0.2s;
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
+    object-fit: cover;
 }
 
-.instagram-section {
+/* .instagram-section {
     text-align: center;
     padding: 50px 0;
 }
@@ -242,7 +275,7 @@ transition: background 0.3s, transform 0.2s;
 font-size: 32px; 
 color: #333; 
 margin-bottom: 10px;
-}
+} */
 
 .row {
     width: 100%;

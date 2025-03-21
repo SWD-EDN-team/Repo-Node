@@ -7,7 +7,7 @@
     <title>{{title}}</title>
     
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
@@ -17,28 +17,10 @@
 </head>
 <body>
 
-    {{!-- Header --}}
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Krist</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Our Story</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-                </ul>
-                <a href="#" class="btn btn-dark ms-3">Login</a>
-            </div>
-        </div>
-    </nav>
+    {{> header}}
 
     {{!-- Banner--}}
-    {{!-- <section class="hero-section">
+    <section class="hero-section">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6 text-start text-white">
@@ -49,10 +31,10 @@
                 </div>
             </div>
         </div>
-    </section> --}}
+    </section>
 
     {{!-- Categories Section --}}
-    {{!-- <section class="container my-5">
+    <section class="containercate my-5">
         <div class="categories-header">
             <h3>Shop by Categories</h3>
             <div class="slider-controls">
@@ -64,41 +46,28 @@
             <div class="categories">
                 {{#each categories}}
                 <div class="category-card">
-                    <img src="{{this.image}}" alt="{{this.name}}">
-                    <h5>{{this.name}}</h5>
+                    <img src="{{this.image}}" alt="{{this.category_name}}">
+                    <h5>{{this.category_name}}</h5>
                 </div>
                 {{/each}}
             </div>
         </div>
-    </section> --}}
+    </section>
 
         <!-- Our Bestseller Section -->
-        <section class="container my-5">
-            <h2 class="text-center fw-bold mb-4">Our Bestseller</h2>
-            <div class="row">
-                {{#each products}}
-                <div class="col-md-3 col-sm-6 mb-4 ">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-img-wrapper">
-                            <img src="{{this.image}}" class="card-img-top" alt="{{this.product_name}}">
-                            <button  class="btn btn-dark add-to-cart">Add to Cart</button>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{this.product_name}}</h5>
-                            <p class="text-muted">{{this.description}}</p>
-                            <p class="fw-bold">${{this.price}} 
-                            <del class="old-price">${{this.oldPrice}}</del></p>
-                        </div>
-                    </div>
+        <h2 class=" fw-bold mb-4">Our Bestseller</h2>
+            <section class="container my-5">
+                <div class="row">
+                    {{#each products}}
+                        {{> productCard}}
+                    {{/each}}
                 </div>
-                {{/each}}
-            </div>
-        </section>
+            </section>
 
     
 
     <!-- Deals of the Month Section -->
-    {{!-- <section class="container my-5 d-flex align-items-center justify-content-between">
+    <section class="container my-5 d-flex align-items-center justify-content-between">
         <div class="deal-text w-50">
             <h2 class="fw-bold">Deals of the Month</h2>
             <p class="text-muted">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
@@ -125,10 +94,11 @@
         <div class="deal-image w-50">
             <img src="https://luvinus.com/wp-content/uploads/2022/05/fashionista-la-gi-1.jpg" class="img-fluid rounded" alt="Deal Image">
         </div>
-    </section> --}}
+    </section>
 
     {{!-- Rating & comment --}}
-    <section class="rating-section">
+    <div class="container">
+    <section class="rating-section ">
         <div class="rating-header">
             <h2>What our Customers say</h2>
             <div class="slider-controls">
@@ -157,6 +127,8 @@
             </div>
         </div>
     </section>
+    </div>
+
 
     {{!-- <section class="instagram-section">
         <h2>Our Instagram Stories</h2>
@@ -180,7 +152,7 @@
     </section> --}}
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {{!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
 </body>
 </html>
 <script>

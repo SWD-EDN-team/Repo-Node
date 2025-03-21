@@ -1,4 +1,4 @@
-import { product, reviews } from "../utils/api.js";
+import { categories, product, reviews } from "../utils/api.js";
 
 export const viewLogin = (req, res) => {
   res.render("login/login",{layout: "auth"});
@@ -53,7 +53,7 @@ export const viewMyOrder = (req, res) => {
   res.render("my-orders", { orders });
 };
 export const viewDetailProdct = (req, res) => {
-  res.render("detailProduct", { title: "Giới thiệu", layout: "productPage" });
+  res.render("detailProduct/detailProduct", { title: "Giới thiệu", layout: "productPage" });
 };
 export const viewManageAddress = (req, res) => {
   res.render("manageAddress/manageAddress", {
@@ -78,8 +78,9 @@ export const viewHome = async (req, res) => {
 try {
   const productData = await product()
   const reviewData = await reviews()
+  const categoryData = await categories()
   
-  res.render("home/home",{title: "Trang chủ",products:productData.data, ratings: reviewData.data})
+  res.render("home/home",{title: "Trang chủ",products:productData.data, ratings: reviewData.data, categories: categoryData.data,layout:"main"})
 } catch (error) {
   console.log(error);
 }
