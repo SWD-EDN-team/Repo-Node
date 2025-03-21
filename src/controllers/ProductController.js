@@ -1,6 +1,6 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
-import Product from "../models/product.js";
+import Product from "../models/Product.js";
 import { uploadSingleFile } from "../services/fileService.js";
 
 const productSchema = Joi.object({
