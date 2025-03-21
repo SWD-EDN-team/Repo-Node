@@ -46,7 +46,6 @@ export const createUserApi = async (req, res) => {
       gender,
       role,
     });
-
     return res.status(201).json({
       errorCode: 0,
       message: "User created successfully",
