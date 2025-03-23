@@ -1,4 +1,4 @@
-import { categories, product, reviews } from "../utils/api.js";
+import { categories, product, productById, productpage, reviews } from "../utils/api.js";
 
 export const viewLogin = (req, res) => {
   res.render("login/login",{layout: "auth"});
@@ -52,8 +52,14 @@ const orders = [
 export const viewMyOrder = (req, res) => {
   res.render("my-orders", { orders });
 };
-export const viewDetailProdct = (req, res) => {
-  res.render("detailProduct/detailProduct", { title: "Giới thiệu", layout: "productPage" });
+export const viewDetailProdct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const productData = await productById(id);
+    res.render("detailProduct/detailProduct", { title: "Chi tiết sản phẩm", layout: "productPage", product: productData.data });
+  } catch (error) {
+    console.log(error);
+  }
 };
 export const viewManageAddress = (req, res) => {
   res.render("manageAddress/manageAddress", {
@@ -79,11 +85,73 @@ try {
   const productData = await product()
   const reviewData = await reviews()
   const categoryData = await categories()
+  const bestSellers = productData.data.slice(0, 8);
   
-  res.render("home/home",{title: "Trang chủ",products:productData.data, ratings: reviewData.data, categories: categoryData.data,layout:"main"})
+  res.render("home/home",{title: "Trang chủ",products:bestSellers, ratings: reviewData.data, categories: categoryData.data, layout:"main"})
 } catch (error) {
   console.log(error);
 }
+};
+
+export const viewProductList = async (req, res) => {
+  try {
+    const page = req.params.pageNumber || 1; // Lấy số trang từ URL, mặc định là trang 1
+    const response = await productpage(page); // Gọi API lấy sản phẩm theo trang
+    const categoryData = await categories();
+    // Lấy danh sách colors và sizes không trùng lặp & đếm số lượng
+    const colorCount = {};
+    const sizeCount = {};
+
+    response.data.products.forEach(product => {
+      product.color.forEach(color => {
+        if (color) {
+          colorCount[color] = (colorCount[color] || 0) + 1;
+        }
+      });
+      product.size.forEach(size => {
+        if (size) {
+          sizeCount[size] = (sizeCount[size] || 0) + 1;
+        }
+      });
+    });
+
+    const colors = Object.keys(colorCount).map(color => ({
+      name: color,
+      count: colorCount[color],
+      code: getColorCode(color) // Hàm để lấy mã màu nếu có
+    }));
+
+    const sizes = Object.keys(sizeCount).map(size => ({
+      name: size,
+      count: sizeCount[size]
+    }));
+    
+    res.render("productList/productList", {
+      title: "Danh sách sản phẩm",
+      layout: "main",
+      products: response.data.products,  // API trả về danh sách sản phẩm
+      categories: categoryData.data,
+      colors: colors,  
+      sizes: sizes,
+      currentPage: response.data.currentPage, // Trang hiện tại
+      totalPages: response.data.totalPages, // Tổng số trang
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Lỗi server");
+  }
+};
+
+const getColorCode = (color) => {
+  const colorMap = {
+    "Red": "#FF0000",
+    "Blue": "#0000FF",
+    "Green": "#008000",
+    "Black": "#000000",
+    "White": "#FFFFFF"
+  };
+  return colorMap[color] || "#CCCCCC"; 
+};
 
 // export const commentsHome = async (req, res) => {
 // try {
@@ -177,4 +245,4 @@ try {
     //   { icon: "fa-solid fa-credit-card", title: "Flexible Payment", description: "Pay with multiple credit cards" }
     // ]
   // });
-}
+

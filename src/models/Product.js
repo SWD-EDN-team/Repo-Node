@@ -44,6 +44,19 @@ const productSchema = new Schema(
       type: Number,
       default: 0,
     },
+    color: {
+      type: [String], 
+      required: true,
+    },
+    size: {
+      type: [
+        {
+          type: String,
+          enum: ["S", "M", "L", "XL"], 
+        },
+      ],
+      required: true,
+    },
   },
   { timestamps: false, versionKey: false }
 );

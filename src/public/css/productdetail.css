@@ -1,0 +1,45 @@
+/* Container chung */
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Nút tăng/giảm */
+  .minus, .plus {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .minus:hover, .plus:hover {
+    background-color: #e0e0e0;
+  }
+  
+  /* Ô nhập số lượng */
+  .input-box {
+    width: 50px;
+    height: 36px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+  }
+  
+  /* Khi nhấn vào input */
+  .input-box:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  

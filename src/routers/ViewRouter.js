@@ -1,13 +1,14 @@
 import express from "express";
-import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewSaveCard, viewSignup, viewSuccessful } from "../controllers/viewsController.js";
+import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList, viewSaveCard, viewSignup, viewSuccessful } from "../controllers/viewsController.js";
 const viewRouter = express.Router();
 
 viewRouter.get("/", (req, res) => {
   res.render("home/home");
 });
 viewRouter.get("/home", viewHome);
+viewRouter.get("/products/page/:pageNumber", viewProductList);
 viewRouter.get("/my-orders", viewMyOrder);
-viewRouter.get("/detailProduct", viewDetailProdct);
+viewRouter.get("/detailProduct/:id", viewDetailProdct);
 viewRouter.get("/manageAddress", viewManageAddress);
 viewRouter.get("/myWishList", viewMyWishList);
 viewRouter.get("/saveCard", viewSaveCard);

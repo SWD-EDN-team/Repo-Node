@@ -36,6 +36,22 @@ export const getAllProducts = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getProductById = async (req, res) => {
+  try {
+    const { id } = req.params; 
+    const product = await Product.findById(id); 
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" }); 
+    }
+
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const createProduct = async (req, res) => {
 
   console.log("Received files:", req.files); // Log file nhận được
@@ -70,5 +86,28 @@ export const createProduct = async (req, res) => {
     res
       .status(StatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: error.message });
+  }
+};
+
+export const getProductList = async (req, res) => {
+  try {
+    const page = parseInt(req.params.pageNumber) || 1; 
+    const limit = 8; 
+    const skip = (page - 1) * limit;
+
+    const totalProducts = await Product.countDocuments();
+
+    const products = await Product.find().skip(skip).limit(limit);
+    
+    res.json({
+      success: true,
+      products,
+      currentPage: page,
+      totalPages: Math.ceil(totalProducts / limit),
+      totalProducts
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Lỗi server" });
   }
 };

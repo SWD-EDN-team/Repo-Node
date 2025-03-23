@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+  {{> header}}
+
+  <div class="container my-5">
+    <div class="row">
+      <!-- Sidebar Filter -->
+      <aside class="col-md-3">
+        <div class="filter-section">
+          <h5>Danh mục sản phẩm</h5>
+          <ul class="list-unstyled">
+            {{#each categories}}
+              <li>
+                <input type="checkbox" class="filter-category" value="{{this.id}}" id="cat-{{this.id}}">
+                <label for="cat-{{this.id}}">{{this.category_name}}</label>
+              </li>
+            {{/each}}
+          </ul>
+
+        <h5>Lọc theo giá</h5>
+        <input type="range" id="priceRange" min="0" max="2000" step="50" value="0">
+        <p>Giá: $<span id="priceValue">0</span></p>
+
+        <h5>Lọc theo màu sắc</h5>
+        <ul class="list-unstyled">
+        {{#each colors}}
+            <li>
+            <input type="checkbox" class="filter-color" value="{{this.name}}" id="color-{{this.name}}">
+            <label for="color-{{this.name}}" style="color: {{this.code}};">
+                {{this.name}} ({{this.count}})
+            </label>
+            </li>
+        {{/each}}
+        </ul>
+
+        <h5>Lọc theo kích thước</h5>
+        <ul class="list-unstyled">
+        {{#each sizes}}
+            <li>
+            <input type="checkbox" class="filter-size" value="{{this.name}}" id="size-{{this.name}}">
+            <label for="size-{{this.name}}">{{this.name}} ({{this.count}})</label>
+            </li>
+        {{/each}}
+        </ul>
+
+          <button id="applyFilters" class="btn btn-primary">Áp dụng bộ lọc</button>
+        </div>
+      </aside>
+
+      <!-- Danh sách sản phẩm -->
+      <main class="col-md-9">
+        <section class="row">
+          {{#each products}}
+            {{> productCard}}
+          {{/each}}
+        </section>
+
+        <!-- Phân trang -->
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            {{#if (gt currentPage 1)}}
+              <li class="page-item">
+                <a class="page-link" href="/view/products/page/{{subtract currentPage 1}}">« Trước</a>
+              </li>
+            {{/if}}
+
+            {{#each (range 1 totalPages)}}
+              <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                <a class="page-link" href="/view/products/page/{{this}}">{{this}}</a>
+              </li>
+            {{/each}}
+
+            {{#if (lt currentPage totalPages)}}
+              <li class="page-item">
+                <a class="page-link" href="/view/products/page/{{add currentPage 1}}">Sau »</a>
+              </li>
+            {{/if}}
+          </ul>
+        </nav>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("applyFilters").addEventListener("click", function () {
+      let selectedCategories = [...document.querySelectorAll(".filter-category:checked")].map(el => el.value);
+      let selectedColors = [...document.querySelectorAll(".filter-color:checked")].map(el => el.value);
+      let selectedSizes = [...document.querySelectorAll(".filter-size:checked")].map(el => el.value);
+      let selectedPrice = document.getElementById("priceRange").value;
+
+      let queryParams = new URLSearchParams({
+        categories: selectedCategories.join(","),
+        colors: selectedColors.join(","),
+        sizes: selectedSizes.join(","),
+        maxPrice: selectedPrice
+      });
+
+      window.location.href = `/view/products/filter?${queryParams.toString()}`;
+    });
+
+    const priceRange = document.getElementById("priceRange");
+    const priceValue = document.getElementById("priceValue");
+
+    // Khi người dùng kéo thanh trượt, cập nhật giá trị hiển thị
+    priceRange.addEventListener("input", function() {
+        priceValue.textContent = this.value;
+    });
+  </script>
+</body>
+
+</html>
