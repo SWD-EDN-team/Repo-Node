@@ -18,7 +18,7 @@
           <ul class="list-unstyled">
             {{#each categories}}
               <li>
-                <input type="checkbox" class="filter-category" value="{{this.id}}" id="cat-{{this.id}}">
+                <input type="checkbox" class="filter-category" value="{{this._id}}" id="cat-{{this._id}}">
                 <label for="cat-{{this.id}}">{{this.category_name}}</label>
               </li>
             {{/each}}
@@ -26,15 +26,15 @@
 
         <h5>Lọc theo giá</h5>
         <input type="range" id="priceRange" min="0" max="2000" step="50" value="0">
-        <p>Giá: $<span id="priceValue">0</span></p>
+        <p>Giá tối đa: $<span id="priceValue">0</span></p>
 
         <h5>Lọc theo màu sắc</h5>
         <ul class="list-unstyled">
         {{#each colors}}
             <li>
             <input type="checkbox" class="filter-color" value="{{this.name}}" id="color-{{this.name}}">
-            <label for="color-{{this.name}}" style="color: {{this.code}};">
-                {{this.name}} ({{this.count}})
+            <label for="color-{{this.name}}">
+                {{this.name}} 
             </label>
             </li>
         {{/each}}
@@ -45,7 +45,7 @@
         {{#each sizes}}
             <li>
             <input type="checkbox" class="filter-size" value="{{this.name}}" id="size-{{this.name}}">
-            <label for="size-{{this.name}}">{{this.name}} ({{this.count}})</label>
+            <label for="size-{{this.name}}">{{this.name}}</label>
             </li>
         {{/each}}
         </ul>
@@ -56,7 +56,7 @@
 
       <!-- Danh sách sản phẩm -->
       <main class="col-md-9">
-        <section class="row">
+        <section id="product-list" class="row">
           {{#each products}}
             {{> productCard}}
           {{/each}}
@@ -88,31 +88,109 @@
     </div>
   </div>
 
-  <script>
+<script>
     document.getElementById("applyFilters").addEventListener("click", function () {
-      let selectedCategories = [...document.querySelectorAll(".filter-category:checked")].map(el => el.value);
-      let selectedColors = [...document.querySelectorAll(".filter-color:checked")].map(el => el.value);
-      let selectedSizes = [...document.querySelectorAll(".filter-size:checked")].map(el => el.value);
-      let selectedPrice = document.getElementById("priceRange").value;
-
-      let queryParams = new URLSearchParams({
-        categories: selectedCategories.join(","),
-        colors: selectedColors.join(","),
-        sizes: selectedSizes.join(","),
-        maxPrice: selectedPrice
-      });
-
-      window.location.href = `/view/products/filter?${queryParams.toString()}`;
+        loadPage(1); // Khi áp dụng bộ lọc, luôn tải trang 1
     });
+
+    async function loadPage(page) {
+        let selectedCategories = [...document.querySelectorAll(".filter-category:checked")].map(el => el.value);
+        let selectedColors = [...document.querySelectorAll(".filter-color:checked")].map(el => el.value);
+        let selectedSizes = [...document.querySelectorAll(".filter-size:checked")].map(el => el.value);
+        let selectedPrice = document.getElementById("priceRange").value;
+
+        let queryParams = new URLSearchParams({
+            categories: selectedCategories.join(","),
+            colors: selectedColors.join(","),
+            sizes: selectedSizes.join(","),
+            maxPrice: selectedPrice,
+            page: page
+        });
+
+        try {
+            let response = await fetch(`/view/products/filter?${queryParams.toString()}`);
+            let result = await response.json();
+
+            let productContainer = document.getElementById("product-list");
+            let paginationContainer = document.querySelector(".pagination");
+
+            productContainer.innerHTML = ""; // Xóa danh sách sản phẩm cũ
+            paginationContainer.innerHTML = ""; // Xóa phân trang cũ
+
+            if (result.success) {
+                if (result.data.length === 0) {
+                    // Không có sản phẩm nào
+                    productContainer.innerHTML = `<p class="text-center text-muted">Không có sản phẩm nào phù hợp.</p>`;
+                    return;
+                }
+
+                // Render danh sách sản phẩm
+                result.data.forEach(product => {
+                    productContainer.innerHTML += `
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <div class="card border-0 shadow-sm product-card" data-id="${product._id}" style="height: 400px;">
+                                <img src="${product.image[0]}" class="card-img-top" alt="${product.product_name}" style="height: 200px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.product_name}</h5>
+                                    <p class="text-muted">${product.description}</p>
+                                    <p class="fw-bold">$${product.price}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Cập nhật phân trang
+                if (result.totalPages > 1) {
+                    if (result.currentPage > 1) {
+                        paginationContainer.innerHTML += `
+                            <li class="page-item">
+                                <a class="page-link" href="#" onclick="loadPage(${result.currentPage - 1})">« Trước</a>
+                            </li>
+                        `;
+                    }
+
+                    for (let i = 1; i <= result.totalPages; i++) {
+                        paginationContainer.innerHTML += `
+                            <li class="page-item ${i === result.currentPage ? 'active' : ''}">
+                                <a class="page-link" href="#" onclick="loadPage(${i})">${i}</a>
+                            </li>
+                        `;
+                    }
+
+                    if (result.currentPage < result.totalPages) {
+                        paginationContainer.innerHTML += `
+                            <li class="page-item">
+                                <a class="page-link" href="#" onclick="loadPage(${result.currentPage + 1})">Sau »</a>
+                            </li>
+                        `;
+                    }
+                }
+            }
+
+        } catch (error) {
+            console.error("Lỗi khi tải dữ liệu sản phẩm:", error);
+        }
+    }
+
 
     const priceRange = document.getElementById("priceRange");
     const priceValue = document.getElementById("priceValue");
 
-    // Khi người dùng kéo thanh trượt, cập nhật giá trị hiển thị
-    priceRange.addEventListener("input", function() {
+    priceRange.addEventListener("input", function () {
         priceValue.textContent = this.value;
     });
-  </script>
+    document.getElementById("product-list").addEventListener("click", function (event) {
+        const card = event.target.closest(".product-card");
+        if (card) {
+            const productId = card.getAttribute("data-id");
+            if (productId) {
+                window.location.href = `/view/detailProduct/${productId}`;
+            }
+        }
+    });
+</script>
+
 </body>
 
 </html>

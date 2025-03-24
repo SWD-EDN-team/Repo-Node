@@ -1,5 +1,6 @@
 import express from "express";
 import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList, viewSaveCard, viewSignup, viewSuccessful } from "../controllers/viewsController.js";
+import {searchProduct} from '../controllers/ProductController.js'
 const viewRouter = express.Router();
 
 viewRouter.get("/", (req, res) => {
@@ -7,6 +8,7 @@ viewRouter.get("/", (req, res) => {
 });
 viewRouter.get("/home", viewHome);
 viewRouter.get("/products/page/:pageNumber", viewProductList);
+viewRouter.get("/products/filter", searchProduct);
 viewRouter.get("/my-orders", viewMyOrder);
 viewRouter.get("/detailProduct/:id", viewDetailProdct);
 viewRouter.get("/manageAddress", viewManageAddress);
