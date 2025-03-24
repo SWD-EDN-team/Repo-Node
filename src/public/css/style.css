@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.flex {
+    display: flex;
+}
+
+.col {
+    flex-direction: column;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.ju-content {
+    justify-content: center;
+}
+
+.dec {
+    text-decoration: none;
+    color: black;
+}
+
+.container {
+    display: flex;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 350px;
+    padding: 20px;
+    background: #f9f9f9;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+}
+
+.sidebar ul li.active {
+    /* background: green; */
+    color: white;
+}
+
+.orders-container {
+    flex: 1;
+    padding: 20px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+}
+
+.item-status {
+    display: flex;
+    align-items: center;
+}
+
+.delivered {
+    color: green;
+}
+
+.in-process {
+    color: orange;
+}
+
+.order-actions button {
+    margin: 5px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.view-btn {
+    background: white;
+    border: 1px solid black;
+}
+
+.review-btn {
+    background: black;
+    color: white;
+}
+
+.cancel-btn {
+    background: red;
+    color: white;
+}

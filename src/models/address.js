@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import bcrypt from "bcrypt";
 
 const addressSchema = new Schema(
   {
@@ -14,10 +15,10 @@ const addressSchema = new Schema(
       type: String,
       required: true,
     },
-    user:{
+    user: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
-    }
+      ref: "User",
+    },
   },
   { timestamps: false, versionKey: false }
 );

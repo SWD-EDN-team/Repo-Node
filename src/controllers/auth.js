@@ -3,6 +3,7 @@ import StatusCode from "http-status-codes";
 import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Customer from "../models/Customer.js";
 
 const singupSchema = Joi.object({
   email: Joi.string().email().required().messages({
@@ -74,7 +75,7 @@ export const signup = async (req, res) => {
     }
 
     const hashPassword = await bcryptjs.hash(password, 10);
-    const role = (await User.countDocuments({})) === 0 ? "admin" : "user";
+    const role = (await User.countDocuments({})) === 0 ? "admin" : "customer";
 
     const newUser = await User.create({
       ...req.body,
@@ -82,6 +83,12 @@ export const signup = async (req, res) => {
       role,
     });
 
+    if (role === "customer") {
+      const newCustomer = await Customer.create({
+        customer_id: newUser._id,
+      });
+      await newCustomer.save();
+    }
     const accessToken = jwt.sign(
       { id: newUser._id, email: newUser.email, role: newUser.role },
       process.env.JWT_SECRET,
@@ -114,10 +121,10 @@ export const signup = async (req, res) => {
 
 export const signin = async (req, res) => {
   const { email, password } = await req.body;
-  const { error } = await loginSchema.validate(req.body, {
+  const { error } = loginSchema.validate(req.body, {
     abortEarly: false,
   });
-  // sử lí nếu gặp lỗi
+  // xử lí nếu gặp lỗi
   if (error) {
     const message = error.details.map((err) => err.message);
     return res.status(StatusCode.BAD_REQUEST).json({ message });
@@ -300,7 +307,6 @@ export const logout = async (req, res) => {
   }
 
   try {
-    // Giải mã token để lấy userId
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("decoded", decoded);
 
@@ -332,7 +338,6 @@ export const logout = async (req, res) => {
 };
 export const updateUser = async (req, res) => {
   try {
-
     const token = req.headers.authorization?.split(" ")[1]; // Lấy token từ header
 
     if (!token) {
@@ -340,9 +345,9 @@ export const updateUser = async (req, res) => {
         .status(StatusCode.UNAUTHORIZED)
         .json({ message: "No token provided" });
     }
-  
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  
+
     const user = await User.findById(decoded.id).select("-password");
     if (!user) {
       return res
@@ -378,5 +383,14 @@ export const updateUser = async (req, res) => {
     return res
       .status(StatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: "An error occurred during update user" });
+  }
+};
+
+export const verify_code = async (req, res) => {
+  try {
+    res.status(200).send("verify_code");
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send("An error occurred while updating the user.");
   }
 };
