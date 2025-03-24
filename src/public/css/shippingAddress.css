@@ -1,0 +1,403 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    display: grid;
+}
+.headerContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+.shipping {
+    background: white;
+    padding: 20px;
+    margin-right: 80px;
+}
+
+.shipping {
+    flex: 2;
+}
+.shipping h2{
+}
+.summary {
+    flex: 1;
+}
+
+.steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    margin: 40px 0;
+}
+
+.steps div {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    gap: 5px;
+}
+
+.steps span{
+    white-space: nowrap;
+}
+
+.steps i {
+    font-size: 24px; 
+    color: black;
+    margin-top: 50%;
+    transform: translateY(-50%);
+}
+
+.line{
+    width: 100%;
+    height: 1px;
+    border-top: 2px dashed #ccc;
+    margin: 0 10px;
+}
+
+.address{
+    width: 50px;
+    height: 50px;
+    background-color: #aaa;
+    border-radius: 10px;
+}
+
+.shipping h5{
+    font-weight: 600;
+}
+.shipping p{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 100%;
+    opacity: 0.9;
+}
+
+
+.address-card {
+    display: flex;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    position: relative;
+}
+
+.address-card input {
+    margin-right: 10px;
+}
+
+.address-card button {
+    position: absolute;
+    right: 10px;
+    color: red;
+    cursor: pointer;
+    border: none;
+}
+
+.edit-btn {
+    color: black !important;
+    right: 70px !important;
+}
+
+.deliver-btn {
+    width: 50%;
+    padding: 10px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.summary{
+    margin-top: 0;
+    padding: 10px;
+    border-radius: 10px;
+    height: 280px;
+    border: 1px solid #ccc;
+}
+
+.summary .subtotalText {
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+}
+
+.summary p {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.9;
+    margin: 0;
+}
+.summary .subtotal{
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+.discount {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.discount input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.discount button {
+    padding: 9px 30px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+}
+
+.summary h3{
+    font-size: 18px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0.9;
+}
+
+.summary h2{
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+}
+.delivery{
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.address-list{
+    margin-bottom: 40px;
+}
+
+.address-card {
+    display: grid;
+    width: 40%;
+    padding: 20px 10px;
+    border-radius: 10px;
+    border: 2px solid #eee;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+}
+
+.address-card p{
+    padding: 10px 0;
+}
+
+.address-card.selected {
+    border-color: black;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: black;
+}
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 20px 0;
+}
+
+.edit-btn, .delete-btn {
+    padding: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px;
+}
+
+.edit-btn {
+    background-color: #F1F1F3;
+    position: absolute;
+    left: 0px;
+}
+
+.delete-btn {
+    background-color: #FAECEC;
+    color: red;
+    position: absolute;
+    right: 0;
+}
+
+.address-form {
+    font-family: Arial, sans-serif;
+    width: 50%;
+}
+
+.address-form h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input{
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+}
+
+.checkbox-group input[type="checkbox"]{
+    accent-color: black;
+}
+
+.submit-btn {
+    width: 50%;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 60px;
+}
+@media screen and (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .shipping, .summary {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .summary {
+        margin-top: 105px;
+        height: auto;
+    }
+
+    .steps {
+    }
+
+    .steps .line {
+        display: none;
+    }
+    .address-card{
+        width: 60%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 2px solid #eee;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .shipping, .summary {
+        width: 100%;
+    }
+
+    .address-card {
+        width: 70%;
+        border-radius: 10px;
+        border: 2px solid #eee;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .discount input {
+        width: calc(100% - 80px);
+    }
+
+    .discount button {
+        position: static;
+        width: 80px;
+    }
+
+    .deliver-btn {
+        width: 100%;
+    }
+
+    .edit-btn, .delete-btn {
+        width: 50px;
+        padding: 5px;
+    }
+
+    .steps div {
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .steps span {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .steps {
+        flex-direction: column;
+    }
+
+    .address-card {
+    }
+
+    .card-actions {
+    }
+
+    .edit-btn, .delete-btn {
+        width: 80%;
+        margin-bottom: 5px;
+    }
+}
+

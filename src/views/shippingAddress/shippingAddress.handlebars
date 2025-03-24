@@ -1,0 +1,244 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shipping Address</title>
+    <link rel="stylesheet" href="/css/shippingAddress.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="container address-template">
+      <div class="headerContainer">
+        <div class="shipping">
+          <h2>Shipping Address</h2>
+          <div class="steps">
+            <div>
+              <div class="address">
+                <i class="fas fa-home"></i>
+              </div>
+              <span>Address</span>
+            </div>
+            <div class="line"></div>
+            <div>
+              <div class="address">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <span>Payment Method</span>
+            </div>
+            <div class="line"></div>
+            <div>
+              <div class="address">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <span>Review</span>
+            </div>
+          </div>
+
+          <h5>Select a delivery address</h5>
+          <p>Is the address you'd like to use displayed below? If so, click the
+            corresponding "Deliver to this address" button. Or you can enter a
+            new delivery address.</p>
+
+          <div id="address-list"></div>
+          <div class="address-list">
+            {{#each shippingAddress}}
+            <div class="address-card" data-id="{{id}}">
+              <div class="card-header">
+                <strong>{{name}}</strong>
+                <input type="checkbox" />
+              </div>
+              <p>{{address}}</p>
+              <p>4517 Washington Ave. Manchester, Kentucky 39495</p>
+              <div class="card-actions">
+                <button class="edit-btn"><i class="fas fa-edit"></i>
+                  Edit</button>
+                <button class="delete-btn"><i class="fas fa-trash"></i>
+                  Delete</button>
+              </div>
+            </div>
+            {{/each}}
+          </div>
+          <button class="deliver-btn">Deliver Here</button>
+        </div>
+
+        <div class="summary">
+          <div class="subtotal">
+            <h3 class="subtotalText">Subtotal <span>$200.00</span></h3>
+          </div>
+          <p>Enter Discount Code</p>
+          <div class="discount">
+            <input type="text" value="FLAT50" />
+            <button>Apply</button>
+          </div>
+          <div class="delivery">
+            <h3>Delivery Charge <span>$5.00</span></h3>
+          </div>
+          <h2>Grand Total <span>$205.00</span></h2>
+        </div>
+      </div>
+      <div class="address-form">
+        <h2>Add a new address</h2>
+        <form id="addressForm">
+          <label>Country</label>
+          <select name="country">
+            <option value disabled selected>Select City</option>
+            <option value="hanoi">Hà Nội</option>
+            <option value="hcm">Hồ Chí Minh</option>
+            <option value="danang">Đà Nẵng</option>
+          </select>
+          <label>City</label>
+          <select name="city">
+            <option value disabled selected>Select City</option>
+            <option value="Hanoi">Hà Nội</option>
+            <option value="HoChiMinh">Hồ Chí Minh</option>
+            <option value="DaNang">Đà Nẵng</option>
+          </select>
+
+          <label>Street</label>
+          <input type="text" name="street" placeholder="Enter Pin Code" />
+
+          {{!
+          <div class="checkbox-group">
+            <input type="checkbox" id="defaultAddress" />
+            <label for="defaultAddress">Use as my default address</label>
+          </div> }}
+
+          <button type="submit" class="submit-btn">Add New Address</button>
+        </form>
+      </div>
+    </div>
+  </body>
+
+</html>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  
+  async function fetchShippingAddresses() {
+    try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            console.error("Không tìm thấy token. Vui lòng đăng nhập.");
+            return;
+        }
+
+        // Gửi request bằng Axios
+        const response = await axios.get("http://localhost:8081/api/v1/address", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        console.log(response.data);
+
+        // Lấy template từ script
+        const source = document.getElementById("address-template").innerHTML;
+        const template = Handlebars.compile(source);
+
+        // Render dữ liệu vào template
+        const html = template({ shippingAddress: response.data });
+
+        // Gán vào DOM
+        document.getElementById("address-list").innerHTML = html;
+
+    } catch (error) {
+        console.error("Lỗi khi lấy danh sách địa chỉ:", error);
+    }
+}
+
+// Gọi hàm khi trang tải xong
+fetchShippingAddresses();
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("addressForm");
+    const addressList = document.querySelector(".address-list");
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const country = form.querySelector("select[name='country']").value;
+      const city = form.querySelector("select[name='city']").value;
+      const street = form.querySelector("input[name='street']").value;
+
+      console.log("Country:", country);
+      console.log("City:", city);
+      console.log("Street:", street);
+
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          alert("No token found. Please login again.");
+          return;
+        }
+
+        const response = await axios.post("http://localhost:8081/api/v1/address", 
+          { country, city, street }, 
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("Response:", response.data);
+        const source = document.getElementById("address-template").innerHTML;
+        const template = Handlebars.compile(source);
+
+        // Render dữ liệu vào template
+        const html = template({ shippingAddress: response.data });
+
+        // Gán vào DOM
+        document.getElementById("address-list").innerHTML = html;
+
+        // Chuyển hướng nếu thành công
+        window.location.href = "/view/home";
+
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Login error. Please login again.");
+      }
+    });
+    addressList.addEventListener("click", async function (event) {
+  const button = event.target.closest(".delete-btn");
+  const addressCard = button.closest(".address-card"); 
+  if (!addressCard) {
+    console.error("Không tìm thấy phần tử chứa địa chỉ.");
+    return;
+  }
+
+  const addressId = addressCard.dataset.id;
+  console.log("addressCard:",addressCard);
+  console.log("addressId:",addressId)
+  if (!addressId) {
+    console.error("Address ID bị thiếu.");
+    return;
+  }
+
+  console.log("addressCard:", addressCard);
+  console.log("addressId:", addressId);
+
+ try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("No token found. Please login again.");
+          return;
+        }
+        const response = await axios.delete(`http://localhost:8081/api/v1/address/${addressId}`, 
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Response:", response.data);
+        {{!-- window.location.href = "/view/home"; --}}
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error deleting address. Please try again.");
+      }
+});
+  });
+</script>
