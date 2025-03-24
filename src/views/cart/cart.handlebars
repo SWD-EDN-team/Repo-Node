@@ -135,8 +135,8 @@
 </head>
 <body>
 <div class="checkout-container">
-    <h1>Checkout</h1>
-    <div class="checkout-content">
+    <h1>My Cart</h1>
+<div class="checkout-content">
         <table class="checkout-table">
             <thead>
                 <tr>
@@ -152,24 +152,24 @@
                 {{#each cart.items}}
                 <tr>
                     <td class="product-info">
-                        <img src="/images/{{this.image}}" class="product-img">
+                        <img src="{{this.product_id.image.[0]}}" class="product-img">
                         <div>
-                            <strong>{{this.product_name}}</strong>
+                            <strong>{{this.product_id.product_name}}</strong>
                             <p>Size: {{this.selected_size}}</p>
                         </div>
                     </td>
-                    <td>${{this.price}}</td>
-                        <td>
-                            <div class="quantity">
-                                <button class="minus" data-id="{{this.id}}" aria-label="Decrease">&minus;</button>
-                                <input type="number" class="input-box" value="{{this.quantity}}" min="1" max="10" data-id="{{this.id}}">
-                                <button class="plus" data-id="{{this.id}}" aria-label="Increase">&plus;</button>
-                            </div>
-                        </td>
-                    <td>${{this.selected_color}}</td>
-                    <td>${{multiply this.price this.quantity}}</td>
+                    <td>${{this.product_id.price}}</td>
                     <td>
-                        <button class="remove-item" data-id="{{this.id}}">
+                        <div class="quantity">
+                            <button class="minus" data-id="{{this._id}}" aria-label="Decrease">&minus;</button>
+                            <input type="number" class="input-box" value="{{this.quantity}}" min="1" max="10" data-id="{{this._id}}">
+                            <button class="plus" data-id="{{this._id}}" aria-label="Increase">&plus;</button>
+                        </div>
+                    </td>
+                    <td>{{this.selected_color}}</td>
+                    <td>${{multiply this.product_id.price this.quantity}}</td>
+                    <td>
+                        <button class="remove-item" data-id="{{this._id}}">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </td>

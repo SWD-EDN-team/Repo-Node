@@ -12,7 +12,7 @@ viewRouter.get("/", (req, res) => {
 viewRouter.get("/home", viewHome);
 viewRouter.get("/products/page/:pageNumber", viewProductList);
 viewRouter.get("/products/filter", searchProduct);
-viewRouter.get("/cart", user, getCartbyToken);
+viewRouter.get("/cart", userFE, getCartbyToken);
 viewRouter.get("/my-orders", viewMyOrder);
 viewRouter.get("/detailProduct/:id", viewDetailProdct);
 viewRouter.get("/manageAddress", viewManageAddress);
