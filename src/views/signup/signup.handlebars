@@ -119,27 +119,52 @@
         <div class="form-container">
             <h2>Create New Account</h2>
             <p>Please enter details</p>
-            <form>
-                <label>First Name</label>
-                <input type="text" placeholder="Enter your first name">
-
-                <label>Last Name</label>
-                <input type="text" placeholder="Enter your last name">
-
                 <label>Email Address</label>
-                <input type="email" placeholder="example@email.com">
-
+                <input id="email" type="email" placeholder="Enter email">
+                
+                <label>Use name</label>
+                <input id="userName" type="text" placeholder="Enter your user name">
+                
                 <label>Password</label>
-                <input type="password" placeholder="********">
+                <input id="password" type="password" placeholder="Enter password">
+                
+                <label>Password</la>
+                <input id="confirmPassword" type="password" placeholder="Enter confirm password">
 
                 <div class="checkbox-container">
                     <input type="checkbox" id="terms">
                     <label for="terms">I agree to the <strong>Terms & Conditions</strong></label>
                 </div>
-
-                <button type="submit">Signup</button>
-            </form>
+                <button onclick="signup()">Signup</button>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function signup(){
+            const email = document.getElementById("email").value;
+            const name = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const terms = document.getElementById("terms").checked;
+            if(password!== confirmPassword){
+                alert("Passwords do not match");
+                return;
+            }
+            if(!terms){
+                alert("Please agree to the terms and conditions");
+            }
+            // call API to signup user
+            try{
+                const response = await axios.post("http://localhost:8081/api/v1/auth/signup",{email, name, password, confirmPassword},{ headers: { "Content-Type": "application/json" } })
+                if(response.status === 201){
+                    alert("Signup successful. Please log in.");
+                    window.location.href = "view/login";
+                }
+            }catch(error){
+                console.error(error);
+                alert("Failed to signup. Please try again.");
+            }
+        }
+    </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
 import Cart from "../models/Cart.js";
-import Product from "../models/product.js";
+import Product from "../models/Product.js";
 
 const cartSchema = Joi.object({
   product_id: Joi.string().required().messages({

@@ -79,6 +79,12 @@ export const viewSaveCard = (req, res) => {
     layout: "productPage",
   });
 };
+export const viewPayment = (req,res)=>{
+  res.render("payment/payment",{
+    title:"Giới thiệu",
+    layout:"main"
+  })
+}
 
 export const viewHome = async (req, res) => {
 try {
