@@ -20,14 +20,14 @@ export const getCartbyToken = async (req, res) =>{
     .populate({
       path: "items.product_id",
       model: "Product", // Đảm bảo đúng model của Product
-      select: "name price image", // Chỉ lấy thông tin cần thiết
+      select: "product_name price image", // Chỉ lấy thông tin cần thiết
     })
     .populate("user_id", "name email"); // Lấy thông tin user nếu cần
 
   if (!cart) {
-    return res.status(StatusCode.NOT_FOUND).json({ message: "Cart not found" });
+    return res.status(StatusCode.NOT_FOUND).json({ message: "Cart is empty" });
   }
-    res.status(StatusCode.OK).json({ message: "Get all cart in cart with token" ,cart});
+    res.render("cart/cart", { cart });
   } catch (error) {
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
   }
@@ -98,6 +98,8 @@ export const addToCart = async (req, res) => {
     }
 
     await cart.save();
+    console.log(cart);
+    
     res.status(200).json({ message: "Product added to cart", cart });
   } catch (error) {
     res.status(500).json({ message: error.message });

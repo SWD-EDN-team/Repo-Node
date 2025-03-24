@@ -40,7 +40,8 @@ export const getAllProducts = async (req, res) => {
 
 export const getProductById = async (req, res) => {
   try {
-    const { id } = req.params; 
+    const { id } = await req.params; 
+    console.log("id",id);
     const product = await Product.findById(id); 
 
     if (!product) {

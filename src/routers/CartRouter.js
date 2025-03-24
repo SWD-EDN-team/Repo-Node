@@ -4,7 +4,7 @@ import { user } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.get("/",user,getCartbyToken);
+// router.get("/",user,getCartbyToken);
 router.post("/",user,createCart);
 router.post("/add",user, addToCart );
 export default router;

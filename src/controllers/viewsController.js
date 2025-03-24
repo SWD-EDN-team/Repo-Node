@@ -1,3 +1,4 @@
+import Product from "../models/Product.js";
 import { categories, product, productById, productpage, reviews } from "../utils/api.js";
 
 export const viewLogin = (req, res) => {
@@ -56,6 +57,8 @@ export const viewDetailProdct = async (req, res) => {
   try {
     const { id } = req.params;
     const productData = await productById(id);
+    console.log("product",productData.data);
+    
     res.render("detailProduct/detailProduct", { title: "Chi tiết sản phẩm", layout: "productPage", product: productData.data });
   } catch (error) {
     console.log(error);

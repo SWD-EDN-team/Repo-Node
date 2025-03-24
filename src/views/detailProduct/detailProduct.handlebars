@@ -20,6 +20,8 @@
   </button>
     <body class="bg-white p-10">
       {{!-- {{> header}} --}}
+
+      <p>{{product.product_name}}</p>
     <div class="grid grid-cols-2 gap-10 max-w-5xl mx-auto">
     <div id="gallery">
       <div class="ant-image-preview-group">
@@ -89,7 +91,10 @@
         <div class="mt-6 flex items-center gap-4">
             <div class="quantity">
               <button class="minus" data-id="{{this.id}}" aria-label="Decrease">&minus;</button>
-              <input type="number" class="input-box" value="{{this.quantity}}" min="1" max="10" data-id="{{this.id}}">
+              <input type="number" class="input-box" 
+              value="{{#if this.quantity}}{{this.quantity}}{{else}}1{{/if}}" 
+              min="1" max="10" 
+              data-id="{{this._id}}">
               <button class="plus" data-id="{{this.id}}" aria-label="Increase">&plus;</button>
             </div>
           <button class="bg-black text-white px-6 py-2 rounded-lg"
@@ -102,7 +107,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.3/antd.min.js"></script>
 
     <script>
-
+      console.log("Product Data:", {{{json product}}});
   document.addEventListener("DOMContentLoaded", function () {
     const mainImage = document.getElementById("mainImage");
 

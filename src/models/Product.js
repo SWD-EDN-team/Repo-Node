@@ -46,7 +46,6 @@ const productSchema = new Schema(
     },
     color: {
       type: [String], 
-      required: true,
     },
     size: {
       type: [
@@ -55,7 +54,6 @@ const productSchema = new Schema(
           enum: ["S", "M", "L", "XL"], 
         },
       ],
-      required: true,
     },
   },
   { timestamps: false, versionKey: false }
