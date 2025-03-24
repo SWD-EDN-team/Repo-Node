@@ -1,0 +1,129 @@
+<div class="container">
+    <h2>Customer Reviews</h2>
+
+    {{#each reviews}}
+    <div class="review">
+        <div class="review-header">
+     <img src="/images/upload/avatar.jpg" alt="{{this.user_id.name}}" class="avatar">
+    <strong>{{this.user_id.name}}</strong>
+            <div>
+                <div class="stars">
+                    {{#repeat this.rate}}
+                        <span>⭐</span>
+                    {{/repeat}}
+                </div>
+        </div>
+        <p><strong>{{this.title}}</strong></p>
+        <p><strong>{{this.comment}}</strong></p>
+        <small><b>Review by {{this.user_id.name}}</b> | <b>Posted on {{this.createdAt}}</b></small>
+
+    </div>
+    {{/each}}
+
+    <hr>
+    <h3>Add Your Review</h3>
+    <form action="/submit-review" method="POST">
+        <label>Your Rating</label>
+        <div class="rating">
+            <input type="radio" name="rating" value="5" id="star5"><label for="star5">★</label>
+            <input type="radio" name="rating" value="4" id="star4"><label for="star4">★</label>
+            <input type="radio" name="rating" value="3" id="star3"><label for="star3">★</label>
+            <input type="radio" name="rating" value="2" id="star2"><label for="star2">★</label>
+            <input type="radio" name="rating" value="1" id="star1"><label for="star1">★</label>
+        </div>
+
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" placeholder="Enter Your Name" required>
+
+        <label for="email">Email Address</label>
+        <input type="email" name="email" id="email" placeholder="Enter Your Email" required>
+
+        <label for="review">Your Review</label>
+        <textarea name="review" id="review" placeholder="Enter Your Review" required></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+ <style>
+    .avatar {
+    width: 40px;  /* Điều chỉnh kích thước nhỏ hơn, có thể thử 50px - 100px */
+    height: 40px;
+    border-radius: 50%; /* Làm ảnh tròn */
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+         h2 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        h3 {
+            font-size: 19px;
+            font-weight: bold;
+        }
+        label {
+            font-size: 15px;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+        }
+        .rating input:checked ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: gold;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .review {
+    margin-bottom: 50px; /* Tăng khoảng cách giữa các review */
+    padding-bottom: 15px; /* Tạo khoảng trống dưới mỗi review */
+    border-bottom: 1px solid #ddd; /* Thêm đường kẻ để phân cách */
+}
+
+.stars {
+    margin-bottom: 5px; /* Giảm khoảng cách dưới sao */
+}
+
+.review p {
+    margin: 5px 0; /* Thu gọn khoảng cách giữa các đoạn văn */
+}
+
+.review small {
+    display: block;
+    margin-top: 5px; /* Tăng khoảng cách giữa comment và review info */
+    font-size: 14px;
+    color: gray;
+}
+    </style>

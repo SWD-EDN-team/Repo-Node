@@ -38,7 +38,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Khai báo thư mục chứa file tĩnh (CSS, JS, images)
-app.use(express.static(path.join(__dirname, "./public")));
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
 console.log("Static files served from:", path.join(__dirname, "./public"));
 
 // Middleware
@@ -65,6 +65,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(jsonParser);
 app.use(urlencodedParser);
+
 
 // app.use(
 //   cors({
