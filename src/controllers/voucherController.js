@@ -1,5 +1,5 @@
-import Voucher from "../models/Voucher.js";
-
+import Voucher from "../models/voucher.js";
+//
 export const getVoucher = async (req, res) => {
   try {
     const vouchers = await Voucher.find();
