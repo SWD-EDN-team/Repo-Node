@@ -4,6 +4,13 @@ import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Customer from "../models/Customer.js";
+import {
+  generateOpt,
+  mailTransport,
+  generateEmailTemplate,
+} from "../utils/mail.js";
+import VerificationToken from "../models/verificationToken.js";
+
 
 const singupSchema = Joi.object({
   email: Joi.string().email().required().messages({
@@ -102,6 +109,20 @@ export const signup = async (req, res) => {
 
     const hashedRefreshToken = await bcryptjs.hash(refreshToken, 10);
     newUser.refreshToken = hashedRefreshToken;
+    const OTP = generateOpt();
+    const verificationToken = new VerificationToken({
+      owner: newUser._id,
+      token: OTP,
+    });
+    
+    await verificationToken.save();
+
+    await mailTransport({
+      email: newUser.email,
+      subject: "MÃ OTP Verification",
+      html: generateEmailTemplate(OTP, newUser.name),
+    });
+
     await newUser.save();
     newUser.password = undefined;
 
