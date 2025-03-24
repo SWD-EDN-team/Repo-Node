@@ -14,12 +14,12 @@ const orderDetailSchema = new Schema(
     },
     quantity:{
       type: Number,
-      required: true,
+      // required: true,
       default: 1,
     },
     price:{
       type: Number,
-      required: true,
+      // required: true,
     }
   },
   { timestamps: false, versionKey: false }
