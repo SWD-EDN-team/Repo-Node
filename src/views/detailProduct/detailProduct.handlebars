@@ -1,95 +1,235 @@
+<!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Product Page</title>
+    <title>{{title}}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/productdetail.css">
+    <!-- Thêm Ant Design CSS -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.3/antd.min.css">
+    <style>
+      .sidebar
+      {
+        display: none !important;
+      }
+    </style>
   </head>
-  <body class="bg-white p-10">
+  <button onclick="window.history.back()" style="padding: 10px 20px; color: rgb(0, 0, 0); border-radius: 5px; cursor: pointer; margin-bottom: 20px">
+  ⬅ Quay lại
+  </button>
+    <body class="bg-white p-10">
+      {{!-- {{> header}} --}}
+
+      <p>{{product.product_name}}</p>
     <div class="grid grid-cols-2 gap-10 max-w-5xl mx-auto">
-      <!-- Hình ảnh sản phẩm -->
-      <div>
-        <img
-          id="mainImage"
-          src="https://m.media-amazon.com/images/I/51JpA4Olu4L._AC_UL1157_.jpg"
-          class="w-full rounded-lg shadow-md"
-          alt="Main Product"
-        />
+    <div id="gallery">
+      <div class="ant-image-preview-group">
+        <!-- Ảnh chính -->
+        <img id="mainImage" src="{{product.image.[0]}}" class="ant-image w-full rounded-lg shadow-md" alt="{{product.product_name}}" data-preview-src="{{product.image.[0]}}" />
+
+        <!-- Danh sách ảnh nhỏ -->
         <div class="flex mt-4 gap-2">
-          <img
-            src="https://m.media-amazon.com/images/I/51JpA4Olu4L._AC_UL1157_.jpg"
-            class="w-20 cursor-pointer border rounded-lg"
-            onclick="changeImage(this)"
-          />
-          <img
-            src="https://m.media-amazon.com/images/I/51JpA4Olu4L._AC_UL1157_.jpg"
-            class="w-20 cursor-pointer border rounded-lg"
-            onclick="changeImage(this)"
-          />
-          <img
-            src="https://m.media-amazon.com/images/I/51JpA4Olu4L._AC_UL1157_.jpg"
-            class="w-20 cursor-pointer border rounded-lg"
-            onclick="changeImage(this)"
-          />
-        </div>
-      </div>
-
-      <!-- Thông tin sản phẩm -->
-      <div>
-        <h2 class="text-2xl font-bold">YK Disney</h2>
-        <p class="text-gray-600">Girls Pink Moana Printed Dress</p>
-        <div class="flex items-center mt-2">
-          <span class="text-yellow-400 text-lg">★★★★★</span>
-          <span class="text-gray-500 text-sm ml-2">5.0 (121 Reviews)</span>
-        </div>
-        <div class="mt-2 text-lg">
-          <span class="text-black font-semibold">$80.00</span>
-          <span class="text-gray-400 line-through">$100.00</span>
-        </div>
-
-        <!-- Mô tả -->
-        <p class="mt-4 text-gray-500">This dress is designed for little
-          princesses with high-quality fabric and beautiful color options.</p>
-
-        <!-- Màu sắc -->
-        <div class="mt-4">
-          <h4 class="font-semibold">Color</h4>
-          <div class="flex gap-2 mt-2">
-            <div class="w-6 h-6 bg-red-500 rounded-full cursor-pointer"></div>
-            <div class="w-6 h-6 bg-blue-500 rounded-full cursor-pointer"></div>
-            <div class="w-6 h-6 bg-black rounded-full cursor-pointer"></div>
-            <div
-              class="w-6 h-6 bg-yellow-500 rounded-full cursor-pointer"
-            ></div>
-          </div>
-        </div>
-
-        <!-- Size -->
-        <div class="mt-4">
-          <h4 class="font-semibold">Size</h4>
-          <div class="flex gap-2 mt-2">
-            <button class="border px-4 py-1 rounded-lg">S</button>
-            <button class="border px-4 py-1 rounded-lg">M</button>
-            <button class="border px-4 py-1 rounded-lg">L</button>
-            <button class="border px-4 py-1 rounded-lg">XL</button>
-          </div>
-        </div>
-
-        <!-- Nút thêm vào giỏ hàng -->
-        <div class="mt-6 flex items-center gap-4">
-          <div class="flex border p-2 rounded-lg items-center">
-            <button class="px-3">-</button>
-            <span class="px-4">1</span>
-            <button class="px-3">+</button>
-          </div>
-          <button class="bg-black text-white px-6 py-2 rounded-lg">Add to Cart</button>
+          {{#each product.image}}
+            <img src="{{this}}" class="thumbnail ant-image w-20 cursor-pointer border rounded-lg" data-preview-src="{{this}}" />
+          {{/each}}
         </div>
       </div>
     </div>
 
+
+
+
+      <!-- Thông tin sản phẩm -->
+      <div>
+        <h2 class="text-2xl font-bold">{{product.product_name}}</h2>
+        <p class="text-gray-600">{{product.description}}</p>
+
+        <div class="mt-2 text-lg">
+          <span class="text-black font-semibold">{{formatCurrency product.price}}</span>
+          {{!-- {{#if product.discount}}
+          <span class="text-gray-400 line-through">{{formatCurrency product.originalPrice}}</span>
+          {{/if}} --}}
+        </div>
+
+        <!-- Số lượng còn lại -->
+        <p class="mt-2 text-sm text-gray-500">Còn lại: {{product.stoke_quantity}} sản phẩm</p>
+
+        <!-- Chọn màu -->
+        <div class="mt-4">
+          <h3 class="font-semibold">Màu sắc:</h3>
+          <div class="flex gap-3 mt-2">
+            {{#each product.color}}
+              <div 
+                class="color-box" 
+                style="background-color: {{this}}; width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ccc;"
+                data-color="{{this}}"
+                onclick="selectColor(this, '{{this}}')"
+              >
+              </div>
+            {{/each}}
+          </div>
+        </div>
+
+      <!-- Chọn kích thước -->
+      <div class="mt-4">
+        <h3 class="font-semibold">Kích thước:</h3>
+        <div class="flex gap-3 mt-2">
+          {{#each product.size}}
+          <button
+            class="size-btn px-4 py-2 border rounded-lg hover:bg-gray-200"
+            data-size="{{this}}"
+            onclick="selectSize(this, '{{this}}')"
+          >
+            {{this}}
+          </button>
+          {{/each}}
+        </div>
+      </div>
+
+        <!-- Nút thêm vào giỏ hàng -->
+        <div class="mt-6 flex items-center gap-4">
+            <div class="quantity">
+              <button class="minus" data-id="{{this.id}}" aria-label="Decrease">&minus;</button>
+              <input type="number" class="input-box" 
+              value="{{#if this.quantity}}{{this.quantity}}{{else}}1{{/if}}" 
+              min="1" max="10" 
+              data-id="{{this._id}}">
+              <button class="plus" data-id="{{this.id}}" aria-label="Increase">&plus;</button>
+            </div>
+          <button class="bg-black text-white px-6 py-2 rounded-lg"
+            onclick="addToCart('{{product._id}}', {{product.price}})">
+            Thêm vào giỏ hàng
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.3/antd.min.js"></script>
+
     <script>
-      function changeImage(img) { document.getElementById("mainImage").src =
-      img.src; }
+      console.log("Product Data:", {{{json product}}});
+  document.addEventListener("DOMContentLoaded", function () {
+    const mainImage = document.getElementById("mainImage");
+
+    function changeImage(thumbnail) {
+      mainImage.src = thumbnail.src;
+    }
+
+    if (mainImage) {
+      mainImage.addEventListener("click", function () {
+        const previewModal = document.createElement("div");
+        previewModal.innerHTML = `
+          <div id="previewModal" style="
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); 
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000;" 
+            onclick="this.remove()">
+            <img id="zoomImage" src="${mainImage.src}" style="max-width: 90vw; max-height: 90vh; cursor: zoom-in;">
+          </div>
+        `;
+        document.body.appendChild(previewModal);
+
+        // Thêm sự kiện zoom
+        const zoomImage = document.getElementById("zoomImage");
+        let zoomLevel = 1;
+        zoomImage.addEventListener("click", function (event) {
+          event.stopPropagation();
+          zoomLevel = zoomLevel === 1 ? 2 : 1;
+          this.style.transform = `scale(${zoomLevel})`;
+          this.style.cursor = zoomLevel === 1 ? "zoom-in" : "zoom-out";
+        });
+      });
+    }
+
+    document.querySelectorAll(".thumbnail").forEach((thumbnail) => {
+      thumbnail.addEventListener("click", function () {
+        changeImage(this);
+      });
+    });
+  });
+    let selectedColor = null;
+    let selectedSize = null;
+      function selectColor(element, color) {
+        document.querySelectorAll(".color-box").forEach(el => {
+          el.classList.remove("selected", "border-2", "border-black");
+        });
+        element.classList.add("selected", "border-2", "border-black");
+        selectedColor = color;
+      }
+
+      function selectSize(element, size) {
+        document.querySelectorAll(".size-btn").forEach(el => el.classList.remove("bg-gray-200"));
+        element.classList.add("bg-gray-200");
+        selectedSize = size;
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const quantityContainers = document.querySelectorAll(".quantity");
+
+        quantityContainers.forEach(quantityContainer => {
+          const minusBtn = quantityContainer.querySelector(".minus");
+          const plusBtn = quantityContainer.querySelector(".plus");
+          const inputBox = quantityContainer.querySelector(".input-box");
+
+          if (!minusBtn || !plusBtn || !inputBox) return; 
+
+          minusBtn.addEventListener("click", () => updateQuantity(inputBox, -1));
+          plusBtn.addEventListener("click", () => updateQuantity(inputBox, 1));
+        });
+
+        function updateQuantity(inputBox, change) {
+          let value = parseInt(inputBox.value) || 1;
+          let maxValue = parseInt(inputBox.max) || 10; 
+          let newValue = Math.min(Math.max(value + change, 1), maxValue);
+          inputBox.value = newValue;
+        }
+      });
+
+      // Thêm vào giỏ hàng
+      function addToCart(productId, price) {
+        const quantityInput = document.querySelector(".input-box"); 
+          if (!quantityInput) {
+            alert("Lỗi: Không tìm thấy ô nhập số lượng!");
+            return;
+          }
+          
+          const quantity = parseInt(quantityInput.value);
+          
+        if (!selectedColor) {
+          alert("Vui lòng chọn màu sắc!");
+          return;
+        }
+        
+        if (!selectedSize) {
+          alert("Vui lòng chọn kích thước!");
+          return;
+        }
+
+        const cartItem = {
+          product_id: productId,
+          quantity,
+          selected_color: selectedColor,
+          selected_size: selectedSize,
+          total_price: quantity * price
+        };
+
+        // Gửi dữ liệu đến server qua API
+        fetch("/api/v1/cart/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          },
+          body: JSON.stringify(cartItem)
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert("Đã thêm vào giỏ hàng!");
+        })
+        .catch(error => console.error("Lỗi:", error));
+      }
     </script>
+
   </body>
 </html>

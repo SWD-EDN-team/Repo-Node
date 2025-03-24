@@ -2,6 +2,7 @@ import Joi from "joi";
 import StatusCode from "http-status-codes";
 import Product from "../models/Product.js";
 import { uploadSingleFile } from "../services/fileService.js";
+import mongoose from "mongoose";
 
 const productSchema = Joi.object({
   product_name: Joi.string().required().messages({
@@ -39,13 +40,19 @@ export const getAllProducts = async (req, res) => {
 
 export const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
-    if (!product) res.status(StatusCode.NOT_FOUND).json({ message: "Product not found" });
-    res.status(StatusCode.OK).json(product);
+    const { id } = await req.params; 
+    console.log("id",id);
+    const product = await Product.findById(id); 
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" }); 
+    }
+
+    res.status(200).json(product);
   } catch (error) {
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
-}
+};
 
 export const getProductByPage = async (req, res) => {
   try {
@@ -95,3 +102,79 @@ export const createProduct = async (req, res) => {
       .json({ message: error.message });
   }
 };
+
+export const getProductList = async (req, res) => {
+  try {
+    const page = parseInt(req.params.pageNumber) || 1; 
+    const limit = 8; 
+    const skip = (page - 1) * limit;
+
+    const totalProducts = await Product.countDocuments();
+
+    const products = await Product.find().skip(skip).limit(limit);
+    
+    res.json({
+      success: true,
+      products,
+      currentPage: page,
+      totalPages: Math.ceil(totalProducts / limit),
+      totalProducts
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Lỗi server" });
+  }
+};
+
+
+export const searchProduct = async (req, res) => {
+  try {
+      let { categories, colors, sizes, maxPrice, page = 1, limit = 8 } = req.query;
+      let filter = {};
+
+      // Chuyển đổi page và limit sang số nguyên
+      page = parseInt(page) || 1;
+      limit = parseInt(limit) || 8;
+      let skip = (page - 1) * limit;
+
+      if (categories) {
+          let categoryArray = categories.split(",").filter(Boolean);
+          filter.category_id = { $in: categoryArray.map(id => new mongoose.Types.ObjectId(id)) };
+      }
+    
+      if (colors && colors.trim() !== "") { 
+          filter.color = { $in: colors.split(",") }; 
+      }
+      if (sizes && sizes.trim() !== "") { 
+          filter.size = { $in: sizes.split(",") }; 
+      }
+      if (maxPrice && parseInt(maxPrice) > 0) {
+          filter.price = { $lte: parseInt(maxPrice) };
+      }
+
+      // Lấy tổng số sản phẩm (không phân trang)
+      const totalProducts = await Product.countDocuments(filter);
+
+      // Tìm sản phẩm có phân trang
+      const products = await Product.find(filter)
+          .skip(skip)
+          .limit(limit);
+
+      console.log("Số sản phẩm tìm thấy:", products.length);
+
+      return res.json({ 
+          success: true, 
+          data: products,
+          currentPage: page,
+          totalPages: Math.ceil(totalProducts / limit),
+          totalItems: totalProducts
+      });
+  } catch (error) {
+      console.error("Lỗi backend:", error);
+      return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+
+

@@ -7,280 +7,16 @@
     <title>{{title}}</title>
     
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    {{!-- <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css"> --}}
-    <style>
-    .sidebar {
-        display: none !important;
-    }
-    .hero-section {
-        background: url("https://plus.unsplash.com/premium_photo-1682096556408-c7ee01d2ac81?q=80&w=1967&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat center center;
-        background-size: cover;
-        height: 25%; 
-        display: flex;
-        align-items: center;
-        color: white; 
-        position: relative;
-        padding-left: 5%;
-    }
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/home.css">
 
-    .hero-section .container {
-        position: relative; 
-        z-index: 1;
-    }
-    .categories-wrapper {
-        position: relative;
-        overflow: hidden;
-        max-width: 100%;
-    }
-
-    .categories {
-        display: flex;
-        gap: 20px;
-        transition: transform 0.3s ease-in-out;
-        white-space: nowrap;
-        padding: 0 10px;
-        box-sizing: border-box;
-    }
-
-    .categories-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-    margin-bottom: 20px; 
-    }
-
-    .category-card {
-        flex: 1 1 25%;
-        text-align: center;
-        min-width: 22%; 
-    }
-
-    .category-card img {
-        width: 100%;
-        max-width: 250px;
-        height: 320px;
-        border-radius: 8px;
-        object-fit: cover;
-    }
-
-    .slider-btn.left {
-        left: 0;
-    }
-
-    .slider-btn.right {
-        right: 0;
-    }
-
-    .slider-btn:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000; 
-    }
-    body {
-    padding-top: 70px; 
-    align-items: center;
-    }
-    .card {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .card-img-wrapper {
-    position: relative;
-    overflow: hidden;
-    max-width: 100%;
-    }
-
-    .card-img-top {
-        width: 100%;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .card-body {
-        position: relative;
-        z-index: 2;
-    }
-
-    .card .btn {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(0, 0, 0, 0.7);
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    }
-
-    .card:hover .btn {
-        opacity: 1;
-        transform: translateX(-50%) translateY(-5px);
-    }
-
-    .card:hover .card-img-top {
-        transform: scale(1.05);
-    }
-
-    .old-price {
-        color: rgba(122, 122, 122, 0.5); 
-        font-size: 0.9em; 
-    }
-
-    .rating-section {
-        margin-top: 50px; 
-        position: relative; 
-        background-color: #f8f9fa; 
-        padding: 50px 0;
-    }
-
-    .rating-wrapper {
-        overflow: hidden;
-        width: 100%;
-        position: relative;
-    }
-
-    .rating-container {
-        display: flex;
-        gap: 20px;
-        transition: transform 0.5s ease-in-out;
-        max-width: 200px;
-    }
-
-    .rating-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 0 20px;
-    position: relative;
-    }
-
-    .slider-controls {
-        display: flex !important;
-        gap: 5px ;
-    }
-
-    .slider-btn {
-    background-color: #f5f5f5;
-    color: #333;
-    border: none;
-    padding: 12px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 12px;
-    transition: background 0.3s, transform 0.2s;
-    }
-
-    .slider-btn.right {
-        background-color: #111;
-        color: white;
-    }
-
-    .rating {
-        min-width: 300px; 
-        background: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .stars {
-        color: #FFA500;
-        font-size: 20px;
-    }
-
-    .customer-info {
-        display: flex;
-        align-items: center;
-        margin-top: 10px;
-    }
-
-    .customer-info img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-    }
-
-    .instagram-section {
-        text-align: center;
-        padding: 50px 0;
-    }
-
-    .instagram-wrapper {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-bottom: 40px;
-    }
-
-    .instagram-card {
-        width: 200px;
-        height: 200px;
-        overflow: hidden;
-        border-radius: 10px;
-    }
-
-    .instagram-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-
-    .deliveries {
-        display: flex;
-        justify-content: center;
-        text-align: left;
-        gap: 40px;
-    }
-
-    .delivery {
-        max-width: 200px;
-    }
-
-    .delivery i {
-    font-size: 32px; 
-    color: #333; 
-    margin-bottom: 10px;
-    }
-
-    </style>
 </head>
 <body>
 
-    {{!-- Header --}}
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Krist</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Our Story</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-                </ul>
-                <a href="#" class="btn btn-dark ms-3">Login</a>
-            </div>
-        </div>
-    </nav>
 
     {{!-- Banner--}}
     <section class="hero-section">
@@ -297,7 +33,7 @@
     </section>
 
     {{!-- Categories Section --}}
-    <section class="container my-5">
+    <section class="containercate my-5">
         <div class="categories-header">
             <h3>Shop by Categories</h3>
             <div class="slider-controls">
@@ -309,8 +45,8 @@
             <div class="categories">
                 {{#each categories}}
                 <div class="category-card">
-                    <img src="{{this.image}}" alt="{{this.name}}">
-                    <h5>{{this.name}}</h5>
+                    <img src="{{this.image}}" alt="{{this.category_name}}">
+                    <h5>{{this.category_name}}</h5>
                 </div>
                 {{/each}}
             </div>
@@ -318,27 +54,17 @@
     </section>
 
         <!-- Our Bestseller Section -->
-        <section class="container my-5">
-            <h2 class="text-center fw-bold mb-4">Our Bestseller</h2>
-            <div class="row">
-                {{#each products}}
-                <div class="col-md-3 col-sm-6 mb-4">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-img-wrapper">
-                            <img src="{{this.image}}" class="card-img-top" alt="{{this.name}}">
-                            <button class="btn btn-dark add-to-cart">Add to Cart</button>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{this.name}}</h5>
-                            <p class="text-muted">{{this.description}}</p>
-                            <p class="fw-bold">${{this.price}} 
-                            <del class="old-price">${{this.oldPrice}}</del></p>
-                        </div>
-                    </div>
+        <h2 class=" fw-bold mb-4">Our Bestseller</h2>
+            <section class="container my-5">
+                <div class="row">
+                    {{#each products}}
+                        {{> productCard}}
+                    {{/each}}
                 </div>
-                {{/each}}
-            </div>
-        </section>
+                <div class="view-all">
+                    <a href="/view/products/page/1" class="btn btn-primary">View All Products</a>
+                </div>
+            </section>
 
     
 
@@ -373,7 +99,8 @@
     </section>
 
     {{!-- Rating & comment --}}
-    <section class="rating-section">
+    <div class="container">
+    <section class="rating-section ">
         <div class="rating-header">
             <h2>What our Customers say</h2>
             <div class="slider-controls">
@@ -387,14 +114,14 @@
                 {{#each ratings}}
                 <div class="rating">
                     <div class="stars">
-                        {{#times this.rating}}★{{/times}}
+                        {{#times this.rate}}★{{/times}}
                     </div>
-                    <p>{{this.review}}</p>
+                    <p>{{this.comment}}</p>
                     <div class="customer-info">
-                        <img src="{{this.image}}" alt="{{this.name}}">
+                        <img src="{{this.user_id.avatar}}">
                         <div>
-                            <strong>{{this.name}}</strong>
-                            <p>{{this.role}}</p>
+                            <strong>{{this.user_id.name}}</strong>
+                            <p>{{this.user_id.role}}</p>
                         </div>
                     </div>
                 </div>
@@ -402,30 +129,10 @@
             </div>
         </div>
     </section>
-
-    <section class="instagram-section">
-        <h2>Our Instagram Stories</h2>
-        <div class="instagram-wrapper">
-            {{#each instagramStories}}
-            <div class="instagram-card">
-                <img src="{{this.image}}" alt="{{this.alt}}">
-            </div>
-            {{/each}}
-        </div>
-
-        <div class="deliveries">
-            {{#each delivery}}
-            <div class="delivery">
-                <i class="{{this.icon}}"></i>
-                <h4>{{this.title}}</h4>
-                <p>{{this.description}}</p>
-            </div>
-            {{/each}}
-        </div>
-    </section>
+    </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {{!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
 </body>
 </html>
 <script>

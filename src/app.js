@@ -6,9 +6,11 @@ import connection from "./config/db.js";
 import rootRouter from "./routers/index.routers.js";
 import bodyParser from "body-parser";
 import ViewRouter from "./routers/ViewRouter.js";
+import ProductRouter from "./routers/ProductRouter.js"
 import { create } from "express-handlebars";
 import { fileURLToPath } from 'url';
 import path from 'path';
+
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
 
@@ -20,7 +22,10 @@ var jsonParser = bodyParser.json();
 const hbs = create({
   helpers: {
     eq: (a, b) => a === b,
-    eq: (a, b) => a === b,
+    gt: (a, b) => a > b, // Kiểm tra a > b
+    lt: (a, b) => a < b, // Kiểm tra a < b
+    add: (a, b) => a + b, // Cộng hai số
+    subtract: (a, b) => a - b, // Trừ hai số
     ternary: (condition, value1, value2) => (condition ? value1 : value2),
     inputdata: (value, newValue) => value(...newValue),
     times: function (n, block) {
@@ -30,8 +35,20 @@ const hbs = create({
       }
       return result;
     },
+    formatCurrency: (value) => {
+      return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(value);
+    },
+    range: (start, end) => {
+      let arr = [];
+      for (let i = start; i <= end; i++) {
+        arr.push(i);
+      }
+      return arr;
+    },
+    json: (context) => JSON.stringify(context),
   },
 });
+
 
 const port = process.env.PORT || 8080;
 const hostname = process.env.HOST_NAME || "localhost";
@@ -92,6 +109,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/view",ViewRouter)
 app.use("/api/v1", rootRouter);
+app.use("/products", ProductRouter);
+
 
 // // Start Server
 // const PORT = process.env.PORT || 5000;

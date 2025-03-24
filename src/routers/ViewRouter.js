@@ -1,5 +1,8 @@
 import express from "express";
-import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewPayment,viewReview, viewSaveCard, viewSignup, viewSuccessful } from "../controllers/viewsController.js";
+import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment } from "../controllers/viewsController.js";
+import {searchProduct} from '../controllers/ProductController.js'
+import {getCartbyToken} from '../controllers/CartController.js'
+import { user } from "../middlewares/auth.js"
 import {  userFE } from "../middlewares/auth.js";
 const viewRouter = express.Router();
 
@@ -7,8 +10,11 @@ viewRouter.get("/", (req, res) => {
   res.render("home/home");
 });
 viewRouter.get("/home", viewHome);
+viewRouter.get("/products/page/:pageNumber", viewProductList);
+viewRouter.get("/products/filter", searchProduct);
+viewRouter.get("/cart", userFE, getCartbyToken);
 viewRouter.get("/my-orders", viewMyOrder);
-viewRouter.get("/detailProduct", viewDetailProdct);
+viewRouter.get("/detailProduct/:id", viewDetailProdct);
 viewRouter.get("/manageAddress", viewManageAddress);
 viewRouter.get("/myWishList", viewMyWishList);
 viewRouter.get("/saveCard", viewSaveCard);
