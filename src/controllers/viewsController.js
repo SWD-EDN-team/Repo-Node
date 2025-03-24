@@ -15,8 +15,7 @@ export const viewOTP = (req, res) => {
 export const viewSuccessful = (req, res) => {
   res.render("successful/successful",{layout: "auth"});
 };
-
-const orders = [
+  const orders = [
   {
     img: "/assets/images/dress.png",
     name: "Girls Pink Moana Printed Dress",
@@ -73,6 +72,12 @@ export const viewSaveCard = (req, res) => {
     layout: "productPage",
   });
 };
+export const viewPayment = (req,res)=>{
+  res.render("payment/payment",{
+    title:"Giới thiệu",
+    layout:"main"
+  })
+}
 export const viewReview = async (req, res) => {
   try {
     const reviews = await axios.get("http://localhost:8081/api/v1/review")
