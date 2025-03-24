@@ -13,8 +13,7 @@ export const viewOTP = (req, res) => {
 export const viewSuccessful = (req, res) => {
   res.render("successful/successful",{layout: "auth"});
 };
-
-const orders = [
+  const orders = [
   {
     img: "/assets/images/dress.png",
     name: "Girls Pink Moana Printed Dress",
@@ -76,7 +75,13 @@ export const viewPayment = (req,res)=>{
     title:"Giới thiệu",
     layout:"main"
   })
-}
+};
+export const viewAddProduct = (req,res)=>{
+  res.render("addProduct/addProduct",{
+    title:"Giới thiệu",
+    layout:"sidebarDashboard"
+  })
+};
 
 export const viewHome = (req, res) => {
   res.render("home/home", {  
