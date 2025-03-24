@@ -1,5 +1,5 @@
 import express from "express";
-import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewSaveCard, viewSignup, viewSuccessful } from "../controllers/viewsController.js";
+import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewPayment, viewSaveCard, viewSignup, viewSuccessful } from "../controllers/viewsController.js";
 const viewRouter = express.Router();
 
 viewRouter.get("/", (req, res) => {
@@ -16,5 +16,6 @@ viewRouter.get("/signup", viewSignup);
 viewRouter.get("/forgotpassword", viewForgotPassword);
 viewRouter.get("/otp", viewOTP);
 viewRouter.get("/successful", viewSuccessful);
+viewRouter.get("/payment", viewPayment);
 
 export default viewRouter;
