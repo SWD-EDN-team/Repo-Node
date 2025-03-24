@@ -148,15 +148,48 @@
             <p><strong>robertfox@example.com</strong></p>
 
             <div class="otp-input">
-                <input type="text" maxlength="1">
-                <input type="text" maxlength="1">
-                <input type="text" maxlength="1">
-                <input type="text" maxlength="1">
-                <input type="text" maxlength="1">
-            </div>
+    <input type="text" id="otp1" >
+    <input type="text" id="otp2" >
+    <input type="text" id="otp3" >
+    <input type="text" id="otp4" >
+    <input type="text" id="otp5" >
+           </div>
 
-            <button  onclick="handleVerifileOTP()" class="verify-button">Verify</button>
+            <button onclick="verifyOTP()" class="verify-button">Verify</button>
         </div>
     </div>
+     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+     <script>
+    async function verifyOTP() {
+        console.log("call verifile")
+        const otp1 = document.getElementById("otp1").value;
+        const otp2 = document.getElementById("otp2").value;
+        const otp3 = document.getElementById("otp3").value;
+        const otp4 = document.getElementById("otp4").value;
+        const otp5 = document.getElementById("otp5").value;
+        const otp = otp1 + otp2 + otp3 + otp4 + otp5;
+        if (otp.length !== 5) {
+            alert("Please enter a valid 5-digit OTP.");
+            return;
+        }
+         console.log("Entered OTP:", otp);
+
+        try {
+            const response = await axios.post("http://localhost:8081/api/v1/auth/verify_code", 
+                { otp }, 
+                { headers: { "Content-Type": "application/json" } }
+            );
+
+            if (response.status === 200) {
+                alert("OTP verified successfully!");
+                {{!-- window.location.href = "view/dashboard"; --}}
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Invalid OTP. Please try again.");
+        }
+    }
+</script>
+
 </body>
 </html>
