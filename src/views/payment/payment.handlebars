@@ -126,5 +126,40 @@
             console.log("Selected Payment Method:", this.id);
         })
     });
+    document.querySelector("form").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        let paymentMethod = document.querySelector("input[name='paymentMethod']:checked").id;
+        let cardNumber = document.getElementById("cardNumber").value;
+        let cardName = document.getElementById("cardName").value;
+        let expiryDate = document.getElementById("expiryDate").value;
+        let cvv = document.getElementById("cvv").value;
+        let discountCode = document.getElementById("discountCode").value.trim();
+
+        let paymentData = {
+            subtotal: subtotal,
+            deliveryCharge: deliveryCharge,
+            discountCode: discountCode,
+            grandTotal: grandTotal,
+            paymentMethod: paymentMethod,
+            cardDetails: paymentMethod === "creditCard" ? { cardNumber, cardName, expiryDate, cvv } : null
+        };
+
+        console.log("Sending payment data:", paymentData);
+
+        fetch("http://localhost:8081//api/payment", {  // Cập nhật API của bạn
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(paymentData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Payment response:", data);
+            alert("Payment successful!");
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    });
   });
 </script>
