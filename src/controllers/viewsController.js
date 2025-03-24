@@ -9,8 +9,11 @@ export const viewSignup = (req, res) => {
 export const viewForgotPassword = (req, res) => {
   res.render("forgotPassword/forgot-password",{layout: "auth"});
 };
-export const viewOTP = (req, res) => {
-  res.render("otp/otp",{layout: "auth"});
+export const viewOTP = async (req, res) => {
+  const email= await req.email;
+  console.log(email);
+  
+  res.render("otp/otp",{layout: "auth",email});
 };
 export const viewSuccessful = (req, res) => {
   res.render("successful/successful",{layout: "auth"});
@@ -178,3 +181,10 @@ export const viewHome = (req, res) => {
     ]
   });
 }
+
+export const viewPayment = (req,res)=>{
+  res.render("payment/payment",{
+    title:"Giới thiệu",
+    layout:"main"
+  })
+};

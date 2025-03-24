@@ -10,6 +10,7 @@ import { create } from "express-handlebars";
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fileUpload from "express-fileupload";
+import cookieParser from "cookie-parser";
 
 const app = express();
 dotenv.config();
@@ -47,7 +48,7 @@ app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload()); 
-
+app.use(cookieParser());
 // app.use((req, res, next) => {
 //   console.log("Content-Type:", req.headers["content-type"]);
 //   next();

@@ -106,7 +106,7 @@ export const signup = async (req, res) => {
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: process.env.TIME_REFRESHTOKEN_EXPIRATION }
     );
-
+    res.cookie('token', accessToken, { httpOnly: true });
     const hashedRefreshToken = await bcryptjs.hash(refreshToken, 10);
     newUser.refreshToken = hashedRefreshToken;
     const OTP = generateOpt();
@@ -173,7 +173,7 @@ export const signin = async (req, res) => {
     process.env.JWT_REFRESH_SECRET,
     { expiresIn: process.env.TIME_REFRESHTOKEN_EXPIRATION }
   );
-
+  res.cookie('token', accessToken, { httpOnly: true });
   const hashedRefreshToken = await bcryptjs.hash(refreshToken, 10);
   user.refreshToken = hashedRefreshToken;
   await user.save();
