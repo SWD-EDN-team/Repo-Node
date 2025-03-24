@@ -43,7 +43,8 @@ const hbs = create({
         arr.push(i);
       }
       return arr;
-    }
+    },
+    json: (context) => JSON.stringify(context),
   },
 });
 

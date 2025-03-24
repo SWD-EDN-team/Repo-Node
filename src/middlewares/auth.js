@@ -56,7 +56,7 @@ console.log(token);
         message: "Token has expired, please login again",
       });
     }
-    req.user = decoded; // Gắn thông tin user vào req để sử dụng sau
+    req.user = user; // Gắn thông tin user vào req để sử dụng sau
     next();
   } catch (err) {
     return res.status(StatusCode.FORBIDDEN).json({ message: "Invalid token" });
