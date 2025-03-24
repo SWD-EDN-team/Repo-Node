@@ -76,12 +76,6 @@ export const viewPayment = (req,res)=>{
     layout:"main"
   })
 };
-export const viewAddProduct = (req,res)=>{
-  res.render("addProduct/addProduct",{
-    title:"Giới thiệu",
-    layout:"sidebarDashboard"
-  })
-};
 
 export const viewHome = (req, res) => {
   res.render("home/home", {  

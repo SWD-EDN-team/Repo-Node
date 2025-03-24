@@ -17,6 +17,5 @@ viewRouter.get("/forgotpassword", viewForgotPassword);
 viewRouter.get("/otp", viewOTP);
 viewRouter.get("/successful", viewSuccessful);
 viewRouter.get("/payment", viewPayment);
-viewRouter.get("/addProduct", viewAddProduct)
 
 export default viewRouter;
