@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 
 import fileUpload from "express-fileupload";
+import cookieParser from "cookie-parser";
 
 const app = express();
 dotenv.config();
@@ -55,7 +56,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Khai báo thư mục chứa file tĩnh (CSS, JS, images)
-app.use(express.static(path.join(__dirname, "./public")));
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
 console.log("Static files served from:", path.join(__dirname, "./public"));
 
 // Middleware
@@ -64,7 +65,7 @@ app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload()); 
-
+app.use(cookieParser());
 // app.use((req, res, next) => {
 //   console.log("Content-Type:", req.headers["content-type"]);
 //   next();
@@ -82,6 +83,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(jsonParser);
 app.use(urlencodedParser);
+
 
 // app.use(
 //   cors({

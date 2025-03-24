@@ -12,6 +12,10 @@ export const admin = async (req, res, next) => {
       .json({ message: "No token provided" });
   }
 
+  const tokenFE = localStorage.getItem("token")
+  console.log(tokenFE);
+  
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Xác thực token
 
@@ -29,6 +33,7 @@ export const admin = async (req, res, next) => {
       });
     }
     req.user = decoded; // Gắn thông tin user vào req để sử dụng sau
+    req.user.email = user.email
     next();
   } catch (err) {
     return res.status(StatusCode.FORBIDDEN).json({ message: "Invalid token" });
@@ -37,7 +42,6 @@ export const admin = async (req, res, next) => {
 
 export const user = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1]; // Lấy token từ header
-
   if (!token) {
     return res
       .status(StatusCode.UNAUTHORIZED)
@@ -102,5 +106,34 @@ export const authMiddleware = (req, res, next) => {
     next();
   } catch (error) {
     return res.status(403).json({ errorCode: 1, message: "Invalid token" });
+  }
+};
+
+export const userFE = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res
+      .status(StatusCode.UNAUTHORIZED)
+      .json({ message: "No token provided" });
+  }
+  console.log(token);
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Xác thực token
+
+    const user = await User.findById(decoded.id);
+    if (user.refreshToken === undefined) {
+      return res.status(StatusCode.UNAUTHORIZED).json({
+        message: "Token has expired, please login again",
+      });
+    }
+
+    console.log(user.email);
+    
+    req.user = decoded; // Gắn thông tin user vào req để sử dụng sau
+    req.email = user.email
+    next();
+  } catch (err) {
+    return res.status(StatusCode.FORBIDDEN).json({ message: "Invalid token" });
   }
 };
