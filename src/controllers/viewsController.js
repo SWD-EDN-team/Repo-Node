@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const viewLogin = (req, res) => {
   res.render("login/login",{layout: "auth"});
 };
@@ -71,12 +73,29 @@ export const viewSaveCard = (req, res) => {
     layout: "productPage",
   });
 };
-export const viewPayment = (req,res)=>{
-  res.render("payment/payment",{
-    title:"Giới thiệu",
-    layout:"main"
-  })
-}
+export const viewReview = async (req, res) => {
+  try {
+    const reviews = await axios.get("http://localhost:8081/api/v1/review")
+    console.log(reviews.data);
+    res.render("detailProduct/reviewProduct", {
+      title: "Giới thiệu",
+      layout: "main",
+      reviews: reviews.data,
+      helpers: {
+        repeat: function(n, options) {
+            let result = '';
+            for (let i = 0; i < n; i++) {
+                result += options.fn(i);
+            }
+            return result;
+        }
+    }
+    });
+    
+  } catch (error) {
+    console.log("loi");
+  }
+};
 
 export const viewHome = (req, res) => {
   res.render("home/home", {  

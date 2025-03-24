@@ -20,7 +20,7 @@ const reviewSchema = Joi.object({
 
 export const getAllReview = async (req, res) =>{
   try {
-    const review = await Review.find().populate("user_id");
+    const review = await Review.find().populate("user_id").populate("product_id");
 
     if (review.length === 0) {
       return res.status(StatusCode.NOT_FOUND).json({ message: "Review empty" });
