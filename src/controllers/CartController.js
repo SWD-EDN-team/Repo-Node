@@ -27,8 +27,10 @@ export const getCartbyToken = async (req, res) =>{
   if (!cart) {
     return res.status(StatusCode.NOT_FOUND).json({ message: "Cart is empty" });
   }
-    res.render("cart/cart", { cart });
-  } catch (error) {
+    console.log("Dữ liệu giỏ hàng:", JSON.stringify(cart, null, 2));
+    res.status(StatusCode.OK).json({ message: "Get all cart in cart with token" ,cart});
+    // res.render("cart/cart", cart);
+  } catch (error) { 
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
   }
 }
@@ -103,5 +105,33 @@ export const addToCart = async (req, res) => {
     res.status(200).json({ message: "Product added to cart", cart });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const removeFromCart = async (req, res) => {
+  try {
+      const { itemId } = req.params;
+      const userId = req.user.id; 
+
+      // Tìm giỏ hàng của người dùng
+      const cart = await Cart.findOne({ user_id: userId });
+      if (!cart) {
+          return res.status(404).json({ error: "Cart not found." });
+      }
+
+      // Lọc ra các sản phẩm không phải itemId (tức là loại bỏ sản phẩm cần xóa)
+      cart.items = cart.items.filter(item => item._id.toString() !== itemId);
+
+      // Cập nhật tổng giá
+      cart.total_price = cart.items.reduce((total, item) => {
+          return total + item.product_id.price * item.quantity;
+      }, 0);
+
+      await cart.save();
+
+      res.json({ message: "Product removed form cart" });
+  } catch (error) {
+      console.error("Lỗi khi xóa sản phẩm:", error);
+      res.status(500).json({ error: "Lỗi server." });
   }
 };

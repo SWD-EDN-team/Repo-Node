@@ -1,5 +1,5 @@
 import express from "express";
-import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment } from "../controllers/viewsController.js";
+import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart} from "../controllers/viewsController.js";
 import {searchProduct} from '../controllers/ProductController.js'
 import {getCartbyToken} from '../controllers/CartController.js'
 import { user } from "../middlewares/auth.js"
@@ -12,7 +12,7 @@ viewRouter.get("/", (req, res) => {
 viewRouter.get("/home", viewHome);
 viewRouter.get("/products/page/:pageNumber", viewProductList);
 viewRouter.get("/products/filter", searchProduct);
-viewRouter.get("/cart", userFE, getCartbyToken);
+viewRouter.get("/cart", userFE, viewCart);
 viewRouter.get("/my-orders", viewMyOrder);
 viewRouter.get("/detailProduct/:id", viewDetailProdct);
 viewRouter.get("/manageAddress", viewManageAddress);

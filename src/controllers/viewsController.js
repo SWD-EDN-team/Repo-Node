@@ -1,4 +1,6 @@
-import {product,categories,productById,productpage,reviews} from "../utils/api.js"
+import {product,categories,productById,productpage,reviews, cart} from "../utils/api.js"
+// import { getCartbyToken} from "../controllers/CartController.js";
+import Cart from "../models/Cart.js"
 export const viewLogin = (req, res) => {
   res.render("login/login",{layout: "auth"});
 };
@@ -180,6 +182,36 @@ const getColorCode = (color) => {
   return colorMap[color] || "#CCCCCC"; 
 };
 
+export const viewCart = async (req, res) => {
+  try {
+    // Lấy dữ liệu giỏ hàng trực tiếp
+    const cartData = await Cart.findOne({ user_id: req.user.id })
+      .populate({
+        path: "items.product_id",
+        model: "Product",
+        select: "product_name price image",
+      })
+      .populate("user_id", "name email")
+      .lean();
+    if (!cartData) {
+      return res.render("cart/cart", { 
+        title: "Giỏ hàng", 
+        cart: null, 
+        layout: "main"
+      });
+    }
+
+    res.render("cart/cart", { 
+      title: "Giỏ hàng", 
+      cart: cartData, 
+      layout: "main"
+    });
+
+  } catch (error) {
+    console.error("Lỗi khi lấy giỏ hàng:", error);
+    res.status(500).send("Lỗi server");
+  }
+};
 // export const commentsHome = async (req, res) => {
 // try {
 //   const data = await reviews()
