@@ -77,7 +77,13 @@ export const viewPayment = (req,res)=>{
     title:"Giới thiệu",
     layout:"main"
   })
-}
+};
+export const viewAddProduct = (req,res)=>{
+  res.render("addProduct/addProduct",{
+    title:"Giới thiệu",
+    layout:"sidebarDashboard"
+  })
+};
 export const viewReview = async (req, res) => {
   try {
     const reviews = await axios.get("http://localhost:8081/api/v1/review")
