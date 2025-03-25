@@ -334,6 +334,12 @@ export const viewCart = async (req, res) => {
       console.log(e);
     }
   };
+  export const viewManageOrder = async (req,res)=>{
+      res.render("manageOrder/manageOrder",{
+        title:"Giới thiệu",
+        layout:"sidebarDashboard",
+      })
+  };
 
 
 

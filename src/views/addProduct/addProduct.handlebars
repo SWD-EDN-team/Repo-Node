@@ -101,8 +101,8 @@ document.addEventListener("DOMContentLoaded",async function () {
         formData.append("product_name", product_name);
         formData.append("price", price);
         formData.append("stoke_quantity", stoke_quantity);
-        formData.append("color", JSON.stringify(color));
-        formData.append("size", JSON.stringify(size)); 
+        formData.append("color", color.join(","));
+        formData.append("size", size.join(",")); 
         formData.append("category_id", category);
         imageArray.forEach((file) => {
             formData.append("image", file); 
@@ -113,16 +113,15 @@ document.addEventListener("DOMContentLoaded",async function () {
             product_name,
             price,
             stoke_quantity,
-            color:[color],
-            size:[size],
+            color,
+            size,
             category,
-            images: Array.from(images).map(img => img.name),
+            image: Array.from(image).map(img => img.name),
             description
         });
         try {
             const response = await axios.post("http://localhost:8081/api/v1/product", formData,{ 
                 headers: {
-                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${localStorage.getItem("token")}`
                 },
             });

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+<h2 class="text-center mb-4 mt-5">Danh sách đơn hàng</h2>
+<div class="mb-3">
+  <input type="text" id="search" class="form-control" placeholder="Tìm kiếm đơn hàng..." oninput="searchOrders()">
+</div>
+
+<table class="table table-striped table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th>Mã đơn hàng</th>
+      <th>Sản phẩm</th>
+      <th>Số lượng</th>
+      <th>Giá</th>
+      <th>Trạng thái</th>
+      <th>Chi tiết</th>
+    </tr>
+  </thead>
+  <tbody id="order-list"></tbody>
+</table>
+
+<div class="d-flex justify-content-between">
+  <button id="prevPage" class="btn btn-secondary" disabled>Trước</button>
+  <span id="pageInfo" class="align-self-center">Trang 1</span>
+  <button id="nextPage" class="btn btn-secondary">Tiếp theo</button>
+</div>
+
+<!-- Modal Chi tiết đơn hàng -->
+<div class="modal fade" id="orderModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Chi tiết đơn hàng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="orderDetails"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+  let currentPage = 1;
+  const itemsPerPage = 5;
+  let orders = [];
+  let filteredOrders = [];
+
+  async function fetchOrders() {
+    try {
+      const response = await axios.get("http://localhost:8081/api/v1/order", {
+        headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+      });
+      orders = response.data;
+      filteredOrders = orders;
+      renderTable();
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách đơn hàng:", error);
+    }
+  }
+
+  function renderTable() {
+    const tableBody = document.getElementById("order-list");
+    tableBody.innerHTML = "";
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    filteredOrders.slice(start, end).forEach(order => {
+      tableBody.innerHTML += `
+        <tr>
+          <td>${order.order_id}</td>
+          <td>${order.total_price}</td>
+          <td>${order.order_date}</td>
+          <td>${order.order_status}</td>
+          <td>
+            <button class="btn btn-info btn-sm" onclick="viewOrder('${order.order_id}')">Xem</button>
+          </td>
+        </tr>`;
+    });
+    updatePagination();
+  }
+
+  function updatePagination() {
+    document.getElementById("pageInfo").innerText = `Trang ${currentPage}`;
+    document.getElementById("prevPage").disabled = currentPage === 1;
+    document.getElementById("nextPage").disabled = currentPage * itemsPerPage >= filteredOrders.length;
+  }
+
+  function searchOrders() {
+    const query = document.getElementById("search").value.toLowerCase();
+    filteredOrders = orders.filter(o => o.product_name.toLowerCase().includes(query));
+    currentPage = 1;
+    renderTable();
+  }
+
+  function viewOrder(orderId) {
+    const order = orders.find(o => o.order_id === orderId);
+    if (!order) return;
+    
+    document.getElementById("orderDetails").innerHTML = `
+      <p><strong>Mã đơn hàng:</strong> ${order.order_id}</p>
+      <p><strong>Sản phẩm:</strong> ${order.product_name}</p>
+      <p><strong>Số lượng:</strong> ${order.quantity}</p>
+      <p><strong>Giá:</strong> ${order.price}</p>
+      <p><strong>Trạng thái:</strong> ${order.status}</p>
+      <p><strong>Ngày đặt hàng:</strong> ${order.order_date}</p>
+    `;
+    new bootstrap.Modal(document.getElementById("orderModal")).show();
+  }
+
+  document.getElementById("prevPage").addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderTable();
+    }
+  });
+
+  document.getElementById("nextPage").addEventListener("click", () => {
+    if (currentPage * itemsPerPage < filteredOrders.length) {
+      currentPage++;
+      renderTable();
+    }
+  });
+
+  fetchOrders();
+});
+</script>

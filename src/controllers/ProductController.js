@@ -68,6 +68,20 @@ export const getProductByPage = async (req, res) => {
 }
 export const createProduct = async (req, res) => {
 
+  const productSchema = Joi.object({
+      product_name: Joi.string().required(),
+      category_id: Joi.string().required(),
+      description: Joi.string().min(10).max(1000).required(),
+      price: Joi.number().required(),
+      rate: Joi.number().min(1).max(5),
+      stoke_quantity: Joi.number().min(0).required(),
+      image: Joi.array().items(Joi.string()),
+      seller_id: Joi.string().required(),
+      discount: Joi.number().default(0),
+      color: Joi.array().items(Joi.string()),  // ✅ Thêm vào đây
+      size: Joi.array().items(Joi.string().valid("S", "M", "L", "XL"))
+  });
+  
   console.log("Received files:", req.files); // Log file nhận được
   console.log("Received body:", req.body);   // Log dữ liệu khác
 
