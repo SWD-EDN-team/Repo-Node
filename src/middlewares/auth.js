@@ -126,7 +126,7 @@ export const userFE = async (req, res, next) => {
 
     console.log(user.email);
     
-    req.user = decoded; // Gắn thông tin user vào req để sử dụng sau
+    req.user = user; // Gắn thông tin user vào req để sử dụng sau
     req.email = user.email
     req.token = token
     next();

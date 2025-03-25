@@ -1,7 +1,4 @@
-import axios from "axios";
-
-import {product,categories,productById,productpage,reviews, cart} from "../utils/api.js"
-// import { getCartbyToken} from "../controllers/CartController.js";
+import {product,categories,productById,productpage,reviews} from "../utils/api.js"
 import Cart from "../models/Cart.js"
 import axios from "axios";
 export const viewLogin = (req, res) => {
@@ -135,8 +132,9 @@ try {
   const reviewData = await reviews()
   const categoryData = await categories()
   const bestSellers = productData.data.slice(0, 8);
+  const user = req.user || null;  // Nếu chưa đăng nhập, user = null
   
-  res.render("home/home",{title: "Trang chủ",products:bestSellers, ratings: reviewData.data, categories: categoryData.data, layout:"main"})
+  res.render("home/home",{title: "Trang chủ",products:bestSellers, ratings: reviewData.data, categories: categoryData.data, user, layout:"main"})
 } catch (error) {
   console.log(error);
 }
@@ -232,82 +230,99 @@ export const viewCart = async (req, res) => {
     res.status(500).send("Lỗi server");
   }
 };
-  export const viewManageProduct = async (req,res)=>{
-    
-    try{
-      const product = await axios.get("http://localhost:8081/api/v1/product");
-      console.log(product.data);
-      res.render("manageProduct/manageProduct",{
-        title:"Giới thiệu",
-        layout:"sidebarDashboard",
-      })
-      
-    }catch(e){
-      console.log(e);
-    }
-  };
-  export const viewManageOrder = async (req,res)=>{
-      res.render("manageOrder/manageOrder",{
-        title:"Giới thiệu",
-        layout:"sidebarDashboard",
-      })
-  };
-    export const viewManageReview = async (req,res)=>{
-      
-      try {
-        const reviews = await axios.get("http://localhost:8081/api/v1/review")
-        console.log(reviews.data);
-        res.render("manageReview/manageReview",{
-          title:"Giới thiệu",
-          layout:"sidebarDashboard",
-          reviews: reviews.data,
-          helpers:{
-            repeat: function(n, options) {
-              let result = '';
-              for (let i = 0; i < n; i++) {
-                  result += options.fn(i);
-              }
-              return result;
-          }
-        }
-        })
-      } catch (error) {
-        console.log("loi");
-      }
-  };
 
-export const viewShippingAddress = async (req, res) => {
-  const city = [
-    "An Giang", "Bà Rịa - Vũng Tàu", "Bắc Giang", "Bắc Kạn", "Bạc Liêu", "Bắc Ninh",
-    "Bến Tre", "Bình Định", "Bình Dương", "Bình Phước", "Bình Thuận", "Cà Mau",
-    "Cần Thơ", "Cao Bằng", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai",
-    "Đồng Tháp", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương",
-    "Hải Phòng", "Hậu Giang", "Hòa Bình", "Hưng Yên", "Khánh Hòa", "Kiên Giang",
-    "Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định",
-    "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình",
-    "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La",
-    "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên Huế", "Tiền Giang",
-    "TP. Hồ Chí Minh", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"
-  ];
-  try {
-    const response = await axios.get("http://localhost:8081/api/v1/address/current", {
-      headers: { Authorization: `Bearer ${req.token}` },
-    });
-    console.log(response.data);
-    res.render("shippingAddress/shippingAddress", {
-      title: "Giới thiệu",
-      layout: "main",
-      shippingAddress: response.data,
-      city
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error fetching shipping address" });
+export const viewManageProduct = async (req,res)=>{
+    
+  try{
+    const product = await axios.get("http://localhost:8081/api/v1/product");
+    console.log(product.data);
+    res.render("manageProduct/manageProduct",{
+      title:"Giới thiệu",
+      layout:"sidebarDashboard",
+    })
+    
+  }catch(e){
+    console.log(e);
   }
 };
 
+export const viewManageOrder = async (req,res)=>{
+  res.render("manageOrder/manageOrder",{
+    title:"Giới thiệu",
+    layout:"sidebarDashboard",
+  })
+};
+export const viewManageReview = async (req,res)=>{
+  
+  try {
+    const reviews = await axios.get("http://localhost:8081/api/v1/review")
+    console.log(reviews.data);
+    res.render("manageReview/manageReview",{
+      title:"Giới thiệu",
+      layout:"sidebarDashboard",
+      reviews: reviews.data,
+      helpers:{
+        repeat: function(n, options) {
+          let result = '';
+          for (let i = 0; i < n; i++) {
+              result += options.fn(i);
+          }
+          return result;
+      }
+    }
+    })
+  } catch (error) {
+    console.log("loi");
+  }
+};
 
+export const viewShippingAddress = async (req, res) => {
+const city = [
+"An Giang", "Bà Rịa - Vũng Tàu", "Bắc Giang", "Bắc Kạn", "Bạc Liêu", "Bắc Ninh",
+"Bến Tre", "Bình Định", "Bình Dương", "Bình Phước", "Bình Thuận", "Cà Mau",
+"Cần Thơ", "Cao Bằng", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai",
+"Đồng Tháp", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương",
+"Hải Phòng", "Hậu Giang", "Hòa Bình", "Hưng Yên", "Khánh Hòa", "Kiên Giang",
+"Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định",
+"Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình",
+"Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La",
+"Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên Huế", "Tiền Giang",
+"TP. Hồ Chí Minh", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"
+];
+try {
+const response = await axios.get("http://localhost:8081/api/v1/address/current", {
+  headers: { Authorization: `Bearer ${req.token}` },
+});
+console.log(response.data);
+res.render("shippingAddress/shippingAddress", {
+  title: "Giới thiệu",
+  layout: "main",
+  shippingAddress: response.data,
+  city
+});
+} catch (error) {
+console.error(error);
+res.status(500).json({ message: "Error fetching shipping address" });
+}
+};
 
+export const viewProfile = async (req, res) => {
+  try {
+      // Lấy user ID từ `req.user`
+      const userId = req.user._id;
+      const userData = await User.findById(userId).select("-password -refreshToken");
 
+      if (!userData) {
+          return res.status(404).json({ message: "User not found" });
+      }
 
+      res.render("profile/profile", {
+          title: "Trang cá nhân",
+          user: userData.toObject()
+      });
 
+  } catch (error) {
+      console.error("Error fetching user profile:", error);
+      res.status(500).json({ message: "Server error" });
+  }
+};
