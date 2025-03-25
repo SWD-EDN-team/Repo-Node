@@ -46,7 +46,7 @@
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label fw-bold">Product Image</label>
-                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                <input type="file" class="form-control" id="image" name="image" accept="image/*" multiple>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label fw-bold">Description</label>
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded",async function () {
         const color = document.getElementById("color").value.split(",").map(c => c.trim());
         const size = document.getElementById("size").value.split(",").map(c => c.trim());
         const category = document.getElementById("category").value;
-        const image = document.getElementById("image").files[0];
+        const image = document.getElementById("image").files;
         const description = document.getElementById("description").value;
         if (!product_name || !category) {
             alert("Please fill in all required fields.");
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded",async function () {
             color:[color],
             size:[size],
             category,
-            image: image ? image.name : "No image selected",
+            images: Array.from(images).map(img => img.name),
             description
         });
         try {
