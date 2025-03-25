@@ -43,4 +43,4 @@ export const createPaymentMethod = async (req, res) => {
       .status(StatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: "Internal Server Error" });
   }
-};
+}

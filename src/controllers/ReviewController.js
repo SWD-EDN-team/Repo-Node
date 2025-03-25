@@ -19,7 +19,7 @@ const reviewSchema = Joi.object({
 
 export const getAllReview = async (req, res) => {
   try {
-    const review = await Review.find().populate("user_id");
+    const review = await Review.find().populate("user_id").populate("product_id");
 
     if (review.length === 0) {
       return res.status(StatusCode.NOT_FOUND).json({ message: "Review empty" });
@@ -51,3 +51,23 @@ export const createReview = async (req, res) => {
       .json({ message: "Server error" });
   }
 };
+
+
+export const updateReview = async (req, res) =>{
+  try {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+      const message = error.details.map((err) => err.message);
+      return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message });
+    }
+    const review = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!review) {
+      return res.status(StatusCode.NOT_FOUND).json({ message: "Review not found" });
+    }
+    
+  } catch (error) {
+    console.error(error);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: "Server error" });
+  }
+}
+

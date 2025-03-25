@@ -1,0 +1,150 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/navigation.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="nav_container">
+      <img class="nav-logo" src="/assets/images/Logowhite.png" alt />
+      <div class="nav_container-menulist">
+        <i class="fa-solid fa-bars nav_container__menu"></i>
+        <ul class="nav_container-showlist">
+          <li><a href="#">Home</a></li>
+          <li><a href="#" class="shope__modal">Shop
+            </a></li>
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="nav-feature">
+        <i class="fa-solid fa-magnifying-glass nav-feature__search">
+          <input class="search_input" type="text" placeholder="Search..." />
+        </i>
+        <i class="fa-regular fa-heart"></i>
+        <a href="#" class="icon" id="cart-link"><i class="fas fa-shopping-bag"></i></a>
+      </div>
+      <button>Login</button>
+    </div>
+
+    <!--SHOP-->
+    <div class="modal">
+      <div class="modal__body">
+        <div class="modal__list">
+          <ul>
+            <h4>Menu</h4>
+            <li><a href="#">T-shirts</a></li>
+            <li><a href="#">Casual Shirts</a></li>
+            <li><a href="#">Formal Shirts</a></li>
+            <li><a href="#">Jackets</a></li>
+            <li><a href="#">Blazers & Coats</a></li>
+          </ul>
+          <ul>
+            <h4>Indian & Festive Wear</h4>
+            <li><a href>Kurtas & Kurta Sets</a></li>
+            <li><a href>Sherwains</a></li>
+          </ul>
+        </div>
+        <div class="modal__list">
+          <ul>
+            <h4>Women</h4>
+            <li><a href="#">Kurtas & Suits</a></li>
+            <li><a href="#">Sarees</a></li>
+            <li><a href="#">Ethnic Wear</a></li>
+            <li><a href="#">Lehenga Cholis</a></li>
+            <li><a href="#">Jackets</a></li>
+          </ul>
+          <ul>
+            <h4>Western Wear</h4>
+            <li><a href>Dresses</a></li>
+            <li><a href>Jumpsuits</a></li>
+          </ul>
+        </div>
+        <div class="modal__list">
+          <ul>
+            <h4>Footwear</h4>
+            <li><a href="#">Flats</a></li>
+            <li><a href="#">Casual Shoes</a></li>
+            <li><a href="#">Heels</a></li>
+            <li><a href="#">Boots</a></li>
+            <li><a href="#">Sports Shoes & Floaters</a></li>
+          </ul>
+          <ul>
+            <h4>Product Features</h4>
+            <li><a href>360 Product Viewer</a></li>
+            <li><a href>Product with Video</a></li>
+          </ul>
+        </div>
+        <div class="modal__list-lastchild">
+          <ul>
+            <h4>Kids</h4>
+            <li><a href="#">T-Shirts</a></li>
+            <li><a href="#">Shirts</a></li>
+            <li><a href="#">Jeans</a></li>
+            <li><a href="#">Trousers</a></li>
+            <li><a href="#">Party Wear</a></li>
+            <li><a href="#">Innerwear & Thermal</a></li>
+            <li><a href="#">Track Pants</a></li>
+            <li><a href="#">Value Pack</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  /*Shop*/ const shopLink = document.querySelector(".shope__modal"); const modal
+  = document.querySelector(".modal"); const modalBody =
+  document.querySelector(".modal__body");
+  shopLink.addEventListener("mouseenter",()=>{ modal.style.display = "block";
+  }); modalBody.addEventListener("mouseleave",()=>{ modal.style.display =
+  "none"; }); modal.addEventListener("mouseleave",()=>{ modal.style.display =
+  "none"; }); /*Search*/ /*const searchContainer = }}
+  document.querySelector(".nav-feature__search"); const searchInput =
+  document.querySelector(".search_input");
+  searchContainer.addEventListener("mouseenter", () => {
+  searchInput.style.display = "block"; searchInput.focus(); });
+  searchInput.addEventListener("blur", () => { searchInput.style.display =
+  "none"; }); */ const menuIcon =
+  document.querySelector(".nav_container__menu"); const menuList =
+  document.querySelector(".nav_container-showlist");
+  menuIcon.addEventListener("click",()=>{ menuList.classList.toggle("show"); });
+  console.log(menuList, menuIcon)
+
+  document.getElementById("cart-link").addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Vui lòng đăng nhập để xem giỏ hàng!");
+      return;
+    }
+
+    try {
+      const response = await fetch("/view/cart", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.status === 401) {
+        alert("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      } else if (response.status === 403) {
+        alert("Token không hợp lệ, vui lòng đăng nhập lại!");
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      } else if (response.ok) {
+        window.location.href = "/view/cart";
+      } else {
+        alert("Lỗi không xác định, vui lòng thử lại sau!");
+      }
+    } catch (error) {
+      console.error("Lỗi khi gửi yêu cầu:", error);
+      alert("Lỗi kết nối, vui lòng kiểm tra lại mạng!");
+    }
+  });
+
+</script>

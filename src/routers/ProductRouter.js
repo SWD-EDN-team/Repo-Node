@@ -1,17 +1,16 @@
 import express from "express";
 import { verifySeller } from "../middlewares/auth.js";
-import {
-  createProduct,
-  getAllProducts,
-  updateProduct,
-  deleteProduct,
-} from "../controllers/ProductController.js";
+import { createProduct, getAllProducts, getProductById, getProductByPage, getProductList } from "../controllers/ProductController.js";
+
 
 const router = express.Router();
 
-router.get("/", verifySeller, getAllProducts);
-router.post("/", verifySeller, createProduct);
-router.put("/:category_id", verifySeller, updateProduct);
-router.delete("/:category_id", verifySeller, deleteProduct);
+router.get("/",getAllProducts);
+// router.get("/:page",getProductByPage);
+router.get("/:id",getProductById);
+router.post("/",verifySeller,createProduct);
+router.get("/page/:pageNumber", getProductList);
+
+
 
 export default router;

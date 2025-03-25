@@ -30,7 +30,7 @@ export const createSeller = async (req, res) => {
         message,
       });
     }
-    console.log(seller);
+    //gui email confirm
     const newSeller = new Seller(seller);
     await newSeller.save();
     res.status(201).json(newSeller);
