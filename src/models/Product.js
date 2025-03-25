@@ -49,10 +49,7 @@ const productSchema = new Schema(
     },
     size: {
       type: [
-        {
-          type: String,
-          enum: ["S", "M", "L", "XL"], 
-        },
+           String,
       ],
     },
   },

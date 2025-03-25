@@ -60,6 +60,12 @@
           <div class="mb-3">
             <input type="text" id="editSize" class="form-control" placeholder="Kích thước">
           </div>
+          <div class="mb-3">
+            <input type="number" id="editQuantity" class="form-control" placeholder="editQuantity">
+          </div>
+          <div class="mb-3">
+            <input type="text" id="editDesciption" class="form-control" placeholder="editDesciption">
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" onclick="updateProduct()">Lưu</button>
@@ -152,19 +158,24 @@
       document.getElementById("editColor").value = product.color;
       document.getElementById("editSize").value = product.size;
       document.getElementById("category").value = product.category || ""
+      document.getElementById("editDesciption").value = product.description;
+      document.getElementById("editQuantity").value = +product.stoke_quantity;
+
       new bootstrap.Modal(document.getElementById("editModal")).show();
     }
 
     function updateProduct() {
     const id = document.getElementById("editId").value;
-    const category = document.getElementById("category").value;
-    console.log("Category ID:", category);
+    const category_id = document.getElementById("category").value;
+    console.log("Category ID:", category_id);
     axios.put(`http://localhost:8081/api/v1/product/${id}`, {
       product_name: document.getElementById("editName").value,
       price: document.getElementById("editPrice").value,
       color: document.getElementById("editColor").value,
       size: document.getElementById("editSize").value,
-      category:category
+      description: document.getElementById("editDesciption").value,
+      stoke_quantity: document.getElementById("editQuantity").value,
+      category_id:category_id
     }, {
       headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
     })

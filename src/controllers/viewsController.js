@@ -95,11 +95,11 @@ export const viewAddProduct = async (req,res)=>{
     console.log(categories.data);
     res.render("addProduct/addProduct",{
       title:"Giới thiệu",
-      layout:"sidebarDashboard"
+      layout:"sidebarDashboard",
     })
     
-  }catch(e){
-    console.log(e);
+  }catch(error){
+    console.log({ error: error.message});
   }
 };
 export const viewReview = async (req, res) => {

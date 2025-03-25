@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded",async function () {
         });
             console.log("Category selected:", category);
     } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error("Error fetching categories:");
     }
     document.getElementById("addProductForm").addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -101,8 +101,8 @@ document.addEventListener("DOMContentLoaded",async function () {
         formData.append("product_name", product_name);
         formData.append("price", price);
         formData.append("stoke_quantity", stoke_quantity);
-        formData.append("color", color.join(","));
-        formData.append("size", size.join(",")); 
+        color.forEach(c => formData.append("color", c));
+        size.forEach(s => formData.append("size", s));
         formData.append("category_id", category);
         imageArray.forEach((file) => {
             formData.append("image", file); 
@@ -132,8 +132,8 @@ document.addEventListener("DOMContentLoaded",async function () {
                 alert("Error: " + response.data.message);
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
-            alert("Failed to add product.");
+            console.error("Chi tiết lỗi:", error.response); // In lỗi ra console
+    alert("Thêm sản phẩm thất bại: " + (error.response?.data?.message || error.message));
         }
     });
 });

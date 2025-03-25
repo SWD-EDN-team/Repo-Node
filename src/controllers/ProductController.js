@@ -76,14 +76,13 @@ export const createProduct = async (req, res) => {
       rate: Joi.number().min(1).max(5),
       stoke_quantity: Joi.number().min(0).required(),
       image: Joi.array().items(Joi.string()),
-      seller_id: Joi.string().required(),
       discount: Joi.number().default(0),
-      color: Joi.array().items(Joi.string()),  // ✅ Thêm vào đây
-      size: Joi.array().items(Joi.string().valid("S", "M", "L", "XL"))
+      color: Joi.array().items(Joi.string()), 
+      size: Joi.array().items(Joi.string())
   });
   
-  console.log("Received files:", req.files); // Log file nhận được
-  console.log("Received body:", req.body);   // Log dữ liệu khác
+  console.log("Received files:", req.files); 
+  console.log("Received body:", req.body);  
 
   const { error } = productSchema.validate(req.body);
   if (error) {
@@ -104,9 +103,10 @@ export const createProduct = async (req, res) => {
         }
       }
     }
-
+    console.log("req.seller.seller_id",req.seller.seller_id);
+    
   try {
-    const product = new Product({ ...req.body, seller_id: req.seller._id,image: imagePaths });
+    const product = new Product({ ...req.body, seller_id: req.seller.seller_id, image: imagePaths });
 
     await product.save();
     res.status(StatusCode.CREATED).json(product);
@@ -238,7 +238,18 @@ export const deleteProduct = async (req, res) => {
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
   }
 };
-
+ export const getProductCurrent = async (req, res) => {
+  try {
+    const product = await Product.find({seller_id: req.seller.seller_id});
+    if (!product) {
+      return res.status(StatusCode.NOT_FOUND).json({ message: "Product not found" });
+    }
+    res.status(StatusCode.OK).json(product);
+  } catch (error) {
+    console.error("Get product current error:", error);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
+  }
+ }
 
 
 

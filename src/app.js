@@ -20,6 +20,10 @@ dotenv.config();
 var jsonParser = bodyParser.json();
 
 const hbs = create({
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true, // Cho phép truy cập các thuộc tính prototype
+    allowProtoMethodsByDefault: true     // Cho phép truy cập các phương thức prototype
+  },
   helpers: {
     eq: (a, b) => a === b,
     gt: (a, b) => a > b, // Kiểm tra a > b
