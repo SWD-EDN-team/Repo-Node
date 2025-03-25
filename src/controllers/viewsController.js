@@ -1,5 +1,6 @@
 import axios from "axios";
 import {product,categories,productById,productpage,reviews} from "../utils/api.js"
+
 export const viewLogin = (req, res) => {
   res.render("login/login",{layout: "auth"});
 };
@@ -339,6 +340,29 @@ export const viewCart = async (req, res) => {
         title:"Giới thiệu",
         layout:"sidebarDashboard",
       })
+  };
+    export const viewManageReview = async (req,res)=>{
+      
+      try {
+        const reviews = await axios.get("http://localhost:8081/api/v1/review")
+        console.log(reviews.data);
+        res.render("manageReview/manageReview",{
+          title:"Giới thiệu",
+          layout:"sidebarDashboard",
+          reviews: reviews.data,
+          helpers:{
+            repeat: function(n, options) {
+              let result = '';
+              for (let i = 0; i < n; i++) {
+                  result += options.fn(i);
+              }
+              return result;
+          }
+        }
+        })
+      } catch (error) {
+        console.log("loi");
+      }
   };
 
 
