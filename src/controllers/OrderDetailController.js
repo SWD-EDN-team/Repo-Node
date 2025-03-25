@@ -1,6 +1,7 @@
 import Order from "../models/Order.js";
 import OrderDetail from "../models/OrderDetail.js";
 import Product from "../models/Product.js";
+import mongoose from "mongoose";
 
 export const getAllOrdersDetail = async (req, res, next) => {
   try {
@@ -45,3 +46,77 @@ export const createOrderDetail = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 }
+
+export const getOrderDetailsBySeller = async (req, res) => {
+  console.log(req.seller);
+  
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.seller.seller_id)) {
+      return res.status(400).json({
+        message: "Invalid seller ID",
+        error: `Seller ID ${req.seller.seller_id} is not a valid ObjectId`,
+      });
+    }
+
+    const orderDetails = await OrderDetail.find()
+      .populate({
+        path: "product_id",
+        match: { seller_id: new mongoose.Types.ObjectId(req.seller.seller_id) },
+        select: "seller_id",
+      })
+      .select("order_id product_id quantity price")
+      .exec();
+
+    const filteredOrderDetails = orderDetails.filter(
+      (detail) => detail.product_id !== null
+    );
+
+    res.status(200).json(filteredOrderDetails);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      message: "Không thể lấy danh sách chi tiết đơn hàng",
+      error: error.message,
+    });
+  }
+};
+
+export const viewOrderDetailsBySeller = async (req, res) => {
+  console.log(req.seller);
+  
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.seller.seller_id)) {
+      return res.status(400).json({
+        message: "Invalid seller ID",
+        error: `Seller ID ${req.seller.seller_id} is not a valid ObjectId`,
+      });
+    }
+
+    const orderDetails = await OrderDetail.find()
+      .populate({
+        path: "product_id",
+        match: { seller_id: new mongoose.Types.ObjectId(req.seller.seller_id) },
+        // select: "seller_id quantity price",
+      })
+      // .select("order_id product_name quantity price")
+      .exec();
+
+    const filteredOrderDetails = orderDetails.filter(
+      (detail) => detail.product_id !== null
+    );
+
+    console.log("orderDetails",filteredOrderDetails);
+    
+    res.render("manageOrder/manageOrder",{
+      title:"Giới thiệu",
+      layout:"sidebarDashboard",
+      orderDetails: filteredOrderDetails,
+    })
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      message: "Không thể lấy danh sách chi tiết đơn hàng",
+      error: error.message,
+    });
+  }
+};
