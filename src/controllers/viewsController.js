@@ -1,4 +1,5 @@
-import {product,categories,productById,productpage,reviews} from "../utils/api.js"
+import Seller from "../models/Seller.js";
+import {product,categories,productById,productpage,reviews, listPedding} from "../utils/api.js"
 export const viewLogin = (req, res) => {
   res.render("login/login",{layout: "auth"});
 };
@@ -280,10 +281,6 @@ export const viewPayment = (req,res)=>{
     layout:"main"
   })
 }
-
-
-
-
 
 
 

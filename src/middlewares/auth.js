@@ -12,10 +12,6 @@ export const admin = async (req, res, next) => {
       .json({ message: "No token provided" });
   }
 
-  const tokenFE = localStorage.getItem("token")
-  console.log(tokenFE);
-  
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Xác thực token
 
@@ -132,6 +128,39 @@ export const userFE = async (req, res, next) => {
     
     req.user = decoded; // Gắn thông tin user vào req để sử dụng sau
     req.email = user.email
+    next();
+  } catch (err) {
+    return res.status(StatusCode.FORBIDDEN).json({ message: "Invalid token" });
+  }
+};
+
+
+export const adminFE = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res
+      .status(StatusCode.UNAUTHORIZED)
+      .json({ message: "No token provided" });
+  }
+  console.log(token);
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Xác thực token
+
+    const user = await User.findById(decoded.id);
+    if (user.refreshToken === undefined) {
+      return res.status(StatusCode.UNAUTHORIZED).json({
+        message: "Token has expired, please login again",
+      });
+    }
+
+    if (decoded.role !== "admin") { 
+      return res.status(StatusCode.FORBIDDEN).json({
+        message: "Access denied, admin only",
+      });
+    }
+    console.log(decoded);
+    req.user = decoded; // Gắn thông tin user vào req để sử dụng sau
     next();
   } catch (err) {
     return res.status(StatusCode.FORBIDDEN).json({ message: "Invalid token" });

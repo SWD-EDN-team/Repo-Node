@@ -68,8 +68,8 @@ export const getProductByPage = async (req, res) => {
 }
 export const createProduct = async (req, res) => {
 
-  console.log("Received files:", req.files); // Log file nhận được
-  console.log("Received body:", req.body);   // Log dữ liệu khác
+  console.log("Received files:", req.files);
+  console.log("Received body:", req.body); 
 
   const { error } = productSchema.validate(req.body);
   if (error) {

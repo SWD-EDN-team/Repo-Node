@@ -31,3 +31,7 @@ export const productpage = (page) => {
     return axios.get(url);
   };
   
+
+export const listPedding = () => {
+  return axios.get("/seller/pending");
+}

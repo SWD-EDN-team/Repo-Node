@@ -2,8 +2,9 @@ import express from "express";
 import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment } from "../controllers/viewsController.js";
 import {searchProduct} from '../controllers/ProductController.js'
 import {getCartbyToken} from '../controllers/CartController.js'
-import { user } from "../middlewares/auth.js"
+import { adminFE, user } from "../middlewares/auth.js"
 import {  userFE } from "../middlewares/auth.js";
+import { viewSellerAccount, viewVerifyAddmin } from "../controllers/SellerController.js";
 const viewRouter = express.Router();
 
 viewRouter.get("/", (req, res) => {
@@ -25,5 +26,7 @@ viewRouter.get("/otp",userFE, viewOTP);
 viewRouter.get("/successful", viewSuccessful);
 viewRouter.get("/payment", viewPayment);
 viewRouter.get("/reviewProduct", viewReview);
+viewRouter.get("/verifySeller",adminFE, viewVerifyAddmin);
+viewRouter.get("/sellerAccount",adminFE, viewSellerAccount);
 
 export default viewRouter;
