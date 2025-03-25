@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import {product,categories,productById,productpage,reviews, cart} from "../utils/api.js"
 // import { getCartbyToken} from "../controllers/CartController.js";
 import Cart from "../models/Cart.js"
@@ -20,7 +22,7 @@ export const viewOTP = async (req, res) => {
 export const viewSuccessful = (req, res) => {
   res.render("successful/successful", { layout: "auth" });
 };
-const orders = [
+  const orders = [
   {
     img: "/assets/images/dress.png",
     name: "Girls Pink Moana Printed Dress",
@@ -85,6 +87,25 @@ export const viewSaveCard = (req, res) => {
     layout: "productPage",
   });
 };
+export const viewPayment = (req,res)=>{
+  res.render("payment/payment",{
+    title:"Giới thiệu",
+    layout:"main"
+  })
+};
+export const viewAddProduct = async (req,res)=>{
+  try{
+    const categories = await axios.get("http://localhost:8081/api/v1/category");
+    console.log(categories.data);
+    res.render("addProduct/addProduct",{
+      title:"Giới thiệu",
+      layout:"sidebarDashboard",
+    })
+    
+  }catch(error){
+    console.log({ error: error.message});
+  }
+};
 export const viewReview = async (req, res) => {
   try {
     const reviews = await axios.get("http://localhost:8081/api/v1/review")
@@ -108,7 +129,6 @@ export const viewReview = async (req, res) => {
     console.log("loi");
   }
 };
-
 export const viewHome = async (req, res) => {
 try {
   const productData = await product()
@@ -212,13 +232,49 @@ export const viewCart = async (req, res) => {
     res.status(500).send("Lỗi server");
   }
 };
-
-export const viewPayment = (req,res)=>{
-  res.render("payment/payment",{
-    title:"Giới thiệu",
-    layout:"main"
-  })
-}
+  export const viewManageProduct = async (req,res)=>{
+    
+    try{
+      const product = await axios.get("http://localhost:8081/api/v1/product");
+      console.log(product.data);
+      res.render("manageProduct/manageProduct",{
+        title:"Giới thiệu",
+        layout:"sidebarDashboard",
+      })
+      
+    }catch(e){
+      console.log(e);
+    }
+  };
+  export const viewManageOrder = async (req,res)=>{
+      res.render("manageOrder/manageOrder",{
+        title:"Giới thiệu",
+        layout:"sidebarDashboard",
+      })
+  };
+    export const viewManageReview = async (req,res)=>{
+      
+      try {
+        const reviews = await axios.get("http://localhost:8081/api/v1/review")
+        console.log(reviews.data);
+        res.render("manageReview/manageReview",{
+          title:"Giới thiệu",
+          layout:"sidebarDashboard",
+          reviews: reviews.data,
+          helpers:{
+            repeat: function(n, options) {
+              let result = '';
+              for (let i = 0; i < n; i++) {
+                  result += options.fn(i);
+              }
+              return result;
+          }
+        }
+        })
+      } catch (error) {
+        console.log("loi");
+      }
+  };
 
 export const viewShippingAddress = async (req, res) => {
   const city = [

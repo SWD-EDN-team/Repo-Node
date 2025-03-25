@@ -20,7 +20,6 @@ export const admin = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Xác thực token
 
     const user = await User.findById(decoded.id);
-    // console.log("user", user);
     if (user.refreshToken === undefined) {
       return res.status(StatusCode.UNAUTHORIZED).json({
         message: "Token has expired, please login again",
@@ -48,13 +47,10 @@ export const user = async (req, res, next) => {
       .json({ message: "No token provided" });
   }
   
-// console.log(token);
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Xác thực token
 
     const user = await User.findById(decoded.id);
-    // console.log("user", user);
     if (user.refreshToken === undefined) {
       return res.status(StatusCode.UNAUTHORIZED).json({
         message: "Token has expired, please login again",
@@ -85,6 +81,8 @@ export const verifySeller = async (req, res, next) => {
         .status(StatusCode.UNAUTHORIZED)
         .json({ message: "Seller not found" });
     }
+    console.log(seller);
+    
     req.seller = seller;
     next();
   } catch (error) {
@@ -97,9 +95,7 @@ export const authMiddleware = (req, res, next) => {
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ errorCode: 1, message: "Unauthorized" });
   }
-
   const token = authHeader.split(" ")[1];
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded; // Gán user vào req
@@ -136,5 +132,32 @@ export const userFE = async (req, res, next) => {
     next();
   } catch (err) {
     return res.status(StatusCode.FORBIDDEN).json({ message: "Invalid token" });
+  }
+};
+
+export const verifySellerFE = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res
+      .status(StatusCode.UNAUTHORIZED)
+      .json({ message: "No token provided" });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token
+    if (!decoded) {
+      return res.status(StatusCode.UNAUTHORIZED).json({ message: "loi" });
+    }
+    const seller = await Seller.findOne({ seller_id: decoded.id });
+    if (!seller) {
+      return res
+        .status(StatusCode.UNAUTHORIZED)
+        .json({ message: "Seller not found" });
+    }
+    console.log(seller);
+    
+    req.seller = seller;
+    next();
+  } catch (error) {
+    return res.status(StatusCode.INTERNAL_SERVER_ERROR).json(error);
   }
 };
