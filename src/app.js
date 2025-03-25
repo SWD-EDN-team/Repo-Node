@@ -30,6 +30,7 @@ const hbs = create({
     lt: (a, b) => a < b, // Kiểm tra a < b
     add: (a, b) => a + b, // Cộng hai số
     subtract: (a, b) => a - b, // Trừ hai số
+    multiply: (a, b) => a * b,
     ternary: (condition, value1, value2) => (condition ? value1 : value2),
     inputdata: (value, newValue) => value(...newValue),
     times: function (n, block) {
@@ -40,7 +41,7 @@ const hbs = create({
       return result;
     },
     formatCurrency: (value) => {
-      return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(value);
+      return value.toLocaleString("vi-VN") + "₫";
     },
     range: (start, end) => {
       let arr = [];
@@ -60,8 +61,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Khai báo thư mục chứa file tĩnh (CSS, JS, images)
-app.use('/images', express.static(path.join(__dirname, 'public/images')));
-app.use(express.static(path.join(__dirname, "./public")));
+app.use(express.static(path.join(__dirname, './public')));
 console.log("Static files served from:", path.join(__dirname, "./public"));
 
 // Middleware
@@ -109,6 +109,13 @@ app.use(urlencodedParser);
     console.log("Failed connecting to server", error);
   }
 })();
+
+app.use(
+  cors({
+    origin: "http://localhost:8081",
+    credentials: true, 
+  })
+);
 
 app.use(express.urlencoded({ extended: true }));
 

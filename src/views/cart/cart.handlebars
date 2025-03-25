@@ -148,46 +148,53 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                {{#each cart.items}}
-                <tr>
-                    <td class="product-info">
-                        <img src="{{this.product_id.image.[0]}}" class="product-img">
-                        <div>
-                            <strong>{{this.product_id.product_name}}</strong>
-                            <p>Size: {{this.selected_size}}</p>
-                        </div>
-                    </td>
-                    <td>${{this.product_id.price}}</td>
-                    <td>
-                        <div class="quantity">
-                            <button class="minus" data-id="{{this._id}}" aria-label="Decrease">&minus;</button>
-                            <input type="number" class="input-box" value="{{this.quantity}}" min="1" max="10" data-id="{{this._id}}">
-                            <button class="plus" data-id="{{this._id}}" aria-label="Increase">&plus;</button>
-                        </div>
-                    </td>
-                    <td>{{this.selected_color}}</td>
-                    <td>${{multiply this.product_id.price this.quantity}}</td>
-                    <td>
-                        <button class="remove-item" data-id="{{this._id}}">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
+                <tbody>
+                    {{#if cart.items}}
+                    {{#if cart.items.length}}
+                        <tbody>
+                            {{#each cart.items}}
+                            <tr>
+                                <td class="product-info">
+                                    <img src="{{this.product_id.image.[0]}}" class="product-img">
+                                    <div>
+                                        <strong>{{this.product_id.product_name}}</strong>
+                                        <p>Size: {{this.selected_size}}</p>
+                                    </div>
+                                </td>
+                                <td>{{formatCurrency this.product_id.price}}</td>
+                                <td>
+                                    <div class="quantity">
+                                        <button class="minus" data-id="{{this._id}}" aria-label="Decrease">&minus;</button>
+                                        <input type="number" class="input-box" value="{{this.quantity}}" min="1" max="30" data-id="{{this._id}}">
+                                        <button class="plus" data-id="{{this._id}}" aria-label="Increase">&plus;</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span style="display: inline-block; width: 20px; height: 20px; background-color: {{this.selected_color}}; border: 1px solid #ccc; border-radius: 4px;"></span>
+                                </td>
+                                <td>{{formatCurrency (multiply this.product_id.price this.quantity)}}</td>
+                                <td>
+                                    <button class="remove-item" data-id="{{this._id}}">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    {{else}}
+                        <p>Giỏ hàng của bạn đang trống.</p>
+                    {{/if}}
+                    {{else}}
+                    <p>Lỗi: Không thể tải dữ liệu giỏ hàng.</p>
+                    {{/if}}
+                </tbody>
         </table>
 
         <div class="summary-box">
-            <h5>Subtotal: <span id="subtotal-value">$0.00</span></h5>
-            <p>Delivery Charge: <span id="delivery-charge">$5.00</span></p>
-            <div class="discount-box">
-                <input type="text" placeholder="Enter Discount Code">
-                <button class="apply-btn">Apply</button>
-            </div>
+            <h5>Subtotal: <span id="subtotal-value">0.00₫</span></h5>
+            <p>Delivery Charge: <span id="delivery-charge">5000₫</span></p>
+            <h2>Grand Total: <span id="grand-total">0.00₫</span></h2>
             <button class="checkout-btn">Proceed to Checkout</button>
-            <hr>
-            <h2>Grand Total: <span id="grand-total">$0.00</span></h2>
         </div>
     </div>
 </div>
@@ -199,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const quantityContainers = document.querySelectorAll(".quantity");
     const subtotalElement = document.querySelector(".summary-box h5 span");
     const grandTotalElement = document.querySelector(".summary-box h2 span");
-    const deliveryCharge = 5.00; // Phí giao hàng cố định
+    const deliveryCharge = 5000; // Phí giao hàng cố định
 
     quantityContainers.forEach(quantityContainer => {
         const minusBtn = quantityContainer.querySelector(".minus");
@@ -222,16 +229,25 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateSubtotal() {
         let subtotal = 0;
         document.querySelectorAll("tbody tr").forEach(row => {
-            const price = parseFloat(row.querySelector("td:nth-child(2)").textContent.replace("$", ""));
-            const quantity = parseInt(row.querySelector(".input-box").value);
+            const priceText = row.querySelector("td:nth-child(2)").textContent.replace(/\D/g, ""); // Lấy số từ giá
+            const price = parseInt(priceText, 10) || 0;  
+            const quantityInput = row.querySelector(".input-box");
+            const quantity = parseInt(quantityInput.value, 10) || 1;  
+
             const rowSubtotal = price * quantity;
-            row.querySelector("td:nth-child(4)").textContent = `$${rowSubtotal.toFixed(2)}`;
+            row.querySelector("td:nth-child(5)").textContent = formatCurrency(rowSubtotal);  
+
             subtotal += rowSubtotal;
         });
 
         // Cập nhật tổng tiền
-        subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
-        grandTotalElement.textContent = `$${(subtotal + deliveryCharge).toFixed(2)}`;
+        document.getElementById("subtotal-value").textContent = formatCurrency(subtotal);
+        document.getElementById("grand-total").textContent = formatCurrency(subtotal + deliveryCharge);
+    }
+
+    // 🏆 Hàm định dạng tiền tệ chuẩn Việt Nam
+    function formatCurrency(value) {
+        return value.toLocaleString("vi-VN") + "₫";
     }
 
     updateSubtotal(); // Gọi lần đầu để cập nhật giá trị ban đầu

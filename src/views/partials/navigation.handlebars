@@ -24,7 +24,7 @@
           <input class="search_input" type="text" placeholder="Search..." />
         </i>
         <i class="fa-regular fa-heart"></i>
-        <a href="#" class="icon" id="cart-link"><i class="fas fa-shopping-bag"></i></a>
+        <a href="" id="cart-link" class="icon"><i class="fas fa-shopping-bag"></i></a>
       </div>
       <button>Login</button>
     </div>
@@ -113,38 +113,51 @@
   menuIcon.addEventListener("click",()=>{ menuList.classList.toggle("show"); });
   console.log(menuList, menuIcon)
 
-  document.getElementById("cart-link").addEventListener("click", async (e) => {
-    e.preventDefault();
+document.getElementById("cart-link").addEventListener("click", async (e) => {
+  e.preventDefault();
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Vui lòng đăng nhập để xem giỏ hàng!");
-      return;
-    }
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Vui lòng đăng nhập để xem giỏ hàng!");
+    return;
+  }
 
-    try {
-      const response = await fetch("/view/cart", {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  try {
+  const response = await fetch("/view/cart", {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
 
-      if (response.status === 401) {
+    console.log("Response status:", response.status);
+
+    switch (response.status) {
+      case 401:
         alert("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
         localStorage.removeItem("token");
         window.location.href = "/login";
-      } else if (response.status === 403) {
+        break;
+
+      case 403:
         alert("Token không hợp lệ, vui lòng đăng nhập lại!");
         localStorage.removeItem("token");
         window.location.href = "/login";
-      } else if (response.ok) {
+        break;
+
+      case 200:
         window.location.href = "/view/cart";
-      } else {
+        break;
+
+      default:
         alert("Lỗi không xác định, vui lòng thử lại sau!");
-      }
-    } catch (error) {
-      console.error("Lỗi khi gửi yêu cầu:", error);
-      alert("Lỗi kết nối, vui lòng kiểm tra lại mạng!");
     }
-  });
+  } catch (error) {
+    console.error("Lỗi khi gửi yêu cầu:", error);
+    alert("Lỗi kết nối, vui lòng kiểm tra lại mạng!");
+  }
+});
 
 </script>
