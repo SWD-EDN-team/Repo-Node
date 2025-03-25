@@ -25,7 +25,6 @@ authRouter.post("/logout", logout);
 authRouter.put("/update", user, updateUser);
 
 authRouter.post("/verify_email", verifyEmail);
-
 authRouter.post("/verify_code", verify_code);
 authRouter.post("/reset_password", reset_Password);
 

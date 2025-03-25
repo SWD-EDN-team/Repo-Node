@@ -71,6 +71,8 @@ export const verifyEmail = async (req, res) => {
 
   const user = await User.findOne({ email });
   if (!user) return sendError(res, "Sorry, user not found!");
+  console.log("user",user);
+  
 
   if (user.verified) return sendError(res, "This account is already verified");
 
