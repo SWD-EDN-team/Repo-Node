@@ -31,11 +31,11 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="color" class="form-label fw-bold">Color</label>
-                    <input type="text" class="form-control" id="color" name="color" required placeholder="Enter color">
+                    <input type="text" class="form-control" id="color" name="color" placeholder="Enter color">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="size" class="form-label fw-bold">Size</label>
-                    <input type="text" class="form-control" id="size" name="size" required placeholder="Enter size">
+                    <input type="text" class="form-control" id="size" name="size" placeholder="Enter size">
                 </div>
             </div>
             <div class="mb-3">
@@ -92,6 +92,11 @@ document.addEventListener("DOMContentLoaded",async function () {
             alert("Please fill in all required fields.");
             return;
         }
+        const imageArray = [];
+
+        for (let i = 0; i < image.length; i++) {
+            imageArray.push(image[i]);
+        }
         const formData = new FormData();
         formData.append("product_name", product_name);
         formData.append("price", price);
@@ -99,7 +104,10 @@ document.addEventListener("DOMContentLoaded",async function () {
         formData.append("color", JSON.stringify(color));
         formData.append("size", JSON.stringify(size)); 
         formData.append("category_id", category);
-        formData.append("image", image);
+        imageArray.forEach((file) => {
+            formData.append("image", file); 
+        });
+
         formData.append("description", description);
         console.log("Form Data Submitted:", {
             product_name,
