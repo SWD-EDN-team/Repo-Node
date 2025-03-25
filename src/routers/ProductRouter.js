@@ -1,6 +1,6 @@
 import express from "express";
 import { verifySeller } from "../middlewares/auth.js";
-import { createProduct, getAllProducts, getProductById, getProductByPage, getProductList } from "../controllers/ProductController.js";
+import { createProduct, deleteProduct, getAllProducts, getProductById, getProductByPage, getProductList, updateProduct } from "../controllers/ProductController.js";
 
 
 const router = express.Router();
@@ -10,7 +10,8 @@ router.get("/",getAllProducts);
 router.get("/:id",getProductById);
 router.post("/",verifySeller,createProduct);
 router.get("/page/:pageNumber", getProductList);
-
+router.put("/:id",verifySeller, updateProduct)
+router.delete("/:id",verifySeller, deleteProduct)
 
 
 export default router;
