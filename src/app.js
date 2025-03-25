@@ -12,7 +12,6 @@ import { fileURLToPath } from "url";
 import path from "path";
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
-import extendBlocks from "handlebars-extend-block";
 
 // Load biến môi trường từ .env
 dotenv.config();
@@ -30,7 +29,7 @@ console.log("Static files served from:", path.join(__dirname, "public"));
 
 // Cấu hình Express Handlebars
 const hbs = create({
-  extname: ".hbs",
+  partialsDir: path.join(__dirname, "views/partials"),
   helpers: {
     eq: (a, b) => a === b,
     gt: (a, b) => a > b, // Kiểm tra a > b
@@ -63,16 +62,12 @@ const hbs = create({
   },
 });
 
-const port = process.env.PORT || 8080;
-const hostname = process.env.HOST_NAME || "localhost";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Khai báo thư mục chứa file tĩnh (CSS, JS, images)
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 console.log("Static files served from:", path.join(__dirname, "./public"));
 
 // Middleware
+const jsonParser = express.json();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -88,8 +83,6 @@ app.use((req, res, next) => {
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
-
-
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 

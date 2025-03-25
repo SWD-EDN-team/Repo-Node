@@ -14,6 +14,7 @@ import PaymentMethodRouter from "../routers/PaymentMethodRouter.js";
 import paymentRouter from "../routers/paymentRouter.js";
 import OrderRouter from "../routers/OrderRouter.js";
 import OrderDetailRouter from "../routers/OrderDetailRouter.js";
+import {  userFE } from "../middlewares/auth.js";
 
 const rootRouter = express.Router();
 
@@ -34,4 +35,3 @@ rootRouter.use("/orderDetail", OrderDetailRouter);
 
 export default rootRouter;
 
-///1

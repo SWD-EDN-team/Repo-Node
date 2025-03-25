@@ -17,7 +17,7 @@ const orderSchema = new Schema(
     },
     payment_id: {
       type: Schema.Types.ObjectId,
-      ref: 'Payment',
+      ref: "Payment",
       // required: true,
     },
     order_date: {
@@ -26,9 +26,9 @@ const orderSchema = new Schema(
     },
     shipping_address: {
       type: Schema.Types.ObjectId,
-      ref: 'Address',
+      ref: "Address",
       // required: true,
-    }
+    },
   },
   { timestamps: false, versionKey: false }
 );

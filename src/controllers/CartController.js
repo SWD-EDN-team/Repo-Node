@@ -102,7 +102,7 @@ export const addToCart = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-};
+
 
 export const updateCartProduct = async (req, res) => {
   try {
@@ -161,5 +161,33 @@ export const deleteCartProduct = async (req, res) => {
     res
       .status(StatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: error.message });
+  }
+};
+
+export const removeFromCart = async (req, res) => {
+  try {
+      const { itemId } = req.params;
+      const userId = req.user.id; 
+
+      // Tìm giỏ hàng của người dùng
+      const cart = await Cart.findOne({ user_id: userId });
+      if (!cart) {
+          return res.status(404).json({ error: "Cart not found." });
+      }
+
+      // Lọc ra các sản phẩm không phải itemId (tức là loại bỏ sản phẩm cần xóa)
+      cart.items = cart.items.filter(item => item._id.toString() !== itemId);
+
+      // Cập nhật tổng giá
+      cart.total_price = cart.items.reduce((total, item) => {
+          return total + item.product_id.price * item.quantity;
+      }, 0);
+
+      await cart.save();
+
+      res.json({ message: "Product removed form cart" });
+  } catch (error) {
+      console.error("Lỗi khi xóa sản phẩm:", error);
+      res.status(500).json({ error: "Lỗi server." });
   }
 };

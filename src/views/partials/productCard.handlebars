@@ -1,26 +1,27 @@
 <div class="col-md-3 col-sm-6 mb-4">
-   <div class="card border-0 shadow-sm product-card" data-id="{{_id}}" style="height: 400px;">
-        <div class="card-img-wrapper">
-            <img src="{{image.[0]}}" class="card-img-top" alt="{{product_name}}" style="height: 200px;">
-            <button class="btn btn-dark add-to-cart">Add to Cart</button>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">{{product_name}}</h5>
-            <p class="text-muted">{{description}}</p>
-            <p class="fw-bold">${{price}}</p>
-            <p class="stars">
-                {{#times rate}}★{{/times}}
-            </p>
-        </div>
+  <div
+    class="card border-0 shadow-sm product-card"
+    data-id="{{_id}}"
+    style="height: 400px;"
+  >
+    <div class="card-img-wrapper">
+           <img src="{{image.[0]}}" class="card-img-top" alt="{{product_name}}" style="height: 200px;">
+      <button class="btn btn-dark add-to-cart">Add to Cart</button>
     </div>
+    <div class="card-body">
+      <h5 class="card-title">{{product_name}}</h5>
+      <p class="text-muted">{{description}}</p>
+      <p class="fw-bold">${{price}}</p>
+      <p class="stars">
+        {{#times rate}}★{{/times}}
+      </p>
+    </div>
+  </div>
 </div>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".product-card").forEach((card) => {
-      card.addEventListener("click", function () {
-        const productId = this.getAttribute("data-id");
-        window.location.href = `/view/detailProduct/${productId}`;
-      });
-    });
-  });
+  document.querySelectorAll(".product-card").forEach((card) => {
+  card.addEventListener("click", function () { const productId =
+  this.getAttribute("data-id"); window.location.href =
+  `/view/detailProduct/${productId}`; }); }); });
 </script>

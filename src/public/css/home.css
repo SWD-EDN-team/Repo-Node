@@ -1,10 +1,12 @@
-.container{
+.container {
     padding-left: 0;
     padding-right: 0;
 }
+
 .sidebar {
     display: none !important;
 }
+
 .hero-section {
     background: url("https://plus.unsplash.com/premium_photo-1682096556408-c7ee01d2ac81?q=80&w=1967&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat center center;
     background-size: cover;
@@ -12,24 +14,25 @@
     min-width: 180vw;
     display: flex;
     align-items: center;
-    color: white; 
+    color: white;
     position: relative;
     padding-left: 5%;
 }
 
 .hero-section .container {
-    position: relative; 
+    position: relative;
     z-index: 1;
-    
+
 }
 
 .containercate {
     display: flex;
-    flex-direction: column; 
-    align-items: center; 
+    flex-direction: column;
+    align-items: center;
     width: 100%;
 
 }
+
 .categories-wrapper {
     position: relative;
     overflow: hidden;
@@ -46,17 +49,17 @@
 }
 
 .categories-header {
-display: flex;
-align-items: center;
-justify-content: space-between; 
-margin-bottom: 20px; 
-/* gap: 500px */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    /* gap: 500px */
 }
 
 .category-card {
     flex: 1 1 25%;
     text-align: center;
-    min-width: 16%; 
+    min-width: 16%;
 }
 
 .category-card img {
@@ -80,16 +83,17 @@ margin-bottom: 20px;
 }
 
 .navbar {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-z-index: 1000; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
+
 body {
-padding-top: 70px; 
-align-items: center;
+    align-items: center;
 }
+
 .card {
     position: relative;
     overflow: hidden;
@@ -98,9 +102,9 @@ align-items: center;
 }
 
 .card-img-wrapper {
-position: relative;
-overflow: hidden;
-max-width: 100%;
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 .card-img-top {
@@ -115,7 +119,7 @@ max-width: 100%;
 }
 
 .card-body .fw-bold {
-    margin-top: auto; 
+    margin-top: auto;
 }
 
 .product-card {
@@ -147,16 +151,16 @@ max-width: 100%;
 }
 
 .old-price {
-    color: rgba(122, 122, 122, 0.5); 
-    font-size: 0.9em; 
+    color: rgba(122, 122, 122, 0.5);
+    font-size: 0.9em;
 }
 
 .rating-section {
     display: flex;
     flex-direction: column;
-    margin-top: 50px; 
-    position: relative; 
-    background-color: #f8f9fa; 
+    margin-top: 50px;
+    position: relative;
+    background-color: #f8f9fa;
     padding: 50px 5px;
     width: 100%;
     margin-bottom: 100px;
@@ -177,40 +181,43 @@ max-width: 100%;
 }
 
 .rating-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-width: 100%;
-padding: 0 20px;
-position: relative;
-margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    position: relative;
+    margin-bottom: 25px;
 }
 
 .slider-controls {
     display: flex !important;
-    gap: 5px ;
+    gap: 5px;
 }
 
 .slider-btn {
-background-color: #f5f5f5;
-color: #333;
-border: none;
-padding: 12px 15px;
-cursor: pointer;
-font-size: 16px;
-border-radius: 12px;
-transition: background 0.3s, transform 0.2s;
+    background-color: #f5f5f5;
+    color: #333;
+    border: none;
+    padding: 12px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 12px;
+    transition: background 0.3s, transform 0.2s;
 }
 
 .slider-btn.right {
     background-color: #111;
     color: white;
 }
+
 .rating {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Đảm bảo phần avatar luôn ở dưới */
-    min-height: 180px; /* Chiều cao tối thiểu để các card đồng đều */
+    justify-content: space-between;
+    /* Đảm bảo phần avatar luôn ở dưới */
+    min-height: 180px;
+    /* Chiều cao tối thiểu để các card đồng đều */
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -218,9 +225,12 @@ transition: background 0.3s, transform 0.2s;
 }
 
 .rating p {
-    flex-grow: 1; /* Mở rộng phần comment để đẩy avatar xuống */
-    margin-bottom: 10px; /* Khoảng cách giữa comment và avatar */
+    flex-grow: 1;
+    /* Mở rộng phần comment để đẩy avatar xuống */
+    margin-bottom: 10px;
+    /* Khoảng cách giữa comment và avatar */
 }
+
 .stars {
     color: #FFA500;
     font-size: 20px;
@@ -231,10 +241,11 @@ transition: background 0.3s, transform 0.2s;
     align-items: center;
     gap: 10px;
 }
+
 .customer-card {
     display: flex;
     flex-direction: column;
-    justify-content: center; 
+    justify-content: center;
 }
 
 .customer-info img {
@@ -255,52 +266,51 @@ transition: background 0.3s, transform 0.2s;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 75%;
-  }
-  
-  .filter-section h5 {
+}
+
+.filter-section h5 {
     margin-bottom: 10px;
     font-size: 18px;
     font-weight: bold;
     color: #333;
     padding-bottom: 5px;
-  }
-  
-  .filter-section ul {
+}
+
+.filter-section ul {
     padding: 0;
     margin: 0;
-  }
-  
-  .filter-section li {
+}
+
+.filter-section li {
     list-style: none;
     margin: 5px 0;
-  }
-  
-  .filter-section input[type="checkbox"] {
+}
+
+.filter-section input[type="checkbox"] {
     margin-right: 8px;
     cursor: pointer;
-  }
-  
-  .filter-section label {
+}
+
+.filter-section label {
     font-size: 14px;
     color: #555;
     cursor: pointer;
-  }
-  
-  #priceRange {
+}
+
+#priceRange {
     width: 75%;
     margin-top: 5px;
-  }
-  
-  #priceValue {
+}
+
+#priceValue {
     font-weight: bold;
     color: #007bff;
-  }
-  
-  #applyFilters {
+}
+
+#applyFilters {
     width: 75%;
     margin-top: 15px;
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;
-  }
-  
+}

@@ -1,9 +1,11 @@
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
-body, html {
+
+body,
+html {
     height: 100%;
     margin: 0;
     display: flex;
@@ -11,35 +13,41 @@ body, html {
 }
 
 .footer_Container {
-    margin-top: auto; 
+    margin-top: auto;
 }
 
 .footer_Content {
     background-color: #131118;
-    height: 280px;
+    height: 305px;
 }
-.footer_Content p{
+
+.footer_Content p {
     color: #ffff;
 }
-.footer_Content ul{
+
+.footer_Content ul {
     color: #ffff;
     list-style: none;
     padding: 0;
 }
-.footer_Content h4{
+
+.footer_Content h4 {
     color: #ffff;
 }
-.footer_Content-layout{
+
+.footer_Content-layout {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    margin: 0 150px; 
+    margin: 0 150px;
     border-bottom: 1px solid #cccc;
     padding: 20px 0;
 }
-.layout_1{
+
+.layout_1 {
     flex-basis: 10%;
 }
-.information_list li{
+
+.information_list li {
     display: flex;
     align-items: flex-start;
     opacity: 0.8;
@@ -47,23 +55,28 @@ body, html {
     font-weight: 400;
     font-size: 16px;
 }
-.information_list i{
+
+.information_list i {
     margin-right: 10px;
 }
-.information_list span{
+
+.information_list span {
     line-height: 1.5;
 }
-.layout_2{
+
+.layout_2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 0 50px;
 }
-.layout_2 h4{
+
+.layout_2 h4 {
     font-size: 16px;
     line-height: 23.12px;
 }
-.layout_2 li{
+
+.layout_2 li {
     margin-top: 10px;
     cursor: pointer;
     font-weight: 400;
@@ -71,114 +84,143 @@ body, html {
     line-height: 23.12px;
     opacity: 0.8;
 }
-.layout_3{
+
+.layout_3 {
     margin-left: 60px;
 }
-.layout_3 h4{
+
+.layout_3 h4 {
     margin-bottom: 10px;
     font-size: 16px;
     line-height: 23.12px;
 }
-.layout_3 p{
+
+.layout_3 p {
     margin-bottom: 10px;
     font-weight: 400;
     font-size: 16px;
     opacity: 0.8;
     line-height: 23.12px;
 }
-.layout_3 input{
+
+.layout_3 input {
     width: 100%;
     padding: 10px 45px;
     border-radius: 10px;
     background-color: #131118;
     border: 1px solid #cccc;
 }
-.layout_3 input:focus{
+
+.layout_3 input:focus {
     color: #ffff;
 }
-.layout_3 input::placeholder{
+
+.layout_3 input::placeholder {
     color: #cccc;
 }
-.email_input{
+
+.email_input {
     display: flex;
     align-items: center;
     position: relative;
 }
-.email_input i{
+
+.email_input i {
     color: #cccc;
 }
-.email_input i:first-child{
+
+.email_input i:first-child {
     position: absolute;
     left: 15px;
 }
-.email_input i:last-child{
+
+.email_input i:last-child {
     position: absolute;
     right: 20px;
 }
-.footer_Content-end{
+
+.footer_Content-end {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 0 150px;
     padding: 10px 0;
 }
-.footer_Content-end i{
+
+.footer_Content-end i {
     color: #ffff;
     margin-left: 20px;
 }
+
 /* Responsive cho tablet */
 @media (max-width: 1280px) {
     .footer_Content-layout {
         margin: 10px;
     }
 }
+
 @media (max-width: 1024px) {
     .footer_Content-layout {
         margin: 0 20px;
         grid-template-columns: repeat(2, 1fr);
     }
-    .footer_Content{
+
+    .footer_Content {
         height: auto;
     }
-    .layout_1,.layout_2{
+
+    .layout_1,
+    .layout_2 {
         border-bottom: 1px solid #ccc;
     }
-    .layout_2{
+
+    .layout_2 {
         margin: 0;
         padding: 0 80px;
     }
-    .layout_3{
+
+    .layout_3 {
         margin-left: 0;
         margin-top: 10px;
     }
-    .social_media{
+
+    .social_media {
         display: flex;
     }
 }
+
 @media (max-width: 768px) {
-    .footer_Content-layout{
+    .footer_Content-layout {
         grid-template-columns: repeat(1, 1fr);
         margin: 0;
         padding: 0 20px;
-    }.social_media{
+    }
+
+    .social_media {
         display: flex;
-    }.footer_Content-end{
+    }
+
+    .footer_Content-end {
         margin: 0 20px;
     }
-    .footer_Content-end p{
+
+    .footer_Content-end p {
         margin-left: 10px;
     }
 }
+
 @media (max-width: 425px) {
-    .footer_Content-layout{
+    .footer_Content-layout {
         grid-template-columns: repeat(1, 1fr);
         margin: 0;
     }
-    .layout_2{
+
+    .layout_2 {
         display: grid;
         padding-bottom: 10px;
     }
-    .layout_2 h4{
+
+    .layout_2 h4 {
         margin-top: 10px;
     }
 }
