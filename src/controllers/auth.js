@@ -394,3 +394,5 @@ export const verify_code = async (req, res) => {
     res.status(500).send("An error occurred while updating the user.");
   }
 };
+
+

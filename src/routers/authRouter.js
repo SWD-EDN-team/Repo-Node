@@ -16,7 +16,7 @@ import { verifyEmail, reset_Password } from "../controllers/userController.js";
 const authRouter = express.Router();
 
 authRouter.post("/auth/signup", signup);
-authRouter.post("/auth/signin", signin);
+authRouter.post("/signin", signin);
 authRouter.get("/auth/getall", getAll);
 authRouter.get("/auth/getByEmail", admin, getByEmail);
 authRouter.get("/auth/getCurrentUser", getCurrentUser);

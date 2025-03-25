@@ -66,6 +66,9 @@ app.use(
   })
 );
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the homepage!");
+});
 // Routes
 app.use("/view", ViewRouter);
 app.use("/api/v1", rootRouter);
