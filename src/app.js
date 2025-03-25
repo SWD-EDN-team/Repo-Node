@@ -37,6 +37,9 @@ const hbs = create({
       return result;
     },
     formatCurrency: (value) => {
+      if (typeof value !== "number" || isNaN(value)) {
+          return "0₫"; // Trả về giá trị mặc định nếu không hợp lệ
+      }
       return value.toLocaleString("vi-VN") + "₫";
     },
     range: (start, end) => {
@@ -115,9 +118,10 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/view",ViewRouter)
+app.use("/view", ViewRouter)
 app.use("/api/v1", rootRouter);
 app.use("/products", ProductRouter);
+
 
 
 // // Start Server

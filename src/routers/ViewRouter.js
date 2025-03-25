@@ -1,5 +1,5 @@
 import express from "express";
-import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart} from "../controllers/viewsController.js";
+import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart, viewProfile} from "../controllers/viewsController.js";
 import {searchProduct} from '../controllers/ProductController.js'
 import {getCartbyToken} from '../controllers/CartController.js'
 import { user } from "../middlewares/auth.js"
@@ -25,5 +25,6 @@ viewRouter.get("/otp",userFE, viewOTP);
 viewRouter.get("/successful", viewSuccessful);
 viewRouter.get("/payment", viewPayment);
 viewRouter.get("/reviewProduct", viewReview);
+viewRouter.get("/profile", userFE, viewProfile);
 
 export default viewRouter;

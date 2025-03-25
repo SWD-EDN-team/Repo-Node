@@ -1,5 +1,5 @@
-import {product,categories,productById,productpage,reviews, cart} from "../utils/api.js"
-// import { getCartbyToken} from "../controllers/CartController.js";
+import {product,categories,productById,productpage,reviews, cart, userById} from "../utils/api.js"
+import User from "../models/User.js"
 import Cart from "../models/Cart.js"
 export const viewLogin = (req, res) => {
   res.render("login/login",{layout: "auth"});
@@ -115,8 +115,9 @@ try {
   const reviewData = await reviews()
   const categoryData = await categories()
   const bestSellers = productData.data.slice(0, 8);
+  const user = req.user || null;  // Nếu chưa đăng nhập, user = null
   
-  res.render("home/home",{title: "Trang chủ",products:bestSellers, ratings: reviewData.data, categories: categoryData.data, layout:"main"})
+  res.render("home/home",{title: "Trang chủ",products:bestSellers, ratings: reviewData.data, categories: categoryData.data, user, layout:"main"})
 } catch (error) {
   console.log(error);
 }
@@ -210,6 +211,27 @@ export const viewCart = async (req, res) => {
   } catch (error) {
     console.error("Lỗi khi lấy giỏ hàng:", error);
     res.status(500).send("Lỗi server");
+  }
+};
+
+export const viewProfile = async (req, res) => {
+  try {
+      // Lấy user ID từ `req.user`
+      const userId = req.user._id;
+      const userData = await User.findById(userId).select("-password -refreshToken");
+
+      if (!userData) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      res.render("profile/profile", {
+          title: "Trang cá nhân",
+          user: userData.toObject()
+      });
+
+  } catch (error) {
+      console.error("Error fetching user profile:", error);
+      res.status(500).json({ message: "Server error" });
   }
 };
 // export const commentsHome = async (req, res) => {
