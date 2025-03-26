@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+
+    .checkout-container {
+
+    margin: auto;
+    padding: 20px;
+    }
+
+    .checkout-content {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .checkout-table {
+        width: 100%;
+        border-collapse: collapse;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .checkout-table th, .checkout-table td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .product-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 5px;
+    }
+
+.quantity {
+  display: flex;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 90%;
+}
+
+.quantity button {
+  color: #000000;
+  background-color: #ffffff;
+  border: none;
+  font-size: 12px;
+  width: 30px;
+  height: auto;
+  text-align: center;
+}
+
+
+.input-box {
+  width: 35px;
+  text-align: center;
+  border: none;
+  padding: 5px 8px;
+  font-size: 12px;
+  outline: none;
+}
+
+/* Hide the number input spin buttons */
+.input-box::-webkit-inner-spin-button,
+.input-box::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-box[type="number"] {
+  -moz-appearance: textfield;
+}
+
+    .remove-item {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+    .summary-box {
+        width: 50%;
+        height: 50%;
+        padding: 20px;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .discount-box {
+        display: flex;
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    .discount-box input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+    }
+
+    .apply-btn {
+        background: black;
+        color: white;
+        padding: 8px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .checkout-btn {
+        width: 100%;
+        background: black;
+        color: white;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    </style>
+</head>
+<body>
+<div class="checkout-container">
+    {{!-- <aside class="sidebar p-3 border rounded shadow-sm me-4" style="width: 250px; background-color: #f4f4f4;">
+      {{> sidebar}}
+    </aside> --}}
+    <h1>My Cart</h1>
+<div class="checkout-content">
+        <table class="checkout-table">
+            <thead>
+                <tr>
+                    <th>Products</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Color</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+                <tbody>
+                    {{#if cart.items}}
+                    {{#if cart.items.length}}
+                        <tbody>
+                            {{#each cart.items}}
+                            <tr>
+                                <td class="product-info">
+                                    <img src="{{this.product_id.image.[0]}}" class="product-img">
+                                    <div>
+                                        <strong>{{this.product_id.product_name}}</strong>
+                                        <p>Size: {{this.selected_size}}</p>
+                                    </div>
+                                </td>
+                                <td>{{formatCurrency this.product_id.price}}</td>
+                                <td>
+                                    <div class="quantity">
+                                        <button class="minus" data-id="{{this._id}}" aria-label="Decrease">&minus;</button>
+                                        <input type="number" class="input-box" value="{{this.quantity}}" min="1" max="30" data-id="{{this._id}}">
+                                        <button class="plus" data-id="{{this._id}}" aria-label="Increase">&plus;</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span style="display: inline-block; width: 20px; height: 20px; background-color: {{this.selected_color}}; border: 1px solid #ccc; border-radius: 4px;"></span>
+                                </td>
+                                <td>{{formatCurrency (multiply this.product_id.price this.quantity)}}</td>
+                                <td>
+                                    <button class="remove-item" data-id="{{this._id}}">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    {{else}}
+                        <p>Giỏ hàng của bạn đang trống.</p>
+                    {{/if}}
+                    {{else}}
+                    <p>Lỗi: Không thể tải dữ liệu giỏ hàng.</p>
+                    {{/if}}
+                </tbody>
+        </table>
+
+        <div class="summary-box">
+            <h5>Subtotal: <span id="subtotal-value">0.00₫</span></h5>
+            <p>Delivery Charge: <span id="delivery-charge">5000₫</span></p>
+            <h2>Grand Total: <span id="grand-total">0.00₫</span></h2>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const quantityContainers = document.querySelectorAll(".quantity");
+    const subtotalElement = document.querySelector(".summary-box h5 span");
+    const grandTotalElement = document.querySelector(".summary-box h2 span");
+    const deliveryCharge = 5000; // Phí giao hàng cố định
+
+    quantityContainers.forEach(quantityContainer => {
+        const minusBtn = quantityContainer.querySelector(".minus");
+        const plusBtn = quantityContainer.querySelector(".plus");
+        const inputBox = quantityContainer.querySelector(".input-box");
+
+        minusBtn.addEventListener("click", () => updateQuantity(inputBox, -1));
+        plusBtn.addEventListener("click", () => updateQuantity(inputBox, 1));
+        inputBox.addEventListener("input", () => updateSubtotal());
+    });
+
+    function updateQuantity(inputBox, change) {
+        let value = parseInt(inputBox.value);
+        let maxValue = parseInt(inputBox.max);
+        let newValue = isNaN(value) ? 1 : Math.min(Math.max(value + change, 1), maxValue);
+        inputBox.value = newValue;
+        updateSubtotal();
+    }
+
+    function updateSubtotal() {
+        let subtotal = 0;
+        document.querySelectorAll("tbody tr").forEach(row => {
+            const priceText = row.querySelector("td:nth-child(2)").textContent.replace(/\D/g, ""); // Lấy số từ giá
+            const price = parseInt(priceText, 10) || 0;  
+            const quantityInput = row.querySelector(".input-box");
+            const quantity = parseInt(quantityInput.value, 10) || 1;  
+
+            const rowSubtotal = price * quantity;
+            row.querySelector("td:nth-child(5)").textContent = formatCurrency(rowSubtotal);  
+
+            subtotal += rowSubtotal;
+        });
+
+        // Cập nhật tổng tiền
+        document.getElementById("subtotal-value").textContent = formatCurrency(subtotal);
+        document.getElementById("grand-total").textContent = formatCurrency(subtotal + deliveryCharge);
+    }
+
+        function formatCurrency(value) {
+            if (typeof value !== "number" || isNaN(value)) {
+                return "0₫"; 
+            }
+            return value.toLocaleString("vi-VN") + "₫";
+        }
+    updateSubtotal();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const removeButtons = document.querySelectorAll(".remove-item");
+
+    removeButtons.forEach((button) => {
+        button.addEventListener("click", async function () {
+            const itemId = this.getAttribute("data-id");
+            console.log(itemId);
+
+            if (!itemId) {
+                console.error("Không tìm thấy ID sản phẩm để xóa.");
+                return;
+            }
+
+            const confirmDelete = confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?");
+            if (!confirmDelete) return;
+
+            try {
+                const response = await fetch(`/api/v1/cart/remove/${itemId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    },
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message);
+                    window.location.reload(); // Load lại trang sau khi xóa
+                } else {
+                    alert("Lỗi: " + result.error);
+                }
+            } catch (error) {
+                console.error("Lỗi khi xóa sản phẩm:", error);
+            }
+        });
+    });
+});
+
+
+</script>

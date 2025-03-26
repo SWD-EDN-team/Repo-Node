@@ -2,6 +2,7 @@ import Joi from "joi";
 import StatusCode from "http-status-codes";
 import Product from "../models/Product.js";
 import { uploadSingleFile } from "../services/fileService.js";
+import mongoose from "mongoose";
 
 const productSchema = Joi.object({
   product_name: Joi.string().required().messages({
@@ -39,13 +40,19 @@ export const getAllProducts = async (req, res) => {
 
 export const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
-    if (!product) res.status(StatusCode.NOT_FOUND).json({ message: "Product not found" });
-    res.status(StatusCode.OK).json(product);
+    const { id } = await req.params; 
+    console.log("id",id);
+    const product = await Product.findById(id); 
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" }); 
+    }
+
+    res.status(200).json(product);
   } catch (error) {
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
-}
+};
 
 export const getProductByPage = async (req, res) => {
   try {
@@ -61,8 +68,21 @@ export const getProductByPage = async (req, res) => {
 }
 export const createProduct = async (req, res) => {
 
-  console.log("Received files:", req.files); // Log file nhận được
-  console.log("Received body:", req.body);   // Log dữ liệu khác
+  const productSchema = Joi.object({
+      product_name: Joi.string().required(),
+      category_id: Joi.string().required(),
+      description: Joi.string().min(10).max(1000).required(),
+      price: Joi.number().required(),
+      rate: Joi.number().min(1).max(5),
+      stoke_quantity: Joi.number().min(0).required(),
+      image: Joi.array().items(Joi.string()),
+      discount: Joi.number().default(0),
+      color: Joi.array().items(Joi.string()), 
+      size: Joi.array().items(Joi.string())
+  });
+  
+  console.log("Received files:", req.files); 
+  console.log("Received body:", req.body);  
 
   const { error } = productSchema.validate(req.body);
   if (error) {
@@ -83,9 +103,10 @@ export const createProduct = async (req, res) => {
         }
       }
     }
-
+    console.log("req.seller.seller_id",req.seller.seller_id);
+    
   try {
-    const product = new Product({ ...req.body, seller_id: req.seller._id,image: imagePaths });
+    const product = new Product({ ...req.body, seller_id: req.seller.seller_id, image: imagePaths });
 
     await product.save();
     res.status(StatusCode.CREATED).json(product);
@@ -95,3 +116,141 @@ export const createProduct = async (req, res) => {
       .json({ message: error.message });
   }
 };
+
+export const getProductList = async (req, res) => {
+  try {
+    const page = parseInt(req.params.pageNumber) || 1; 
+    const limit = 8; 
+    const skip = (page - 1) * limit;
+
+    const totalProducts = await Product.countDocuments();
+
+    const products = await Product.find().skip(skip).limit(limit);
+    
+    res.json({
+      success: true,
+      products,
+      currentPage: page,
+      totalPages: Math.ceil(totalProducts / limit),
+      totalProducts
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Lỗi server" });
+  }
+};
+
+
+export const searchProduct = async (req, res) => {
+  try {
+      let { categories, colors, sizes, maxPrice, page = 1, limit = 8 } = req.query;
+      let filter = {};
+
+      // Chuyển đổi page và limit sang số nguyên
+      page = parseInt(page) || 1;
+      limit = parseInt(limit) || 8;
+      let skip = (page - 1) * limit;
+
+      if (categories) {
+          let categoryArray = categories.split(",").filter(Boolean);
+          filter.category_id = { $in: categoryArray.map(id => new mongoose.Types.ObjectId(id)) };
+      }
+    
+      if (colors && colors.trim() !== "") { 
+          filter.color = { $in: colors.split(",") }; 
+      }
+      if (sizes && sizes.trim() !== "") { 
+          filter.size = { $in: sizes.split(",") }; 
+      }
+      if (maxPrice && parseInt(maxPrice) > 0) {
+          filter.price = { $lte: parseInt(maxPrice) };
+      }
+      // Lấy tổng số sản phẩm (không phân trang)
+      const totalProducts = await Product.countDocuments(filter);
+      // Tìm sản phẩm có phân trang
+      const products = await Product.find(filter)
+          .skip(skip)
+          .limit(limit);
+      console.log("Số sản phẩm tìm thấy:", products.length);
+      return res.json({ 
+          success: true, 
+          data: products,
+          currentPage: page,
+          totalPages: Math.ceil(totalProducts / limit),
+          totalItems: totalProducts
+      });
+  } catch (error) {
+      console.error("Lỗi backend:", error);
+      return res.status(500).json({ success: false, message: error.message });
+  }
+};
+export const updateProduct = async (req, res) => {
+  try {
+    const {id}  = req.params;
+    // Kiểm tra sản phẩm có tồn tại không
+    let product = await Product.findById(id);
+    if (!product) {
+      return res.status(StatusCode.NOT_FOUND).json({ message: "Product not found" });
+    }
+    // Validate dữ liệu đầu vào
+    const { error } = productSchema.validate(req.body, { allowUnknown: true });
+    if (error) {
+      const message = error.details.map((err) => err.message);
+      return res.status(StatusCode.BAD_REQUEST).json({ message });
+    }
+    // Nếu có hình ảnh mới, xử lý upload ảnh
+    let imagePaths = product.image || []; // Giữ ảnh cũ nếu không có ảnh mới
+    if (req.files && req.files.image) {
+      const files = Array.isArray(req.files.image) ? req.files.image : [req.files.image];
+      for (let file of files) {
+        const uploadResult = await uploadSingleFile(file);
+        console.log("File uploaded result: ", uploadResult);
+        if (uploadResult.status === "success") {
+          imagePaths.push(uploadResult.path);
+        }
+      }
+    }
+    // Cập nhật dữ liệu sản phẩm
+    product = await Product.findByIdAndUpdate(
+      id,
+      { ...req.body, image: imagePaths },
+      { new: true, runValidators: true }
+    );
+    res.status(StatusCode.OK).json(product);
+  } catch (error) {
+    console.error("Update product error:", error);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
+  }
+};
+export const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Kiểm tra xem sản phẩm có tồn tại không
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(StatusCode.NOT_FOUND).json({ message: "Product not found" });
+    }
+    // Xóa sản phẩm
+    await Product.findByIdAndDelete(id);
+    res.status(StatusCode.OK).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error("Delete product error:", error);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
+  }
+};
+ export const getProductCurrent = async (req, res) => {
+  try {
+    const product = await Product.find({seller_id: req.seller.seller_id});
+    if (!product) {
+      return res.status(StatusCode.NOT_FOUND).json({ message: "Product not found" });
+    }
+    res.status(StatusCode.OK).json(product);
+  } catch (error) {
+    console.error("Get product current error:", error);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
+  }
+ }
+
+
+
+

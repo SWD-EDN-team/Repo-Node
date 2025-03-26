@@ -18,20 +18,21 @@ const reviewSchema = Joi.object({
   
 })
 
-export const getAllReview = async (req, res) =>{
+export const getAllReview = async (req, res) => {
   try {
-    const review = await Review.find().populate("user_id").populate("product_id");
-
-    if (review.length === 0) {
-      return res.status(StatusCode.NOT_FOUND).json({ message: "Review empty" });
-    }
-
-    res.status(StatusCode.OK).json(review);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+    
+    const totalReviews = await Review.countDocuments();
+    const reviews = await Review.find().populate("user_id").skip(skip).limit(limit);
+    
+    res.status(200).json({ reviews, total: totalReviews });
   } catch (error) {
     console.error(error);
-    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error" });
   }
-}
+
 
 export const createReview = async (req, res) =>{
   try {
@@ -67,3 +68,15 @@ export const updateReview = async (req, res) =>{
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: "Server error" });
   }
 }
+export const deleteReview = async (req, res) => {
+  try {
+    const review = await Review.findByIdAndDelete(req.params.id);
+    if (!review) {
+      return res.status(StatusCode.NOT_FOUND).json({ message: "Review not found" });
+    }
+    res.status(StatusCode.OK).json({ message: "Review deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: "Server error" });
+  }
+};
