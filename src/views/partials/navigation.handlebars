@@ -11,7 +11,7 @@
       <div class="nav_container-menulist">
         <i class="fa-solid fa-bars nav_container__menu"></i>
         <ul class="nav_container-showlist">
-          <li><a href="#">Home</a></li>
+          <li><a href="/view/home">Home</a></li>
           <li><a href="#" class="shope__modal">Shop
             </a></li>
           <li><a href="#">Our Story</a></li>
@@ -24,7 +24,7 @@
           <input class="search_input" type="text" placeholder="Search..." />
         </i>
         <i class="fa-regular fa-heart"></i>
-        <i class="fa-solid fa-bag-shopping"></i>
+        <a href="" id="cart-link" class="icon"><i class="fas fa-shopping-bag"></i></a>
       </div>
       <button>Login</button>
     </div>
@@ -112,4 +112,52 @@
   document.querySelector(".nav_container-showlist");
   menuIcon.addEventListener("click",()=>{ menuList.classList.toggle("show"); });
   console.log(menuList, menuIcon)
+
+document.getElementById("cart-link").addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Vui lòng đăng nhập để xem giỏ hàng!");
+    return;
+  }
+
+  try {
+  const response = await fetch("/view/cart", {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+
+    console.log("Response status:", response.status);
+
+    switch (response.status) {
+      case 401:
+        alert("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+        break;
+
+      case 403:
+        alert("Token không hợp lệ, vui lòng đăng nhập lại!");
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+        break;
+
+      case 200:
+        window.location.href = "/view/cart";
+        break;
+
+      default:
+        alert("Lỗi không xác định, vui lòng thử lại sau!");
+    }
+  } catch (error) {
+    console.error("Lỗi khi gửi yêu cầu:", error);
+    alert("Lỗi kết nối, vui lòng kiểm tra lại mạng!");
+  }
+});
+
 </script>
