@@ -102,26 +102,20 @@
 
     <!-- JavaScript để tạo QR Code -->
    <script>
-  document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
   let MY_BANK = {
     BANK_ID: "VCB",
     ACCOUNT_NO: "9704368623100024010",
-    ACCOUNT_NAME: "NGUYEN VAN A"
   };
 
-  // Lấy tổng số tiền từ thẻ HTML
   let totalElement = document.getElementById("paid_price");
   let total = totalElement ? totalElement.textContent.trim().replace(/\./g, "").replace(/đ/g, "") : "0";
 
-  total = parseInt(total, 10); // Chuyển thành số nguyên
-
-  console.log("Total value:", total); 
+  total = parseInt(total, 10); 
 
   if (isNaN(total)) total = 0;
 
-  let QR = `https://img.vietqr.io/image/${MY_BANK.BANK_ID}-${MY_BANK.ACCOUNT_NO}-compact2.png?amount=${total}&addInfo=ThanhToan&accountName=${encodeURIComponent(MY_BANK.ACCOUNT_NAME)}`;
-
-  console.log("QR Code URL:", QR); // Kiểm tra URL QR code
+  let QR = `https://img.vietqr.io/image/${MY_BANK.BANK_ID}-${MY_BANK.ACCOUNT_NO}-compact2.png?amount=${total}&addInfo=ThanhToan`;
 
   let product_qr_img = document.querySelector(".product_qr_img");
   if (product_qr_img) {
