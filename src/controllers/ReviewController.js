@@ -32,6 +32,7 @@ export const getAllReview = async (req, res) =>{
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: "Server error" });
   }
 }
+
 export const createReview = async (req, res) =>{
   try {
     const { error } = reviewSchema.validate(req.body);
