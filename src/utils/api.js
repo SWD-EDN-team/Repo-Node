@@ -24,7 +24,7 @@ export const categories = () => {
 }
 
 export const productById = (id) => {
-    return api.get(`/product/${id}`);
+    return api.get(`http://localhost:8081/api/v1/product/productDetail/${id}`);
 }
 export const userById = (id) => {
   return axios.get(`/users/${id}`)
@@ -34,6 +34,9 @@ export const cart = () => {
   return axios.get(url);
 }
 
+export const orders = (id) => {
+  return api.get("/order");
+}
 export const productpage = (page) => {
     const url = `http://localhost:8081/api/v1/product/page/${page}`
     return axios.get(url);

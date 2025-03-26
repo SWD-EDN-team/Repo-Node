@@ -1,9 +1,9 @@
 import express from "express";
-import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart, viewProfile} from "../controllers/viewsController.js";
+import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart, viewProfile, viewShippingAddress, viewAddProduct, viewManageProduct, viewManageReview } from "../controllers/viewsController.js";
 import {searchProduct} from '../controllers/ProductController.js'
-import {getCartbyToken} from '../controllers/CartController.js'
-import { user } from "../middlewares/auth.js"
+import { user, verifySellerFE } from "../middlewares/auth.js"
 import {  userFE } from "../middlewares/auth.js";
+import { viewOrderDetailsBySeller } from "../controllers/OrderDetailController.js";
 const viewRouter = express.Router();
 
 viewRouter.get("/", (req, res) => {
@@ -26,5 +26,10 @@ viewRouter.get("/successful", viewSuccessful);
 viewRouter.get("/payment", viewPayment);
 viewRouter.get("/reviewProduct", viewReview);
 viewRouter.get("/profile", userFE, viewProfile);
+viewRouter.get("/shippingAddress",userFE, viewShippingAddress);
+viewRouter.get("/addProduct", viewAddProduct);
+viewRouter.get("/manageProduct", viewManageProduct);
+viewRouter.get("/manageOrder",verifySellerFE,viewOrderDetailsBySeller)
+viewRouter.get("/manageReview", viewManageReview);
 
 export default viewRouter;
