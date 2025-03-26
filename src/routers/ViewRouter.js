@@ -5,7 +5,7 @@ import { user, verifySellerFE } from "../middlewares/auth.js"
 import {  userFE } from "../middlewares/auth.js";
 import { viewOrderDetailsBySeller } from "../controllers/OrderDetailController.js";
 const viewRouter = express.Router();
-
+//1
 viewRouter.get("/", (req, res) => {
   res.render("home/home");
 });
