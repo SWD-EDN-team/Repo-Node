@@ -194,7 +194,9 @@
             <h5>Subtotal: <span id="subtotal-value">0.00₫</span></h5>
             <p>Delivery Charge: <span id="delivery-charge">5000₫</span></p>
             <h2>Grand Total: <span id="grand-total">0.00₫</span></h2>
-            <button class="checkout-btn">Proceed to Checkout</button>
+            <a>
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </a>
         </div>
     </div>
 </div>
@@ -242,16 +244,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Cập nhật tổng tiền
         document.getElementById("subtotal-value").textContent = formatCurrency(subtotal);
-        document.getElementById("grand-total").textContent = formatCurrency(subtotal + deliveryCharge);
-    }
+        const priceOrder = document.getElementById("grand-total").textContent = formatCurrency(subtotal + deliveryCharge);
+        console.log(">>>",priceOrder)
 
-    // 🏆 Hàm định dạng tiền tệ chuẩn Việt Nam
-    function formatCurrency(value) {
-        return value.toLocaleString("vi-VN") + "₫";
-    }
-
-    updateSubtotal(); // Gọi lần đầu để cập nhật giá trị ban đầu
+        // trueyen data
+    document.querySelector(".checkout-btn").addEventListener("click", () => {
+    const priceOrder = document.getElementById("grand-total").textContent.trim();
+    window.location.href = `/view/paymentView?total=${encodeURIComponent(priceOrder)}`;
 });
+    }
+
+        function formatCurrency(value) {
+            if (typeof value !== "number" || isNaN(value)) {
+                return "0₫"; 
+            }
+            return value.toLocaleString("vi-VN") + "₫";
+        }
+    updateSubtotal();
+});
+
+
 
 
 </script>
