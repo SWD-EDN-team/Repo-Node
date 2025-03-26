@@ -14,7 +14,7 @@ export const getWishlistBytoken = async (req, res) => {
     const wishlists = await Wishlist.find({ user_id: req.user.id })
       .populate({
         path: "product_id",
-        populate: { path: "category_id" },
+        populate: { path: "category_id product_name price image" },
       })
       .populate("user_id");
     if (!wishlists)
@@ -47,3 +47,18 @@ export const createWishList = async (req, res) => {
       .json({ message: error.message });
   }
 };
+
+export const removeWishlist = async (req,res)=>{
+  try {
+    const {id} = await req.params;
+    if (!id) {
+      res.status(400).json({message: "invalue id"})
+    }
+    await Wishlist.findByIdAndDelete(id)
+    res.status(200).json({message:"delete succesfull"})
+  } catch (error) {
+    res
+    .status(StatusCode.INTERNAL_SERVER_ERROR)
+    .json({ message: error.message });
+  }
+}
