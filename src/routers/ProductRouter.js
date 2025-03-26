@@ -1,11 +1,12 @@
 import express from "express";
 import { verifySeller } from "../middlewares/auth.js";
-import { createProduct, deleteProduct, getAllProducts, getProductById, getProductByPage, getProductCurrent, getProductList, updateProduct } from "../controllers/ProductController.js";
+import { createProduct, deleteProduct, getAllProducts, getProductById, getProductByPage, getProductCategory, getProductCurrent, getProductList, updateProduct } from "../controllers/ProductController.js";
 
 
 const router = express.Router();
 
 router.get("/",getAllProducts);
+router.get("/category",getProductCategory);
 // router.get("/:page",getProductByPage);
 router.get("/seller", verifySeller ,getProductCurrent);
 router.get("/productDetail/:id",getProductById);

@@ -3,6 +3,7 @@ import StatusCode from "http-status-codes";
 import Product from "../models/Product.js";
 import { uploadSingleFile } from "../services/fileService.js";
 import mongoose from "mongoose";
+import Category from "../models/Category.js";
 
 const productSchema = Joi.object({
   product_name: Joi.string().required().messages({
@@ -250,7 +251,46 @@ export const deleteProduct = async (req, res) => {
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
   }
  }
+ export const getProductCategory = async (req, res) => {
+  try {
+    const { page = 10 } = req.query; // Số sản phẩm mỗi lần log (mặc định 10)
+    const categories = await Category.find(); // Lấy tất cả danh mục
+    let responseData = []; // Mảng chứa dữ liệu trả về
 
+    for (const category of categories) {
+      const categoryId = category._id;
+      let pageIndex = 0;
+      let hasMore = true;
+      let categoryProducts = []; // Mảng chứa sản phẩm theo từng danh mục
 
+      while (hasMore) {
+        const products = await Product.find({ category_id: categoryId })
+          .skip(pageIndex * page)
+          .limit(Number(page));
 
+        if (products.length === 0) {
+          hasMore = false;
+          break;
+        }
+
+        console.log(`🔹 Batch ${pageIndex + 1} (Showing ${products.length} products):`);
+
+        categoryProducts.push(...products);
+        pageIndex++;
+      }
+
+      responseData.push({
+        category: category.category_name,
+        description: category.description,
+        categoryId: categoryId,
+        products: categoryProducts
+      });
+    }
+
+    res.status(StatusCode.OK).json({ message: "Success", data: responseData });
+  } catch (error) {
+    console.error("Get product by category error:", error);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: error.message });
+  }
+};
 

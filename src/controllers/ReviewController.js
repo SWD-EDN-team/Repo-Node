@@ -32,30 +32,6 @@ export const getAllReview = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
-};
-// export const getAllReview = async (req, res) => {
-//   try {
-//     const { seller_id, page = 1, limit = 5 } = req.query;
-
-//     if (!seller_id) {
-//       return res.status(400).json({ message: "Thiếu seller_id" });
-//     }
-
-//     const skip = (parseInt(page) - 1) * parseInt(limit);
-
-//     // Lọc theo seller_id
-//     const totalReviews = await Review.countDocuments({ seller_id });
-//     const reviews = await Review.find({ seller_id })
-//       .populate("user_id") // Lấy thông tin user
-//       .skip(skip)
-//       .limit(parseInt(limit));
-
-//     res.status(200).json({ reviews, total: totalReviews });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Lỗi server" });
-//   }
-// };
 
 
 export const createReview = async (req, res) =>{
