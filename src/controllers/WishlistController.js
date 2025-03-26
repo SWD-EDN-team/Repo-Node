@@ -1,6 +1,7 @@
 import Joi from "joi";
 import StatusCode from "http-status-codes";
 import Wishlist from "../models/WishList.js";
+import Product from "../models/Product.js";
 
 const wishlistSchema = Joi.object({
   product_id: Joi.string().required().messages({
