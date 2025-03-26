@@ -10,7 +10,7 @@ import {
   updateUser,
   verify_code,
 } from "../controllers/auth.js";
-import { admin, user } from "../middlewares/auth.js";
+import { admin, customer } from "../middlewares/auth.js";
 import { verifyEmail, reset_Password } from "../controllers/userController.js";
 
 const authRouter = express.Router();
@@ -22,8 +22,7 @@ authRouter.get("/getByEmail", admin, getByEmail);
 authRouter.get("/getCurrentUser", getCurrentUser);
 authRouter.post("/refreshToken", refreshToken);
 authRouter.post("/logout", logout);
-authRouter.put("/update", user, updateUser);
-
+authRouter.put("/update", customer, updateUser);
 authRouter.post("/verify_email", verifyEmail);
 authRouter.post("/verify_code", verify_code);
 authRouter.post("/reset_password", reset_Password);

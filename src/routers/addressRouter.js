@@ -1,5 +1,5 @@
 import express from "express";
-import { user } from "../middlewares/auth.js";
+import { customer } from "../middlewares/auth.js";
 import {
   getAddress,
   getAddressbyId,
@@ -8,14 +8,13 @@ import {
   updateAddress,
   deleteAddress,
 } from "../controllers/addressController.js";
-
 const router = express.Router();
 
-router.get("/", user, getAddress);
-router.get("/current", user, getAddressbyUser);
-router.get("/:id", user, getAddressbyId);
-router.post("/", user, createAddress);
-router.put("/:id", user, updateAddress);
-router.delete("/:id", user, deleteAddress);
+router.get("/", customer, getAddress);
+router.get("/current", customer, getAddressbyUser);
+router.get("/:id", customer, getAddressbyId);
+router.post("/", customer, createAddress);
+router.put("/:id", customer, updateAddress);
+router.delete("/:id", customer, deleteAddress);
 
 export default router;

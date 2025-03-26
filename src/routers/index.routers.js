@@ -12,7 +12,6 @@ import WishlistRouter from "../routers/WishlistRouter.js"
 import PaymentMethodRouter from "../routers/PaymentMethodRouter.js"
 import OrderRouter from "../routers/OrderRouter.js"
 import OrderDetailRouter from "../routers/OrderDetailRouter.js"
-import {  userFE } from "../middlewares/auth.js";
 const rootRouter = express.Router();
 
 rootRouter.use("/users", userRouter);

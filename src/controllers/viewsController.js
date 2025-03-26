@@ -1,9 +1,7 @@
 import axios from "axios";
 
 import {product,categories,productById,productpage,reviews, cart} from "../utils/api.js"
-// import { getCartbyToken} from "../controllers/CartController.js";
 import Cart from "../models/Cart.js"
-import axios from "axios";
 export const viewLogin = (req, res) => {
   res.render("login/login", { layout: "auth" });
 };
