@@ -1,6 +1,7 @@
 import {product,categories,productById,productpage,reviews} from "../utils/api.js"
 import Cart from "../models/Cart.js"
 import axios from "axios";
+import User from "../models/User.js";
 export const viewLogin = (req, res) => {
   res.render("login/login", { layout: "auth" });
 };
@@ -61,7 +62,7 @@ export const viewDetailProdct = async (req, res) => {
     const productData = await productById(id);
     console.log("product",productData.data);
     
-    res.render("detailProduct/detailProduct", { title: "Chi tiết sản phẩm", layout: "productPage", product: productData.data });
+    res.render("detailProduct/detailProduct", { title: "Chi tiết sản phẩm", layout: "main", product: productData.data });
   } catch (error) {
     console.log(error);
   }
@@ -215,14 +216,14 @@ export const viewCart = async (req, res) => {
       return res.render("cart/cart", { 
         title: "Giỏ hàng", 
         cart: null, 
-        layout: "main"
+        layout: "productPage"
       });
     }
 
     res.render("cart/cart", { 
       title: "Giỏ hàng", 
       cart: cartData, 
-      layout: "main"
+      layout: "productPage"
     });
 
   } catch (error) {
