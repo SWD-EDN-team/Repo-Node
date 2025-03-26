@@ -3,7 +3,7 @@ import {
   getUserApi,
   createUserApi,
   changeInfoAccountApi,
-  getUserById
+  getUserById,
 } from "../controllers/userController.js";
 import { authMiddleware } from "../middlewares/auth.js";
 
