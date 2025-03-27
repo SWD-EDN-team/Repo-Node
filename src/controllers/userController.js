@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import { uploadSingleFile } from "../services/fileService.js";
 import ForgotPassword from "../models/forgotPassword.js";
 import bcrypt from "bcrypt";
 import {
@@ -135,6 +136,26 @@ export const changeInfoAccountApi = async (req, res) => {
   }
 };
 
+export const updateUserProfile = async (req, res) => {
+  try {
+      const userId = req.user.id; // Lấy ID từ token
+      const { field, value } = req.body;
+
+      // Kiểm tra nếu trường hợp đặc biệt (email cần xác thực...)
+      if (field === "email") {
+          return res.status(400).json({ success: false, message: "Không thể thay đổi email tại đây." });
+      }
+
+      // Cập nhật dữ liệu
+      await User.findByIdAndUpdate(userId, { [field]: value });
+
+      res.json({ success: true, message: "Cập nhật thành công!" });
+  } catch (error) {
+      console.error("Lỗi cập nhật:", error);
+      res.status(500).json({ success: false, message: "Lỗi máy chủ" });
+  }
+};
+
 export const reset_Password = async (req, res) => {
     try {
       const { oldPassword, newPassword, confirmNewPassword } = req.body;
@@ -193,6 +214,7 @@ export const uploadAvatar = async (req, res) => {
       const fileObject = req.files.avatar;
       const uploadResult = await uploadSingleFile(fileObject);
       console.log("Upload result:", uploadResult);
+
       if (uploadResult.status !== "success") {
           return res.status(500).json({ success: false, error: uploadResult.error });
       }
