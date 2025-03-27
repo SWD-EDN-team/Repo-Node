@@ -34,8 +34,7 @@
       <button id="nextPage" class="btn btn-secondary">Tiếp theo</button>
     </div>
   </div>
-</body>
-</html>
+
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     let currentPage = 1;
@@ -43,8 +42,8 @@
 
     async function fetchReviews(page) {
       try {
-        const response = await axios.get("http://localhost:8081/api/v1/review");
-        const reviews = response.data;
+        const response = await axios.get(`http://localhost:8081/api/v1/review?page=${page}&limit=5`);
+        const reviews = response.data.reviews;
         
         const reviewTableBody = document.getElementById("reviewTableBody");
         reviewTableBody.innerHTML = "";
@@ -127,4 +126,5 @@
 
     fetchReviews(currentPage);
   </script>
-
+</body>
+</html>
