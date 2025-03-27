@@ -4,8 +4,11 @@ import User from "../models/User.js";
 import Seller from "../models/Seller.js";
 
 
-const auth = ({ requiredRole = null } = {}) => {
+const auth = ({ requiredRole  } = {}) => {
   return async (req, res, next) => {
+
+    console.log(requiredRole);
+    
     const authHeader = req.headers.authorization;
     let token = authHeader && authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
 
@@ -44,7 +47,7 @@ const auth = ({ requiredRole = null } = {}) => {
     }
 }
 }
- export const admin = auth({role: 'user'})
- export const customer = auth({role: 'customer'})
- export const seller = auth({role: 'seller'})
- export const manager = auth({role: 'manager'})
+ export const admin = auth({requiredRole: 'admin'})
+ export const customer = auth({requiredRole: 'customer'})
+ export const seller = auth({requiredRole: 'seller'})
+ export const manager = auth({requiredRole: 'manager'})

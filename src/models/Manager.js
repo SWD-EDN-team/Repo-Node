@@ -9,7 +9,7 @@ const managerSchema = new Schema(
       unique: true,
     }
   },
-  { timestamps: false, versionKey: false,_id: false }
+  { timestamps: false, versionKey: false }
 );
 
 export default mongoose.model("Manager", managerSchema);
