@@ -78,12 +78,29 @@ export const viewDetailProdct = async (req, res) => {
     console.log(error);
   }
 };
-export const viewManageAddress = (req, res) => {
-  res.render("manageAddress/manageAddress", {
-    title: "Giới thiệu",
-    layout: "productPage",
-  });
-};
+export const viewManageAddress = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const userData = await User.findById(userId)
+        .select("-password -refreshToken")
+        .populate("address")
+        .exec();
+
+    if (!userData) {
+        return res.status(404).json({ message: "address not found" });
+    }
+
+    res.render("manageAddress/manageAddress", {
+        title: "Quản lí địa chỉ",
+        user: userData.toObject({ getters: true }),
+        layout: "productPage"
+    });
+
+} catch (error) {
+    console.error("Error fetching address:", error);
+    res.status(500).json({ message: "Server error" });
+}};
+
 export const viewMyWishList = (req, res) => {
   res.render("myWishList/myWishList", {
     title: "Giới thiệu",
@@ -377,15 +394,21 @@ export const viewShippingAddress = async (req, res) => {
 
 export const viewProfile = async (req, res) => {
   try {
-    // Lấy user ID từ `req.user`
-    const userId = req.user._id;
-    const userData = await User.findById(userId).select(
-      "-password -refreshToken"
-    );
+      const userId = req.user._id;
+      const userData = await User.findById(userId)
+          .select("-password -refreshToken")
+          .populate("address")
+          .exec();
 
-    if (!userData) {
-      return res.status(404).json({ message: "User not found" });
-    }
+      if (!userData) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      res.render("profile/profile", {
+          title: "Trang cá nhân",
+          user: userData.toObject({ getters: true }),
+          layout: "productPage"
+      });
 
     res.render("profile/profile", {
       title: "Trang cá nhân",

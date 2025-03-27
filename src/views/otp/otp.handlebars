@@ -194,7 +194,7 @@
 
                 if (response.status === 200) {
                     alert("OTP verified successfully!");
-                    window.location.href = "/dashboard"; // Sửa đường dẫn nếu cần
+                    window.location.href = "/view/login"; // Sửa đường dẫn nếu cần
                 }
             } catch (error) {
                 console.error("Error:", error.response ? error.response.data : error);

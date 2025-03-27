@@ -15,25 +15,27 @@
       }
     </style>
   </head>
-  <button onclick="window.history.back()" style="padding: 10px 20px; color: rgb(0, 0, 0); border-radius: 5px; cursor: pointer; margin-bottom: 20px">
-  ⬅ Quay lại
-  </button>
-    <body class="bg-white p-10">
+    <body class="bg-white">
       {{!-- {{> header}} --}}
-    <div class="grid grid-cols-2 gap-10 max-w-5xl mx-auto">
-    <div id="gallery">
-      <div class="ant-image-preview-group">
-        <!-- Ảnh chính -->
-        <img id="mainImage" src="{{product.image.[0]}}" class="ant-image w-full rounded-lg shadow-md" alt="{{product.product_name}}" data-preview-src="{{product.image.[0]}}" />
+    <div class="grid grid-cols-2 gap-10 max-w-5xl mx-auto my-10">
+      <div id="gallery">
+        <div class="ant-image-preview-group">
+          <!-- Ảnh chính -->
+          <div class="main-image-wrapper">
+            <img id="mainImage" src="{{product.image.[0]}}" 
+              class="ant-image rounded-lg shadow-md"
+              alt="{{product.product_name}}" 
+              data-preview-src="{{product.image.[0]}}" />
+          </div>
 
-        <!-- Danh sách ảnh nhỏ -->
-        <div class="flex mt-4 gap-2">
-          {{#each product.image}}
-            <img src="{{this}}" class="thumbnail ant-image w-20 cursor-pointer border rounded-lg" data-preview-src="{{this}}" />
-          {{/each}}
+          <!-- Danh sách ảnh nhỏ -->
+          <div class="flex mt-4 gap-2">
+            {{#each product.image}}
+              <img src="{{this}}" class="thumbnail ant-image w-20 h-20 cursor-pointer border rounded-lg object-cover" data-preview-src="{{this}}" />
+            {{/each}}
+          </div>
         </div>
       </div>
-    </div>
 
 
 
