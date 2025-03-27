@@ -104,7 +104,7 @@ export const createProduct = async (req, res) => {
         }
       }
     }
-    console.log("req.seller.seller_id",req.user.id);
+    console.log("req.user.id",req.user.id);
     
   try {
     const product = new Product({ ...req.body, seller_id: req.user.id, image: imagePaths });
@@ -241,7 +241,7 @@ export const deleteProduct = async (req, res) => {
 };
  export const getProductCurrent = async (req, res) => {
   try {
-    const product = await Product.find({seller_id: req.seller.seller_id});
+    const product = await Product.find({seller_id: req.user.id});
     if (!product) {
       return res.status(StatusCode.NOT_FOUND).json({ message: "Product not found" });
     }
