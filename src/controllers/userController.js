@@ -15,6 +15,7 @@ import {
 } from "../services/userService.js";
 import { sendError } from "../utils/helper.js";
 import { isValidObjectId } from "mongoose";
+import { uploadSingleFile } from "../services/fileService.js";
 
 export const getUserApi = async (req, res) => {
   try {
@@ -191,7 +192,7 @@ export const uploadAvatar = async (req, res) => {
       // Gửi file vào hàm upload
       const fileObject = req.files.avatar;
       const uploadResult = await uploadSingleFile(fileObject);
-
+      console.log("Upload result:", uploadResult);
       if (uploadResult.status !== "success") {
           return res.status(500).json({ success: false, error: uploadResult.error });
       }

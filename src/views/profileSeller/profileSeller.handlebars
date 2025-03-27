@@ -41,6 +41,10 @@
             border: none;
             transition: all 0.3s ease;
         }
+        #avatar-input {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
@@ -131,7 +135,13 @@
       const TOKEN = localStorage.getItem("token"); 
 
       async function fetchProfileData() {
-        const inputFile = document.getElementById("profile-img");
+        const avatarImg = document.getElementById("profile-img");
+        const inputFile = document.getElementById("avatar-input");
+        // Khi click vào avatar -> mở hộp thoại chọn file
+        avatarImg.addEventListener("click", function () {
+            inputFile.click();
+        });
+
         inputFile.addEventListener("change", function(e) {
             const file = event.target.files[0];
             if (file){
@@ -156,7 +166,11 @@
                 .then(data => {
                     if (data.success) {
                         avatarImg.src = data.avatarPath;
-                        alert("Cập nhật Avatar thành công");
+                        // Cập nhật profileData với ảnh mới
+                        profileData.avatar = data.avatarPath;
+                        // Lưu vào localStorage để khi reload vẫn giữ được
+                        localStorage.setItem("profile", JSON.stringify(profileData));
+                        alert("Cập nhật Avatar thành công", );
                     } else {
                         alert("Lỗi khi cập nhật avatar.");
                     }
@@ -196,18 +210,18 @@
       function fillEditForm() {
         document.getElementById("editName").value = profileData.name || "";
         document.getElementById("editGender").value = profileData.gender || "";
-        const avatarPreview = document.getElementById("avatarPreview");
+        {{!-- const avatarPreview = document.getElementById("avatarPreview");
         if (avatarPreview) {
             avatarPreview.src = profileData.avatar || "https://i.pravatar.cc/140";
         }
-        console.log(avatarPreview);
+        console.log(avatarPreview); --}}
     }
 
       async function updateProfile() {
           const updatedData = {
               name: document.getElementById("editName").value,
               gender: document.getElementById("editGender").value,
-              {{!-- avatar: document.getElementById("editAvatar").files[0] --}}
+              avatar: document.getElementById("editAvatar").files[0]
           };
 
           try {
