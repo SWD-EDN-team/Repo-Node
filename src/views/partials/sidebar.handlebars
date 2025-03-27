@@ -51,7 +51,7 @@
                 class="bi bi-heart"
               ></i>
               My Wishlists</a></li>
-          <li><a href="/manageAddress" class="menu-item"><i
+          <li><a href="/view/manageAddress" id="ManageAddress" class="menu-item"><i
                 class="bi bi-geo-alt"
               ></i>
               Manage Addresses</a></li>
@@ -109,6 +109,29 @@
       }
   });
 
+  document.getElementById("ManageAddress").addEventListener("click", async () => {
+      try {
+          const token = getTokenFromCookies();
+
+          if (!token) {
+              alert("Bạn chưa đăng nhập!");
+              window.location.href = "/view/login";
+              return;
+          }
+
+          const response = await fetchAddress(token);
+
+          if (response.ok) {
+              window.location.href = "/view/manageAddress";
+          } else {
+              alert("Lỗi khi lấy thông tin địa chỉ!");
+          }
+      } catch (error) {
+          console.error("Lỗi khi lấy address:", error);
+          alert("Đã xảy ra lỗi, vui lòng thử lại!");
+      }
+  });
+
   // Hàm lấy token từ cookies
   function getTokenFromCookies() {
       return document.cookie
@@ -120,6 +143,14 @@
   // Hàm fetch thông tin profile
   async function fetchProfile(token) {
       return await fetch("/view/profile", {
+          method: "GET",
+          headers: {
+              "Authorization": `Bearer ${token}`
+          }
+      });
+  }
+    async function fetchProfile(token) {
+      return await fetch("/view/manageAddress", {
           method: "GET",
           headers: {
               "Authorization": `Bearer ${token}`

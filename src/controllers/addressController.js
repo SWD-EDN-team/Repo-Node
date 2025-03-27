@@ -54,7 +54,7 @@ export const createAddress = async (req, res) => {
 
     user.address.push(savedAddress._id); 
     await user.save();
-    res.status(201).json(savedAddress);
+    res.status(200).json({ message: "Address added successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -88,7 +88,7 @@ export const updateAddress = async (req, res) => {
       { new: true }
     );
     if (!updatedAddress) res.status(404).json({ message: "Address not found" });
-    res.status(200).json(updatedAddress);
+    res.status(200).json({ message: "Address updated successfull" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

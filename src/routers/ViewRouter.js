@@ -15,7 +15,7 @@ viewRouter.get("/products/filter", searchProduct);
 viewRouter.get("/cart", customer, viewCart);
 viewRouter.get("/my-orders", viewMyOrder);
 viewRouter.get("/detailProduct/:id", viewDetailProdct);
-viewRouter.get("/manageAddress", viewManageAddress);
+viewRouter.get("/manageAddress",customer, viewManageAddress);
 viewRouter.get("/myWishList", viewMyWishList);
 viewRouter.get("/saveCard", viewSaveCard);
 viewRouter.get("/login", viewLogin);

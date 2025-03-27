@@ -13,12 +13,16 @@
       {
         display: none !important;
       }
+      .avatar{
+        width: 75px;
+        border-radius: 50%;
+      }
     </style>
   </head>
   <button onclick="window.history.back()" style="padding: 10px 20px; color: rgb(0, 0, 0); border-radius: 5px; cursor: pointer; margin-bottom: 20px">
   ⬅ Quay lại
   </button>
-    <body class="bg-white p-10">
+    <body >
       {{!-- {{> header}} --}}
     <div class="grid grid-cols-2 gap-10 max-w-5xl mx-auto">
     <div id="gallery">
@@ -34,10 +38,6 @@
         </div>
       </div>
     </div>
-
-
-
-
       <!-- Thông tin sản phẩm -->
       <div>
         <h2 class="text-2xl font-bold">{{product.product_name}}</h2>
@@ -104,13 +104,11 @@
     </div>
 
     <div class="container">
-    <h2>Customer Reviews</h2>
-
     {{#each reviews}}
     <div class="review">
         <div class="review-header">
-     <img src="/images/upload/avatar.jpg" alt="{{this.user_id.name}}" class="avatar">
-    <strong>{{this.user_id.name}}</strong>
+     <img class="avatar" src="/images/upload/avatar.jpg" alt="{{this.user_id.name}}" class="avatar">
+        <strong>{{this.user_id.name}}</stron>
             <div>
                 <div class="stars">
                     {{#repeat this.rate}}

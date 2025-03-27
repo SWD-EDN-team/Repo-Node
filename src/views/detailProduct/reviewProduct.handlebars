@@ -1,6 +1,6 @@
 <div class="container">
     <h2>Customer Reviews</h2>
-
+{{#if reviews.length}}
     {{#each reviews}}
     <div class="review">
         <div class="review-header">
@@ -19,7 +19,9 @@
 
     </div>
     {{/each}}
-
+{{else}}
+    <p class="no-reviews">No reviews available yet. Be the first to write a review!</p>
+{{/if}}
     <hr>
     <h3>Add Your Review</h3>
     <form action="/submit-review" method="POST">
