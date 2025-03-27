@@ -48,20 +48,20 @@ export const createOrderDetail = async (req, res) => {
 }
 
 export const getOrderDetailsBySeller = async (req, res) => {
-  console.log(req.seller);
+  console.log(req.user);
   
   try {
-    if (!mongoose.Types.ObjectId.isValid(req.seller.seller_id)) {
+    if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
       return res.status(400).json({
         message: "Invalid seller ID",
-        error: `Seller ID ${req.seller.seller_id} is not a valid ObjectId`,
+        error: `Seller ID ${req.user.id} is not a valid ObjectId`,
       });
     }
 
     const orderDetails = await OrderDetail.find()
       .populate({
         path: "product_id",
-        match: { seller_id: new mongoose.Types.ObjectId(req.seller.seller_id) },
+        match: { seller_id: new mongoose.Types.ObjectId(req.user.id) },
         select: "seller_id",
       })
       .select("order_id product_id quantity price")
@@ -82,20 +82,19 @@ export const getOrderDetailsBySeller = async (req, res) => {
 };
 
 export const viewOrderDetailsBySeller = async (req, res) => {
-  console.log(req.seller);
   
   try {
-    if (!mongoose.Types.ObjectId.isValid(req.seller.seller_id)) {
+    if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
       return res.status(400).json({
         message: "Invalid seller ID",
-        error: `Seller ID ${req.seller.seller_id} is not a valid ObjectId`,
+        error: `Seller ID ${req.user.id} is not a valid ObjectId`,
       });
     }
 
     const orderDetails = await OrderDetail.find()
       .populate({
         path: "product_id",
-        match: { seller_id: new mongoose.Types.ObjectId(req.seller.seller_id) },
+        match: { seller_id: new mongoose.Types.ObjectId(req.user.id) },
         // select: "seller_id quantity price",
       })
       // .select("order_id product_name quantity price")

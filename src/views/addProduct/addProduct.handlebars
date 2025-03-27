@@ -125,9 +125,9 @@ document.addEventListener("DOMContentLoaded",async function () {
                     "Authorization": `Bearer ${localStorage.getItem("token")}`
                 },
             });
-            if (response.status === 200) {
+            if (response.status === 201) {
                 alert("Product added successfully!");
-                document.getElementById("addProductForm").reset();
+                 window.location.reload();
             } else {
                 alert("Error: " + response.data.message);
             }

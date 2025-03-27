@@ -157,7 +157,7 @@ export const updateUserProfile = async (req, res) => {
 
 export const reset_Password = async (req, res) => {
     try {
-      const { oldPassword, newPassword, confirmNewPassword } = await req.body;
+      const { oldPassword, newPassword, confirmNewPassword } = req.body;
       
       if (!confirmNewPassword || !oldPassword || !newPassword) {
         return res.status(400).json({errorCode:1, message: "Invalid"});
@@ -181,7 +181,7 @@ export const reset_Password = async (req, res) => {
         message: "Password updated successfully",
       });
     } catch (error) {
-      console.error("Error resetting password:", error);
+      console.error("Error resetting password:",{ message: error.message});
       res.status(500).json({ errorCode: 2, message: "Internal server error" });
     }
   };
@@ -212,6 +212,7 @@ export const uploadAvatar = async (req, res) => {
       // Gửi file vào hàm upload
       const fileObject = req.files.avatar;
       const uploadResult = await uploadSingleFile(fileObject);
+      console.log("Upload result:", uploadResult);
 
       if (uploadResult.status !== "success") {
           return res.status(500).json({ success: false, error: uploadResult.error });

@@ -4,9 +4,6 @@ import User from "../models/User.js";
 import Seller from "../models/Seller.js";
 
 const createSellerSchema = Joi.object({
-  seller_id: Joi.required().messages({
-    "any.required": "seller_id is required",
-  }),
   store_name: Joi.required().messages({
     "any.required": "store_name is required",
   }),
@@ -20,8 +17,9 @@ const createSellerSchema = Joi.object({
 
 export const createSeller = async (req, res) => {
   try {
+    
     const seller = await req.body;
-    const { error } = createSellerSchema.validate(req.body, {
+    const { error } = createSellerSchema.validate({...req.body,seller_id:req.user.id}, {
       abortEarly: false,
     });
     if (error) {
