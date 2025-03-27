@@ -1,5 +1,5 @@
 import express from "express";
-import { createWishList, getWishlistBytoken } from "../controllers/WishlistController.js";
+import { createWishList, getWishlistBytoken, removeWishlist } from "../controllers/WishlistController.js";
 import {customer } from "../middlewares/auth.js";
 
 
