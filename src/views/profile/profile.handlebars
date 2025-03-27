@@ -36,62 +36,174 @@
           border-radius: 50% !important;
           overflow: hidden !important;
       }
+      .avatar-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin-top: 20px;
+      }
+
+      /* Avatar wrapper */
+      .avatar-wrapper {
+          position: relative;
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          overflow: hidden;
+          border: 3px solid #3498db;
+          transition: 0.3s;
+      }
+
+      /* Avatar image */
+      .profile-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+      }
+
+      /* Overlay effect when hover */
+      .upload-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: white;
+          font-size: 20px;
+          opacity: 0;
+          transition: opacity 0.3s ease-in-out;
+          cursor: pointer;
+      }
+
+      .upload-overlay i {
+          font-size: 24px;
+      }
+
+      /* Hiển thị overlay khi hover */
+      .avatar-wrapper:hover .upload-overlay {
+          opacity: 1;
+      }
+      #avatar-input {
+          display: none;
+      }
+
     </style>
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
     </head>
 <body class="p-4">
   <div class="container d-flex">
-    <!-- Sidebar -->
-    <aside class="sidebar p-3 border rounded shadow-sm me-4" style="width: 250px; background-color: #f4f4f4;">
-      {{> sidebar}}
-    </aside>
 
     <!-- Main Content -->
     <div class="flex-grow-1">
       <!-- Profile Section -->
-      <div class="d-flex align-items-center mb-4">
-      <div class="position-relative text-center">
-          <img id="profile-img" src="{{user.avatar}}" alt="Profile Picture" class="profile-img rounded-circle" width="100" height="100" />
-          
-          <input type="file" id="avatar-input" name="avatar" accept="image/*">
-      </div>
-        <button class="btn btn-dark ms-auto">
-          <i class="bi bi-pencil-square me-1"></i>
-          Edit Profile
-        </button>
-      </div>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <!-- Avatar Container -->
+        <div class="avatar-container">
+            <div class="avatar-wrapper">
+                <img id="profile-img" src="{{user.avatar}}" alt="Profile Picture" class="profile-img" />
+                <label for="avatar-input" class="upload-overlay">
+                    <i class="fas fa-camera"></i>
+                </label>
+            </div>
+            <input type="file" id="avatar-input" name="avatar" accept="image/*">
+        </div>
+
+        <!-- Nút thêm bên phải -->
+        <button id="add-button" class="btn btn-primary">Đăng kí trở thành Seller ngay!</button>
+    </div>
 
     <!-- Form Section -->
-      <form>
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label class="form-label">Full Name</label>
-            <input type="text" class="form-control" value="{{user.name}}" readonly />
+      <form id="user-form">
+          <div class="row mb-3">
+              <div class="col-md-6">
+                  <label class="form-label">Full Name</label>
+                  <div class="input-group">
+                      <input type="text" class="form-control" id="name" value="{{user.name}}" readonly />
+                      <button type="button" class="btn btn-outline-primary edit-btn">Edit</button>
+                  </div>
+              </div>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Role</label>
-            <input type="text" class="form-control" value="{{user.role}}" readonly />
-          </div>
-        </div>
 
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label class="form-label">Email Address</label>
-            <input type="email" class="form-control" value="{{user.email}}" readonly />
+          <div class="row mb-3">
+              <div class="col-md-6">
+                  <label class="form-label">Email Address</label>
+                  <div class="input-group">
+                      <input type="email" class="form-control" id="email" value="{{user.email}}" readonly />
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <label class="form-label">Role</label>
+                  <div class="input-group">
+                      <input type="text" class="form-control" id="role" value="{{user.role}}" readonly />
+                  </div>
+              </div>
           </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Address</label>
-          <input type="text" class="form-control" value="{{user.address.[0]}}" />
-        </div>
-
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label class="form-label">Gender</label>
-            <input type="text" class="form-control" value="{{user.gender}}" readonly />
+  
+          <p class="mb-1"><strong>Address</strong></p>
+          <div id="default-address" class="address-card mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
+              <div>
+                  <p><strong>{{user.address.0.name}}</strong></p>
+                  <p class="mb-0" id="default-address-text">
+                      {{user.address.0.street}}, {{user.address.0.city}}, {{user.address.0.country}}
+                  </p>
+              </div>
+              <button type="button" class="btn btn-outline-primary" id="change-address-btn">Edit</button>
           </div>
-        </div>
+
+          <!-- Modal quản lý địa chỉ -->
+          <div id="address-modal" class="modal" tabindex="-1">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title">Quản lý địa chỉ</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body">
+                          <!-- Danh sách địa chỉ -->
+                          <ul class="list-group" id="address-list">
+                              {{#each user.address}}
+                              <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  <p><strong>{{this.name}}</strong></p>
+                                  <span>{{this.street}}, {{this.city}}, {{this.country}}</span>
+                                  <button class="btn btn-danger btn-sm delete-address-btn" data-id="{{this._id}}">Xóa</button>
+                              </li>
+                              {{/each}}
+                          </ul>
+
+                          <!-- Form thêm địa chỉ -->
+                          <div class="mt-3">
+                              <h6>Thêm địa chỉ mới</h6>
+                              <input type="text" class="form-control mb-2" id="new-address-name" placeholder="Tên địa chỉ">
+                              <input type="text" class="form-control mb-2" id="new-address-street" placeholder="Đường">
+                              <input type="text" class="form-control mb-2" id="new-address-city" placeholder="Thành phố">
+                              <input type="text" class="form-control mb-2" id="new-address-country" placeholder="Quốc gia">
+                              <button class="btn btn-success" id="add-address-btn">Thêm</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row mb-3">
+              <div class="col-md-6">
+                  <label class="form-label">Gender</label>
+                  <div class="input-group">
+                      <!-- Dropdown thay vì input -->
+                      <select class="form-control" id="gender" disabled>
+                          <option value="Male" {{#if (eq user.gender 'Male')}}selected{{/if}}>male</option>
+                          <option value="Female" {{#if (eq user.gender 'Female')}}selected{{/if}}>female</option>
+                          <option value="Other" {{#if (eq user.gender 'Other')}}selected{{/if}}>other</option>
+                      </select>
+                      <button type="button" class="btn btn-outline-primary edit-btn">Edit</button>
+                  </div>
+              </div>
+          </div>
       </form>
     </div>
   </div>
@@ -99,25 +211,193 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
   <script>
-    FilePond.create(document.getElementById('avatar-input'), {
-        labelIdle: `
-            🖼️ <span class="filepond--label-action">Chọn ảnh</span> hoặc kéo thả vào đây`,
-        imagePreviewHeight: 150, // Tăng kích thước preview
-        imageCropAspectRatio: '1:1',
-        imageResizeTargetWidth: 250,
-        imageResizeTargetHeight: 250,
-        stylePanelLayout: 'compact', // Giao diện gọn gàng
-        styleLoadIndicatorPosition: 'center', // Hiển thị loading ở trung tâm
-        styleProgressIndicatorPosition: 'bottom', // Tiến trình upload nằm ở dưới
-        styleButtonRemoveItemPosition: 'left', // Nút xóa ảnh nằm bên trái
-        styleButtonProcessItemPosition: 'right', // Nút upload nằm bên phải
-        allowImageTransform: true,
-        server: {
-            process: '/upload-avatar',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
+    document.addEventListener("DOMContentLoaded", function () {
+        const avatarImg = document.getElementById("profile-img");
+        const inputFile = document.getElementById("avatar-input");
+
+        // Khi click vào avatar -> mở hộp thoại chọn file
+        avatarImg.addEventListener("click", function () {
+            inputFile.click();
+        });
+
+        // Khi chọn ảnh -> cập nhật preview & gửi lên server
+        inputFile.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Hiển thị ảnh mới ngay lập tức
+                avatarImg.src = URL.createObjectURL(file);
+
+                // Tạo FormData để gửi file lên server
+                const formData = new FormData();
+                formData.append("avatar", file);
+                
+                // Lấy token từ LocalStorage hoặc sessionStorage
+                const token = localStorage.getItem("token"); 
+
+                // Gửi ảnh lên server bằng Fetch API
+                fetch("/api/v1/users/upload-avatar", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                    "Authorization": `Bearer ${token}` 
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        avatarImg.src = data.avatarPath;
+                        alert("Cập nhật Avatar thành công");
+                    } else {
+                        alert("Lỗi khi cập nhật avatar.");
+                    }
+                })
+                .catch(error => console.error("Lỗi:", error));
             }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const editButtons = document.querySelectorAll(".edit-btn");
+
+        editButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const field = this.previousElementSibling; // Lấy input hoặc select bên cạnh nút
+            
+            if (field) {
+                if (field.tagName === "INPUT") {
+                    // Xử lý input (text)
+                    if (field.readOnly) {
+                        field.readOnly = false;
+                        field.focus();
+                        this.textContent = "Save"; 
+                        this.classList.replace("btn-outline-primary", "btn-success");
+                    } else {
+                        field.readOnly = true;
+                        this.textContent = "Edit"; 
+                        this.classList.replace("btn-success", "btn-outline-primary");
+
+                        updateUserData(field.id, field.value);
+                    }
+                } else if (field.tagName === "SELECT") {
+                    // Xử lý select (dropdown)
+                    if (field.disabled) {
+                        field.disabled = false;
+                        this.textContent = "Save"; 
+                        this.classList.replace("btn-outline-primary", "btn-success");
+                    } else {
+                        field.disabled = true;
+                        this.textContent = "Edit"; 
+                        this.classList.replace("btn-success", "btn-outline-primary");
+
+                        updateUserData(field.id, field.value);
+                    }
+                }
+            }
+        });
+    });
+
+        // Hàm cập nhật dữ liệu lên server
+        function updateUserData(field, value) {
+            const token = localStorage.getItem("token"); // Lấy token từ localStorage
+            if (!token) {
+                alert("Bạn chưa đăng nhập!");
+                return;
+            }
+
+            fetch("/api/v1/users/update-info", {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`, 
+                    "Content-Type": "application/json" 
+                },
+                body: JSON.stringify({ field, value })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Cập nhật thông tin thành công", data);
+                } else {
+                    alert("Cập nhật thất bại!");
+                }
+            })
+            .catch(error => console.error("Lỗi khi cập nhật:", error));
         }
     });
+      document.addEventListener("DOMContentLoaded", function () {
+      const changeAddressBtn = document.getElementById("change-address-btn");
+      const addAddressBtn = document.getElementById("add-address-btn");
+      const addressModal = new bootstrap.Modal(document.getElementById("address-modal"));
+
+      // Hiển thị modal khi bấm "Thay đổi"
+      changeAddressBtn.addEventListener("click", function () {
+          addressModal.show();
+      });
+
+      // Xử lý thêm địa chỉ
+      addAddressBtn.addEventListener("click", function () {
+          const name = document.getElementById("new-address-name").value.trim();
+          const street = document.getElementById("new-address-street").value.trim();
+          const city = document.getElementById("new-address-city").value.trim();
+          const country = document.getElementById("new-address-country").value.trim();
+
+          if (!street || !city || !country) {
+              alert("Vui lòng nhập đầy đủ thông tin.");
+              return;
+          }
+
+          fetch("/api/v1/address", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${localStorage.getItem("token")}`
+              },
+              body: JSON.stringify({ name, street, city, country })
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  // Thêm vào danh sách
+                  const addressList = document.getElementById("address-list");
+                  const newItem = document.createElement("li");
+                  newItem.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
+                  newItem.innerHTML = `
+                      <span>${street}, ${city}, ${country}</span>
+                      <button class="btn btn-danger btn-sm delete-address-btn" data-id="${data.newAddressId}">Xóa</button>
+                  `;
+                  addressList.appendChild(newItem);
+                  
+              } else {
+                  alert("Thêm địa chỉ thất bại!");
+              }
+          })
+          .catch(error => console.error("Lỗi khi thêm địa chỉ:", error));
+      });
+
+      // Xử lý xóa địa chỉ
+      document.getElementById("address-list").addEventListener("click", function (event) {
+          if (event.target.classList.contains("delete-address-btn")) {
+              const addressId = event.target.getAttribute("data-id");
+              const addressCard = event.target.closest(".address-card");
+
+              fetch(`/api/v1/address/${addressId}`, {
+                  method: "DELETE",
+                  headers: {
+                      "Authorization": `Bearer ${localStorage.getItem("token")}`
+                  },
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      addressCard.remove();
+                      alert("Xóa địa chỉ thành công!");
+                      event.target.closest(".address-card").remove();
+                  } else {
+                      alert("Xóa địa chỉ thất bại!");
+                  }
+              })
+              .catch(error => console.error("Lỗi khi xóa địa chỉ:", error));
+          }
+      });
+  });
   </script>
 </body>
