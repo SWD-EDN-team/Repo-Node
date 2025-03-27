@@ -228,18 +228,18 @@ export const viewCart = async (req, res) => {
       .populate("user_id", "name email")
       .lean();
     if (!cartData) {
-      return res.render("cart/cart", { 
-        title: "Giỏ hàng", 
-        cart: null, 
-        layout: "productPage"
+      return res.render("cart/cart", {
+        title: "Giỏ hàng",
+        cart: null,
+        layout: "productPage",
       });
     }
     console.log("mmmm", cartData._id);
 
-    res.render("cart/cart", { 
-      title: "Giỏ hàng", 
-      cart: cartData, 
-      layout: "productPage"
+    res.render("cart/cart", {
+      title: "Giỏ hàng",
+      cart: cartData,
+      layout: "productPage",
     });
   } catch (error) {
     console.error("Lỗi khi lấy giỏ hàng:", error);
@@ -395,4 +395,34 @@ export const viewProfile = async (req, res) => {
     console.error("Error fetching user profile:", error);
     res.status(500).json({ message: "Server error" });
   }
+};
+
+export const paymentView = async (req, res) => {
+  let total = req.query.total;
+  total = total.replace(/[.,]/g, "");
+  console.log("total", total);
+
+  const des = req.query.des;
+
+  console.log(">>>>>,,<>", req.user);
+
+  console.log(total, des);
+
+  let order = await Order.findOne({ total_price: total, orderCart_id: des });
+  if (!order) {
+    order = new Order({
+      customer_id: req.user.id,
+      orderCart_id: des,
+      total_price: total,
+      order_status: "Pending",
+    });
+  }
+
+  let saveOrder = await order.save();
+  console.log("saveOrder>>>>>>>>>>>>> ,", saveOrder.orderCart_id.toString());
+
+  res.render("paymentView/paymentView", {
+    total,
+    saveOrder_Id: saveOrder.orderCart_id.toString(),
+  });
 };

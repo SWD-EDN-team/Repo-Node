@@ -87,7 +87,7 @@ width: 100%;
 z-index: 1000; 
 }
 body {
-padding-top: 70px; 
+/* padding-top: 70px;  */
 align-items: center;
 }
 .card {
