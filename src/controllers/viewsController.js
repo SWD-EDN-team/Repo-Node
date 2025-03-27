@@ -8,6 +8,7 @@ import {
 } from "../utils/api.js";
 // import { getCartbyToken} from "../controllers/CartController.js";
 import Cart from "../models/Cart.js";
+import Order from "../models/Order.js";
 export const viewLogin = (req, res) => {
   res.render("login/login", { layout: "auth" });
 };
@@ -200,7 +201,6 @@ const getColorCode = (color) => {
 
 export const viewCart = async (req, res) => {
   try {
-    // Lấy dữ liệu giỏ hàng trực tiếp
     const cartData = await Cart.findOne({ user_id: req.user.id })
       .populate({
         path: "items.product_id",
@@ -216,6 +216,7 @@ export const viewCart = async (req, res) => {
         layout: "main",
       });
     }
+    console.log("mmmm", cartData._id);
 
     res.render("cart/cart", {
       title: "Giỏ hàng",
@@ -325,8 +326,32 @@ export const viewPayment = (req, res) => {
   });
 };
 
-export const paymentView = (req, res) => {
-  const total = req.query.total;
-  console.log("total ,", total);
-  res.render("paymentView/paymentView", { total });
+export const paymentView = async (req, res) => {
+  let total = req.query.total;
+  total = total.replace(/[.,]/g, "");
+  console.log("total", total);
+
+  const des = req.query.des;
+
+  console.log(">>>>>,,<>", req.user);
+
+  console.log(total, des);
+
+  let order = await Order.findOne({ total_price: total, orderCart_id: des });
+  if (!order) {
+    order = new Order({
+      customer_id: req.user.id,
+      orderCart_id: des,
+      total_price: total,
+      order_status: "Pending",
+    });
+  }
+
+  let saveOrder = await order.save();
+  console.log("saveOrder>>>>>>>>>>>>> ,", saveOrder.orderCart_id.toString());
+
+  res.render("paymentView/paymentView", {
+    total,
+    saveOrder_Id: saveOrder.orderCart_id.toString(),
+  });
 };

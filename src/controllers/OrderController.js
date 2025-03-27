@@ -15,6 +15,8 @@ export const getAllOrders = async (req, res, next) => {
 export const getCurrentOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(req.user.id)
+    console.log("hello" , req.user.id);
+    
     if (!order) return res.status(404).json({ message: "Order not found" })
     res.status(200).json(order)
   } catch (error) {

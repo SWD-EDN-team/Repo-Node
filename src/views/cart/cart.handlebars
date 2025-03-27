@@ -152,6 +152,7 @@
                     {{#if cart.items}}
                     {{#if cart.items.length}}
                         <tbody>
+                              <input type="hidden" id="cart_id" value="{{cart._id}}" />
                             {{#each cart.items}}
                             <tr>
                                 <td class="product-info">
@@ -231,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateSubtotal() {
         let subtotal = 0;
         document.querySelectorAll("tbody tr").forEach(row => {
-            const priceText = row.querySelector("td:nth-child(2)").textContent.replace(/\D/g, ""); // Lấy số từ giá
+            const priceText = row.querySelector("td:nth-child(2)").textContent.replace(/\D/g, ""); 
             const price = parseInt(priceText, 10) || 0;  
             const quantityInput = row.querySelector(".input-box");
             const quantity = parseInt(quantityInput.value, 10) || 1;  
@@ -249,16 +250,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // trueyen data
     document.querySelector(".checkout-btn").addEventListener("click", () => {
+
     const priceOrder = document.getElementById("grand-total").textContent.trim();
-    window.location.href = `/view/paymentView?total=${encodeURIComponent(priceOrder)}`;
+    const des = document.getElementById("cart_id").value;
+    window.location.href = `/view/paymentView?total=${encodeURIComponent(priceOrder)}&des=${des}`;
 });
     }
 
         function formatCurrency(value) {
             if (typeof value !== "number" || isNaN(value)) {
-                return "0₫"; 
+                return "0"; 
             }
-            return value.toLocaleString("vi-VN") + "₫";
+            return value.toLocaleString("vi-VN") + "";
         }
     updateSubtotal();
 });

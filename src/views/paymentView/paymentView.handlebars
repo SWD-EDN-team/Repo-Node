@@ -7,122 +7,79 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
     <style>
-      body {
-        background-color: #f8f9fa;
-      }
-      .checkout-container {
-        max-width: 900px;
-        margin: auto;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-      }
-      .cart-items {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        flex-wrap: wrap;
-      }
-      .cart-item {
-        background: #1e2952;
-        color: white;
-        padding: 15px;
-        border-radius: 10px;
-        text-align: center;
-        width: 180px;
-      }
-      .cart-item img {
-        width: 100%;
-        height: 120px;
-        border-radius: 8px;
-        object-fit: cover;
-      }
-      .cart-item button {
-        width: 100%;
-        margin-top: 10px;
-        background: white;
-        color: #1e2952;
-        border: none;
-        padding: 5px;
-        border-radius: 5px;
-        font-weight: bold;
-      }
-      .divider {
-        width: 100%;
-        border-top: 2px solid #ddd;
-        margin: 20px 0;
-      }
-      .qr-container {
-        width:  450px;
-        text-align: center;
-      }
-      .qr-container img {
-         width: 500px;
-  height: 250px;
-  max-width: 100%;
-  max-height: 100%;
-      }
-      .payment-info {
-        margin-top: 10px;
-      }
+      body { background-color: #f4f4f4; font-family: Arial, sans-serif; }
+      .checkout-container { max-width: 750px; margin: auto; background: white;
+      padding: 25px; border-radius: 12px; box-shadow: 0px 5px 15px rgba(0, 0, 0,
+      0.1); animation: fadeIn 1s ease-in-out; } @keyframes fadeIn { from {
+      opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform:
+      translateY(0); } } .cart-items { display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 15px; } .cart-item { background: white;
+      border-radius: 10px; padding: 10px; width: 200px; text-align: center;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1); } .cart-item img { width:
+      100%; height: 140px; border-radius: 8px; object-fit: cover; } .cart-item
+      button { margin-top: 10px; background: #007bff; color: white; border:
+      none; padding: 8px; border-radius: 5px; font-weight: bold; width: 100%; }
+      .divider { width: 100%; border-top: 2px solid #ddd; margin: 25px 0; }
+      .qr-container { text-align: center; } .qr-container img { width: 300px;
+      border-radius: 10px; } .payment-info p { font-size: 16px; font-weight:
+      bold; }
     </style>
   </head>
   <body>
-    <div class="container mt-5 checkout-container">
-      <h2>Thanh Toán</h2>
+    <div class="container mt-5 mb-5 checkout-container">
+      <h2 class="text-center mb-4">
+        <i class="fas fa-credit-card"></i>
+        Thanh Toán
+      </h2>
       <div class="cart-items">
         {{#each cart}}
           <div class="cart-item">
             <img src="{{this.image}}" alt="{{this.name}}" />
-            <p class="fw-bold">{{this.name}}</p>
-            <p>{{this.total}} VND</p>
-            <button>Mua</button>
+            <p class="fw-bold mt-2">{{this.name}}</p>
+            <p class="text-danger">{{this.total}} {{saveOrder_Id}} VND</p>
+            <button>Mua ngay</button>
           </div>
         {{/each}}
       </div>
       <div class="divider"></div>
       <div class="qr-container">
+        <h4>Quét mã QR để thanh toán</h4>
         <img
-          class="product_qr_img"
-          src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://example.com"
-          alt="QR Code"
+          src="https://img.vietqr.io/image/MB-0987729947-qr_only.jpg?amount={{total}}&addInfo={{saveOrder_Id}}"
+          alt="QR Code for Payment"
         />
-        <div class="payment-info">
+        <div class="payment-info mt-3">
           <p>Nội dung chuyển khoản: <span id="paid_content">NDCK</span></p>
-          <p>Số tiền: <span id="paid_price">{{total}}</span></p>
+          <p>Số tiền:
+            <span id="paid_price" class="text-danger">{{total}}</span>
+            VND</p>
         </div>
       </div>
     </div>
 
-    <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ <script>
+  document.addEventListener("DOMContentLoaded", function () {
 
-    <!-- JavaScript để tạo QR Code -->
-   <script>
-document.addEventListener("DOMContentLoaded", function () {
-  let MY_BANK = {
-    BANK_ID: "VCB",
-    ACCOUNT_NO: "9704368623100024010",
-  };
 
-  let totalElement = document.getElementById("paid_price");
-  let total = totalElement ? totalElement.textContent.trim().replace(/\./g, "").replace(/đ/g, "") : "0";
+    function fetchPaymentStatus() {
+      fetch("/api/v1/paymentMethod/checkPay?des={{saveOrder_Id}}&total={{total}}") 
+      .then(response => response.json()) // Chuyển đổi dữ liệu về JSON
+      .then(data => {
+        if (data === true) { // Kiểm tra nếu API trả về `true`
+          window.location.href = "/view/home";
+        }
+      })
+      .catch(error => console.error("Lỗi khi gọi API:", error)); 
+    }
 
-  total = parseInt(total, 10); 
-
-  if (isNaN(total)) total = 0;
-
-  let QR = `https://img.vietqr.io/image/${MY_BANK.BANK_ID}-${MY_BANK.ACCOUNT_NO}-compact2.png?amount=${total}&addInfo=ThanhToan`;
-
-  let product_qr_img = document.querySelector(".product_qr_img");
-  if (product_qr_img) {
-    product_qr_img.src = QR;
-  }
-});
-
+    // Gọi API mỗi 5 giây
+    setInterval(fetchPaymentStatus, 5000);
+  });
 </script>
 
   </body>

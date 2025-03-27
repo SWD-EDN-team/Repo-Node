@@ -15,8 +15,10 @@ const cartSchema = Joi.object({
 })
 
 export const getCartbyToken = async (req, res) =>{
+  console.log("<<<",req.user.id);
   try {
     const cart = await Cart.findOne({ user_id: req.user.id })
+    
     .populate({
       path: "items.product_id",
       model: "Product", // Đảm bảo đúng model của Product

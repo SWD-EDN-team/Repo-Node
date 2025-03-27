@@ -1,239 +1,144 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
     <style>
-    .sidebar {
-        display: none !important;
-    }
-    .checkout-container {
-
-    margin: auto;
-    padding: 20px;
-    }
-
-    .checkout-content {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-    }
-
-    .checkout-table {
-        width: 100%;
-        border-collapse: collapse;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .checkout-table th, .checkout-table td {
-        padding: 15px;
-        text-align: left;
-    }
-
-    .product-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .product-img {
-        width: 50px;
-        height: 50px;
-        border-radius: 5px;
-    }
-
-.quantity {
-  display: flex;
-  border: 2px solid #000000;
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 90%;
-}
-
-.quantity button {
-  color: #000000;
-  background-color: #ffffff;
-  border: none;
-  font-size: 12px;
-  width: 30px;
-  height: auto;
-  text-align: center;
-}
-
-
-.input-box {
-  width: 35px;
-  text-align: center;
-  border: none;
-  padding: 5px 8px;
-  font-size: 12px;
-  outline: none;
-}
-
-/* Hide the number input spin buttons */
-.input-box::-webkit-inner-spin-button,
-.input-box::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.input-box[type="number"] {
-  -moz-appearance: textfield;
-}
-
-    .remove-item {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 20px;
-    }
-
-    .summary-box {
-        width: 50%;
-        height: 50%;
-        padding: 20px;
-        border-radius: 10px;
-        background: white;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .discount-box {
-        display: flex;
-        gap: 10px;
-        margin: 10px 0;
-    }
-
-    .discount-box input {
-        flex: 1;
-        padding: 8px;
-        border: 1px solid #ddd;
-    }
-
-    .apply-btn {
-        background: black;
-        color: white;
-        padding: 8px;
-        border: none;
-        cursor: pointer;
-    }
-
-    .checkout-btn {
-        width: 100%;
-        background: black;
-        color: white;
-        padding: 10px;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
-    }
+      .sidebar { display: none !important; } .checkout-container { margin: auto;
+      padding: 20px; } .checkout-content { display: flex; justify-content:
+      space-between; gap: 20px; } .checkout-table { width: 100%;
+      border-collapse: collapse; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
+      .checkout-table th, .checkout-table td { padding: 15px; text-align: left;
+      } .product-info { display: flex; align-items: center; gap: 10px; }
+      .product-img { width: 50px; height: 50px; border-radius: 5px; } .quantity
+      { display: flex; border: 2px solid #000000; border-radius: 4px; overflow:
+      hidden; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); width: 90%; } .quantity
+      button { color: #000000; background-color: #ffffff; border: none;
+      font-size: 12px; width: 30px; height: auto; text-align: center; }
+      .input-box { width: 35px; text-align: center; border: none; padding: 5px
+      8px; font-size: 12px; outline: none; } /* Hide the number input spin
+      buttons */ .input-box::-webkit-inner-spin-button,
+      .input-box::-webkit-outer-spin-button { -webkit-appearance: none; margin:
+      0; } .input-box[type="number"] { -moz-appearance: textfield; }
+      .remove-item { background: none; border: none; cursor: pointer; font-size:
+      20px; } .summary-box { width: 50%; height: 50%; padding: 20px;
+      border-radius: 10px; background: white; box-shadow: 0px 4px 10px rgba(0,
+      0, 0, 0.1); } .discount-box { display: flex; gap: 10px; margin: 10px 0; }
+      .discount-box input { flex: 1; padding: 8px; border: 1px solid #ddd; }
+      .apply-btn { background: black; color: white; padding: 8px; border: none;
+      cursor: pointer; } .checkout-btn { width: 100%; background: black; color:
+      white; padding: 10px; border: none; cursor: pointer; font-size: 16px; }
 
     </style>
-</head>
-<body>
-<div class="checkout-container">
-    <h1>Checkout</h1>
-    <div class="checkout-content">
+  </head>
+  <body>
+    <div class="checkout-container">
+      <h1>Checkout</h1>
+      <div class="checkout-content">
         <table class="checkout-table">
-            <thead>
-                <tr>
-                    <th>Products</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each cart}}
-                <tr>
-                    <td class="product-info">
-                        <img src="/images/{{this.image}}" class="product-img">
-                        <div>
-                            <strong>{{this.name}}</strong>
-                            <p>Size: {{this.size}}</p>
-                        </div>
-                    </td>
-                    <td>${{this.price}}</td>
-                        <td>
-                            <div class="quantity">
-                                <button class="minus" data-id="{{this.id}}" aria-label="Decrease">&minus;</button>
-                                <input type="number" class="input-box" value="{{this.quantity}}" min="1" max="10" data-id="{{this.id}}">
-                                <button class="plus" data-id="{{this.id}}" aria-label="Increase">&plus;</button>
-                            </div>
-                        </td>
-                    <td>${{multiply this.price this.quantity}}</td>
-                    <td>
-                        <button class="remove-item" data-id="{{this.id}}">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
+          <thead>
+            <tr>
+              <th>Products</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each cart}}
+              <tr>
+                <td class="product-info">
+                  <img src="/images/{{this.image}}" class="product-img" />
+                  <div>
+                    <strong>{{this.name}}</strong>
+                    <p>Size: {{this.size}}</p>
+                  </div>
+                </td>
+                <td>${{this.price}}</td>
+                <td>
+                  <div class="quantity">
+                    <button
+                      class="minus"
+                      data-id="{{this.id}}"
+                      aria-label="Decrease"
+                    >&minus;</button>
+                    <input
+                      type="number"
+                      class="input-box"
+                      value="{{this.quantity}}"
+                      min="1"
+                      max="10"
+                      data-id="{{this.id}}"
+                    />
+                    <button
+                      class="plus"
+                      data-id="{{this.id}}"
+                      aria-label="Increase"
+                    >&plus;</button>
+                  </div>
+                </td>
+                <td>${{multiply this.price this.quantity}}</td>
+                <td>
+                  <button class="remove-item" data-id="{{this.id}}">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
         </table>
 
         <div class="summary-box">
-            <h5>Subtotal: <span id="subtotal-value">$0.00</span></h5>
-            <p>Delivery Charge: <span id="delivery-charge">$5.00</span></p>
-            <div class="discount-box">
-                <input type="text" placeholder="Enter Discount Code">
-                <button class="apply-btn">Apply</button>
-            </div>
-            <button class="checkout-btn">Proceed to Checkout</button>
-            <hr>
-            <h2>Grand Total: <span id="grand-total">$0.00</span></h2>
+          <h5>Subtotal: <span id="subtotal-value">$0.00</span></h5>
+          <p>Delivery Charge: <span id="delivery-charge">$5.00</span></p>
+          <div class="discount-box">
+            <input type="text" placeholder="Enter Discount Code" />
+            <button class="apply-btn">Apply</button>
+          </div>
+          <button class="checkout-btn">Proceed to Checkoutư</button>
+          <button class="checkout-btn">Proceed to Checkou2t</button>
+          <hr />
+          <h2>Grand Total: <span id="grand-total">$0.00</span></h2>
         </div>
+      </div>
     </div>
-</div>
 
-</body>
+  </body>
 </html>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const quantityContainers = document.querySelectorAll(".quantity");
-    const subtotalElement = document.querySelector(".summary-box h5 span");
-    const grandTotalElement = document.querySelector(".summary-box h2 span");
-    const deliveryCharge = 5.00; // Phí giao hàng cố định
-
-    quantityContainers.forEach(quantityContainer => {
-        const minusBtn = quantityContainer.querySelector(".minus");
-        const plusBtn = quantityContainer.querySelector(".plus");
-        const inputBox = quantityContainer.querySelector(".input-box");
-
-        minusBtn.addEventListener("click", () => updateQuantity(inputBox, -1));
-        plusBtn.addEventListener("click", () => updateQuantity(inputBox, 1));
-        inputBox.addEventListener("input", () => updateSubtotal());
-    });
-
-    function updateQuantity(inputBox, change) {
-        let value = parseInt(inputBox.value);
-        let maxValue = parseInt(inputBox.max);
-        let newValue = isNaN(value) ? 1 : Math.min(Math.max(value + change, 1), maxValue);
-        inputBox.value = newValue;
-        updateSubtotal();
-    }
-
-    function updateSubtotal() {
-        let subtotal = 0;
-        document.querySelectorAll("tbody tr").forEach(row => {
-            const price = parseFloat(row.querySelector("td:nth-child(2)").textContent.replace("$", ""));
-            const quantity = parseInt(row.querySelector(".input-box").value);
-            const rowSubtotal = price * quantity;
-            row.querySelector("td:nth-child(4)").textContent = `$${rowSubtotal.toFixed(2)}`;
-            subtotal += rowSubtotal;
-        });
-
-        // Cập nhật tổng tiền
-        subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
-        grandTotalElement.textContent = `$${(subtotal + deliveryCharge).toFixed(2)}`;
-    }
-
-    updateSubtotal(); // Gọi lần đầu để cập nhật giá trị ban đầu
-});
-
+  document.addEventListener("DOMContentLoaded", function () { const
+  quantityContainers = document.querySelectorAll(".quantity"); const
+  subtotalElement = document.querySelector(".summary-box h5 span"); const
+  grandTotalElement = document.querySelector(".summary-box h2 span"); const
+  deliveryCharge = 5.00; // Phí giao hàng cố định
+  quantityContainers.forEach(quantityContainer => { const minusBtn =
+  quantityContainer.querySelector(".minus"); const plusBtn =
+  quantityContainer.querySelector(".plus"); const inputBox =
+  quantityContainer.querySelector(".input-box");
+  minusBtn.addEventListener("click", () => updateQuantity(inputBox, -1));
+  plusBtn.addEventListener("click", () => updateQuantity(inputBox, 1));
+  inputBox.addEventListener("input", () => updateSubtotal()); }); function
+  updateQuantity(inputBox, change) { let value = parseInt(inputBox.value); let
+  maxValue = parseInt(inputBox.max); let newValue = isNaN(value) ? 1 :
+  Math.min(Math.max(value + change, 1), maxValue); inputBox.value = newValue;
+  updateSubtotal(); } function updateSubtotal() { let subtotal = 0;
+  document.querySelectorAll("tbody tr").forEach(row => { const price =
+  parseFloat(row.querySelector("td:nth-child(2)").textContent.replace("$", ""));
+  const quantity = parseInt(row.querySelector(".input-box").value); const
+  rowSubtotal = price * quantity;
+  row.querySelector("td:nth-child(4)").textContent =
+  `$${rowSubtotal.toFixed(2)}`; subtotal += rowSubtotal; }); // Cập nhật tổng
+  tiền subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+  grandTotalElement.textContent = `$${(subtotal + deliveryCharge).toFixed(2)}`;
+  } updateSubtotal(); // Gọi lần đầu để cập nhật giá trị ban đầu });
 
 </script>
