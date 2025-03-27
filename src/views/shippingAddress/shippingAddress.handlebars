@@ -13,6 +13,37 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link rel="stylesheet" href="/css/shippingAddress.css" />
+    <style>
+      #address-list {
+          max-height: 400px; /* Giới hạn chiều cao */
+          overflow-y: auto; /* Thêm thanh cuộn dọc nếu quá nhiều */
+          padding-right: 10px; /* Tạo khoảng cách để tránh che mất nội dung */
+      }
+
+      .address-card {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          max-width: 700px;
+          padding: 15px;
+          border-radius: 10px;
+          background-color: white;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .address-info {
+          flex-grow: 1;
+          font-size: 18px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+      }
+
+      .form-check-input {
+          transform: scale(1.5);
+      }
+    </style>
   </head>
   <body>
     <div class="container address-template py-4">
@@ -47,29 +78,19 @@
             corresponding "Deliver to this address" button. Or you can enter a
             new delivery address.
           </p>
-          <div id="address-list" class="row g-3">
-            {{#each shippingAddress}}
-            <div class="col-md-6">
-              <div class="address-card border p-3 rounded" data-id="{{id}}">
-                <div class="card-header d-flex justify-content-between">
-                  <strong>{{name}}</strong>
-                  <input id="chooseAddress" type="radio" name="chooseAddress" value="{{this._id}}" />
+            <div id="address-list" class="d-flex flex-column gap-3">
+                {{#each shippingAddress}}
+                <div class="address-card d-flex align-items-center border p-3 rounded w-100" data-id="{{id}}">
+                    <div class="address-info flex-grow-1">
+                        <strong>{{name}}</strong>
+                        <p class="mb-0">{{street}}</p>
+                    </div>
+                    <input type="radio" name="chooseAddress" value="{{this._id}}" class="form-check-input ms-3">
                 </div>
-                <p class="mb-1">{{street}}</p>
-                {{!-- <p class="text-muted">4517 Washington Ave. Manchester, Kentucky 39495</p> --}}
-                <div class="card-actions d-flex justify-content-between">
-                  <button class="btn btn-outline-primary btn-sm edit-btn">
-                    <i class="fas fa-edit"></i> Edit
-                  </button>
-                  <button class="btn btn-outline-danger btn-sm delete-btn">
-                    <i class="fas fa-trash"></i> Delete
-                  </button>
-                </div>
-              </div>
+                {{/each}}
             </div>
-            {{/each}}
-          </div>
-          <button class="btn btn-dark mt-3 deliver-btn" onclick="handleUseAddress()">Deliver Here</button>
+
+          <button class="btn btn-dark mt-3 deliver-btn" onclick="ManageAddress()">Manage Address</button>
         </div>
         {{!-- <div class="summary border p-3 rounded mt-4">
           <div class="subtotal d-flex justify-content-between">
@@ -105,47 +126,6 @@
             </div>
           </div>
       </div>
-      <div class="address-form mt-4">
-        <h2>Add a new address</h2>
-        <div  class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label">Name</label>
-            <input id="nameAddress" type="text" class="form-control" name="street" placeholder="Enter Street" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Country</label>
-            <select class="form-select" name="country">
-              <option value disabled selected>Select Country</option>
-              <option value="vietnam">Vietnam</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">City</label>
-            <select class="form-select" name="city">
-              <option value disabled selected>Select City</option>
-
-              {{#each city}}
-              <option value="{{this}}">{{this}}</option>
-              {{/each}}
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Street</label>
-            <input id="street" type="text" class="form-control" name="street" placeholder="Enter Street" />
-          </div>
-          <div class="col-md-12">
-            <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="defaultAddress" />
-              <label for="defaultAddress" class="form-check-label">
-                Use as my default address
-              </label>
-            </div>
-          </div>
-          <div class="col-12">
-            <button onclick="handleAddAddress()" class="btn btn-dark w-100">Add New Address</button>
-          </div>
-        </div>
-      </div>
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
@@ -178,9 +158,8 @@
           console.error(error);
         }
       }
-    async function handleUseAddress(){
-      const selectedAddress = document.querySelector('input[name="chooseAddress"]:checked').value;
-      console.log(selectedAddress)
+    function ManageAddress() {
+        window.location.href = "/view/manageAddress";
     }
 
     </script>

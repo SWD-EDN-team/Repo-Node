@@ -21,150 +21,267 @@
   <body>
 
     <div class="container mt-4">
-      <!-- Nút Thêm địa chỉ -->
-      <button
-        class="btn btn-dark mb-3"
-        data-bs-toggle="modal"
-        data-bs-target="#addAddressModal"
-      >
-        <i class="bi bi-plus"></i>
-        Add New Address
-      </button>
-
-      <!-- Danh sách địa chỉ -->
-      <div class="address-list">
-        <div
-          class="address-card d-flex justify-content-between align-items-center"
-        >
-          <div>
-            <h6 class="fw-bold">Robert Fox</h6>
-            <p class="mb-1">4517 Washington Ave. Manchester, Kentucky 39495</p>
-            <p class="text-muted mb-0"><i class="bi bi-telephone"></i>
-              (209) 555-0104</p>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-edit"><i class="bi bi-pencil"></i>
-              Edit</button>
-            <button class="btn btn-delete"><i class="bi bi-trash"></i>
-              Delete</button>
-          </div>
-        </div>
-        <div
-          class="address-card d-flex justify-content-between align-items-center"
-        >
-          <div>
-            <h6 class="fw-bold">John Willions</h6>
-            <p class="mb-1">3891 Ranchview Dr. Richardson, California 62639</p>
-            <p class="text-muted mb-0"><i class="bi bi-telephone"></i>
-              (270) 555-0117</p>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-edit"><i class="bi bi-pencil"></i>
-              Edit</button>
-            <button class="btn btn-delete"><i class="bi bi-trash"></i>
-              Delete</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal Thêm địa chỉ -->
-    <div
-      class="modal fade"
-      id="addAddressModal"
-      tabindex="-1"
-      aria-labelledby="addAddressModalLabel"
-      aria-hidden="true"
+    <button
+      id="open-add-address-modal"
+      class="btn btn-dark mb-3"
+      data-bs-toggle="modal"
+      data-bs-target="#address-modal"
     >
-      <div class="modal-dialog">
-        <div class="modal-content p-3">
-          <div class="modal-header">
-            <h5 class="modal-title" id="addAddressModalLabel">Add a new address</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="mb-3">
-                <label class="form-label">Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter Name"
-                />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Mobile Number</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter Mobile Number"
-                />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Flat, House no., Building, Company,
-                  Apartment</label>
-                <input type="text" class="form-control" />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Area, Colony, Street, Sector, Village</label>
-                <input type="text" class="form-control" />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">City</label>
-                <select class="form-select">
-                  <option>Select City</option>
-                  <option>New York</option>
-                  <option>Los Angeles</option>
-                  <option>Chicago</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Pin Code</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter Pin Code"
-                />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">State</label>
-                <select class="form-select">
-                  <option>Select State</option>
-                  <option>California</option>
-                  <option>Texas</option>
-                  <option>Florida</option>
-                </select>
-              </div>
-              <div class="mb-3 form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="defaultAddress"
-                />
-                <label class="form-check-label" for="defaultAddress">Use as my
-                  default address</label>
-              </div>
-              <div class="d-flex justify-content-between">
-                <button
-                  type="button"
-                  class="btn btn-light"
-                  data-bs-dismiss="modal"
-                >Cancel</button>
-                <button type="submit" class="btn btn-dark">Add New Address</button>
-              </div>
-            </form>
-          </div>
+      <i class="bi bi-plus"></i>
+      Add New Address
+    </button>
+
+        <div id="address-list">
+            {{#each user.address}}
+            <div class="address-card mb-3 p-3 border rounded d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="mb-1"><strong>{{this.name}}</strong></p>
+                    <p class="mb-0">{{this.street}}, {{this.city}}, {{this.country}}</p>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary edit-address-btn" 
+                            data-id="{{this._id}}" 
+                            data-name="{{this.name}}" 
+                            data-street="{{this.street}}" 
+                            data-city="{{this.city}}" 
+                            data-country="{{this.country}}">
+                        Edit
+                    </button>
+                    <button class="btn btn-danger delete-address-btn" data-id="{{this._id}}">Delete</button>
+                </div>
+            </div>
+            {{/each}}
         </div>
-      </div>
-    </div>
+
+          <!-- Modal Thêm địa chỉ -->
+          <div class="modal fade" id="address-modal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addressModalLabel">Add new address</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" id="new-address-name" class="form-control">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Street</label>
+                    <input type="text" id="new-address-street" class="form-control">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">City/Province</label>
+                    <input type="text" id="new-address-city" class="form-control">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Nation</label>
+                    <input type="text" id="new-address-country" class="form-control">
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="add-address-btn">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     ></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const addressModal = new bootstrap.Modal(document.getElementById("address-modal"));
+        const addAddressBtn = document.getElementById("add-address-btn");
+        const addressList = document.getElementById("address-list");
+
+        let isEditing = false;  // Biến kiểm tra đang sửa hay thêm mới
+        let currentAddressId = null; // Lưu ID địa chỉ đang sửa
+
+        // Xử lý mở modal Thêm địa chỉ
+        document.getElementById("open-add-address-modal").addEventListener("click", () => {
+            isEditing = false;
+            currentAddressId = null;
+            resetModal();
+            addAddressBtn.textContent = "Lưu địa chỉ";
+        });
+
+        // Xử lý mở modal Sửa địa chỉ
+        document.querySelectorAll(".edit-address-btn").forEach((button) => {
+            button.addEventListener("click", (event) => {
+                isEditing = true;
+                currentAddressId = event.target.dataset.id;
+
+                // Lấy dữ liệu từ card
+                const addressCard = event.target.closest(".address-card");
+                document.getElementById("new-address-name").value = addressCard.querySelector("strong").textContent;
+                document.getElementById("new-address-street").value = addressCard.querySelector("p.mb-0").textContent.split(", ")[0];
+                document.getElementById("new-address-city").value = addressCard.querySelector("p.mb-0").textContent.split(", ")[1];
+                document.getElementById("new-address-country").value = addressCard.querySelector("p.mb-0").textContent.split(", ")[2];
+
+                addAddressBtn.textContent = "Cập nhật địa chỉ";
+                addressModal.show();
+            });
+        });
+
+        // Xử lý sự kiện lưu (Thêm mới hoặc Sửa)
+        addAddressBtn.addEventListener("click", () => {
+            const name = document.getElementById("new-address-name").value;
+            const street = document.getElementById("new-address-street").value;
+            const city = document.getElementById("new-address-city").value;
+            const country = document.getElementById("new-address-country").value;
+            const token = localStorage.getItem("token");
+
+            if (isEditing) {
+                // Cập nhật địa chỉ
+                fetch(`/api/v1/address/${currentAddressId}`, {
+                    method: "PUT",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ name, street, city, country })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === "Address updated successfull") {
+                        alert("Cập nhật thành công!");
+                        location.reload(); 
+                    } else {
+                        alert("Cập nhật thất bại!");
+                    }
+                })
+                .catch(error => console.error("Lỗi khi cập nhật:", error));
+            } else {
+                // Thêm mới địa chỉ
+                fetch("/api/v1/address", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ name, street, city, country })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === "Address added successfully") {
+                        alert("Thêm mới thành công!");
+                        location.reload(); // Hoặc cập nhật UI
+                    } else {
+                        alert("Thêm mới thất bại!");
+                    }
+                })
+                .catch(error => console.error("Lỗi khi thêm địa chỉ:", error));
+            }
+
+            addressModal.hide();
+        });
+
+        // Hàm reset modal khi mở lại
+        function resetModal() {
+            document.getElementById("new-address-name").value = "";
+            document.getElementById("new-address-street").value = "";
+            document.getElementById("new-address-city").value = "";
+            document.getElementById("new-address-country").value = "";
+        }
+    });
+
+      // Xử lý xóa địa chỉ
+      document.getElementById("address-list").addEventListener("click", function (event) {
+          if (event.target.classList.contains("delete-address-btn")) {
+              const addressId = event.target.getAttribute("data-id");
+              const addressCard = event.target.closest(".address-card");
+
+              fetch(`/api/v1/address/${addressId}`, {
+                  method: "DELETE",
+                  headers: {
+                      "Authorization": `Bearer ${localStorage.getItem("token")}`
+                  },
+              })
+              .then(response => response.json())
+              .then(data => {
+                  console.log("Dữ liệu trả về từ server:", data); // Kiểm tra dữ liệu
+
+                  if (data.message === "Address deleted successfull") {  
+                      alert("Xóa địa chỉ thành công!");
+                      event.target.closest(".address-card").remove(); // Xóa địa chỉ khỏi giao diện
+                  } else {
+                      alert("Xóa địa chỉ thất bại!");
+                  }
+              })
+              .catch(error => console.error("Lỗi khi xóa địa chỉ:", error));
+          }
+      });
+
+      {{!-- document.addEventListener("DOMContentLoaded", function () {
+          const addressModal = new bootstrap.Modal(document.getElementById("address-modal"));
+          const modalTitle = document.getElementById("addressModalLabel");
+          const saveBtn = document.getElementById("add-address-btn");
+
+          const nameInput = document.getElementById("new-address-name");
+          const streetInput = document.getElementById("new-address-street");
+          const cityInput = document.getElementById("new-address-city");
+          const countryInput = document.getElementById("new-address-country");
+
+          let currentAddressId = null; // Lưu ID của địa chỉ đang chỉnh sửa
+
+          // Xử lý khi nhấn nút "Sửa"
+          document.querySelectorAll(".edit-address-btn").forEach(button => {
+              button.addEventListener("click", function () {
+                  // Lấy dữ liệu từ button
+                  currentAddressId = this.dataset.id;
+                  nameInput.value = this.dataset.name;
+                  streetInput.value = this.dataset.street;
+                  cityInput.value = this.dataset.city;
+                  countryInput.value = this.dataset.country;
+
+                  // Thay đổi tiêu đề và nút
+                  modalTitle.textContent = "Edit address";
+                  saveBtn.textContent = "Save change";
+                  saveBtn.dataset.action = "edit";
+
+                  // Mở modal
+                  addressModal.show();
+              });
+          });
+
+          // Xử lý khi nhấn "Cập nhật địa chỉ"
+          saveBtn.addEventListener("click", function () {
+              if (this.dataset.action === "edit" && currentAddressId) {
+                  fetch(`/api/v1/address/${currentAddressId}`, {
+                      method: "PUT",
+                      headers: { "Content-Type": "application/json",
+                                  "Authorization": `Bearer ${localStorage.getItem("token")}` 
+                               },
+                      body: JSON.stringify({
+                          name: nameInput.value,
+                          street: streetInput.value,
+                          city: cityInput.value,
+                          country: countryInput.value
+                      })
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.message === "Address updated successfully") {
+                          alert("Cập nhật địa chỉ thành công!");
+
+                          // Cập nhật lại dữ liệu hiển thị
+                          const addressCard = document.querySelector(`.edit-address-btn[data-id="${currentAddressId}"]`).closest(".address-card");
+                          addressCard.querySelector("strong").textContent = nameInput.value;
+                          addressCard.querySelector("p.mb-0").textContent = `${streetInput.value}, ${cityInput.value}, ${countryInput.value}`;
+
+                          // Đóng modal
+                          addressModal.hide();
+                      } else {
+                          alert("Cập nhật địa chỉ thất bại!");
+                      }
+                  })
+                  .catch(error => console.error("Lỗi khi cập nhật địa chỉ:", error));
+              }
+          });
+      }); --}}
+    </script>
   </body>
 </html>
