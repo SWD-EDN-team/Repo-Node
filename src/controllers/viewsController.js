@@ -9,6 +9,7 @@ import {
 // import { getCartbyToken} from "../controllers/CartController.js";
 import Cart from "../models/Cart.js";
 import Order from "../models/Order.js";
+import User from "../models/User.js";
 export const viewLogin = (req, res) => {
   res.render("login/login", { layout: "auth" });
 };
@@ -19,7 +20,7 @@ export const viewForgotPassword = (req, res) => {
   res.render("forgotPassword/forgot-password", { layout: "auth" });
 };
 export const viewOTP = async (req, res) => {
-  const email = await req.email;
+  const email = await req.user.email;
   console.log(email);
 
   res.render("otp/otp", { layout: "auth", email });
@@ -394,7 +395,7 @@ export const viewShippingAddress = async (req, res) => {
 
 export const viewProfile = async (req, res) => {
   try {
-      const userId = req.user._id;
+      const userId = req.user.id;
       const userData = await User.findById(userId)
           .select("-password -refreshToken")
           .populate("address")

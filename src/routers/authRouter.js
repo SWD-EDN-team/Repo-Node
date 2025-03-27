@@ -19,7 +19,7 @@ authRouter.post("/signup", signup);
 authRouter.post("/signin", signin);
 authRouter.get("/getall", getAll);
 authRouter.get("/getByEmail", admin, getByEmail);
-authRouter.get("/getCurrentUser", getCurrentUser);
+authRouter.get("/getCurrentUser",customer, getCurrentUser);
 authRouter.post("/refreshToken", refreshToken);
 authRouter.post("/logout", logout);
 authRouter.put("/update", seller, updateUser);

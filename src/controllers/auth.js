@@ -252,22 +252,14 @@ export const getByEmail = async (req, res) => {
 };
 
 export const getCurrentUser = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1]; // Lấy token từ header
-
-  if (!token) {
-    return res
-      .status(StatusCode.UNAUTHORIZED)
-      .json({ message: "No token provided" });
-  }
-
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-  const user = await User.findById(decoded.id).select("-password");
+  console.log(req.user);
+  
+  const user = await User.findById(req.user.id).select("-password");
 
   // Kiểm tra xem người dùng có tồn tại không
   if (!user) {
     return res.status(StatusCode.NOT_FOUND).json({
-      message: "User not found",
+      message: "User not foundd",
     });
   }
 
