@@ -16,7 +16,6 @@ import {
 } from "../services/userService.js";
 import { sendError } from "../utils/helper.js";
 import { isValidObjectId } from "mongoose";
-import { uploadSingleFile } from "../services/fileService.js";
 
 export const getUserApi = async (req, res) => {
   try {

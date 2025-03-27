@@ -41,7 +41,7 @@
             border: none;
             transition: all 0.3s ease;
         }
-        #avatar-input {
+        #avatar-input{
             display: none;
         }
 
@@ -142,18 +142,16 @@
             inputFile.click();
         });
 
-        inputFile.addEventListener("change", function(e) {
+        inputFile.addEventListener("change", function(event) {
             const file = event.target.files[0];
             if (file){
                 // Hiển thị ảnh mới ngay lập tức
                 avatarImg.src = URL.createObjectURL(file);
-
                 // Tạo FormData để gửi file lên server
                 const formData = new FormData();
                 formData.append("avatar", file);
                 // Lấy token từ LocalStorage hoặc sessionStorage
                 const token = localStorage.getItem("token"); 
-
                 // Gửi ảnh lên server bằng Fetch API
                 fetch("/api/v1/users/upload-avatar", {
                     method: "POST",
@@ -210,18 +208,12 @@
       function fillEditForm() {
         document.getElementById("editName").value = profileData.name || "";
         document.getElementById("editGender").value = profileData.gender || "";
-        {{!-- const avatarPreview = document.getElementById("avatarPreview");
-        if (avatarPreview) {
-            avatarPreview.src = profileData.avatar || "https://i.pravatar.cc/140";
-        }
-        console.log(avatarPreview); --}}
     }
 
       async function updateProfile() {
           const updatedData = {
               name: document.getElementById("editName").value,
               gender: document.getElementById("editGender").value,
-              avatar: document.getElementById("editAvatar").files[0]
           };
 
           try {
@@ -255,12 +247,10 @@
         alert("Vui lòng nhập đầy đủ thông tin!");
         return;
     }
-
     if (newPassword !== confirmNewPassword) {
         alert("Mật khẩu mới và nhập lại mật khẩu không khớp!");
         return;
     }
-
     try {
         const response = await axios.post("http://localhost:8081/api/v1/auth/reset_password", {
             oldPassword:currentPassword,
@@ -281,7 +271,6 @@
         alert(error.response?.data?.message || "Mật khẩu cũ không đúng!");
     }
 }
-
       document.addEventListener("DOMContentLoaded", fetchProfileData);
     </script>
 </body>
