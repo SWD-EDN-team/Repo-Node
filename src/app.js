@@ -20,6 +20,10 @@ dotenv.config();
 var jsonParser = bodyParser.json();
 
 const hbs = create({
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true, // Cho phép truy cập các thuộc tính prototype
+    allowProtoMethodsByDefault: true     // Cho phép truy cập các phương thức prototype
+  },
   helpers: {
     eq: (a, b) => a === b,
     gt: (a, b) => a > b, // Kiểm tra a > b
@@ -37,6 +41,9 @@ const hbs = create({
       return result;
     },
     formatCurrency: (value) => {
+      if (typeof value !== "number" || isNaN(value)) {
+          return "0₫"; // Trả về giá trị mặc định nếu không hợp lệ
+      }
       return value.toLocaleString("vi-VN") + "₫";
     },
     range: (start, end) => {

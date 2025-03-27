@@ -22,18 +22,7 @@ export const getAddressbyId = async (req, res) => {
 };
 export const getAddressbyUser = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1]; // Lấy token từ header
-
-    if (!token) {
-      return res
-        .status(StatusCode.UNAUTHORIZED)
-        .json({ message: "No token provided" });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
-
-    const address = await Address.find({ user: decoded.id });
+    const address = await Address.find({ user: req.user.id });
     if (!address) res.status(404).json({ message: "Address not found" });
     res.status(200).json(address);
   } catch (error) {

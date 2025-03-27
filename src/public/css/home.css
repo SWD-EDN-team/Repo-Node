@@ -9,7 +9,7 @@
     background: url("https://plus.unsplash.com/premium_photo-1682096556408-c7ee01d2ac81?q=80&w=1967&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") no-repeat center center;
     background-size: cover;
     min-height: 90vh;
-    min-width: 180vw;
+    min-width: 99vw;
     display: flex;
     align-items: center;
     color: white; 

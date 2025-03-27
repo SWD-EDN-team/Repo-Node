@@ -2,6 +2,7 @@ import Joi from "joi";
 import StatusCode from "http-status-codes";
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
+import mongoose from "mongoose";
 
 const cartSchema = Joi.object({
   product_id: Joi.string().required().messages({
@@ -112,22 +113,32 @@ export const addToCart = async (req, res) => {
 
 export const removeFromCart = async (req, res) => {
   try {
-      const { itemId } = req.params;
-      const userId = req.user.id; 
+      const { id } = await req.params; 
+      console.log("Received itemId:", id);
 
       // Tìm giỏ hàng của người dùng
-      const cart = await Cart.findOne({ user_id: userId });
+      const cart = await Cart.findOne({ user_id: req.user._id }).populate("items.product_id");
       if (!cart) {
           return res.status(404).json({ error: "Cart not found." });
       }
 
-      // Lọc ra các sản phẩm không phải itemId (tức là loại bỏ sản phẩm cần xóa)
-      cart.items = cart.items.filter(item => item._id.toString() !== itemId);
+      const itemExists = cart.items.some(item => item._id.toString() === id);
+      if (!itemExists) {
+          return res.status(404).json({ error: "Item not found in cart." });
+      }
 
-      // Cập nhật tổng giá
-      cart.total_price = cart.items.reduce((total, item) => {
-          return total + item.product_id.price * item.quantity;
-      }, 0);
+      // Lọc ra các sản phẩm không phải itemId (tức là loại bỏ sản phẩm cần xóa)
+      cart.items = cart.items.filter(item => item._id.toString() !== id);
+
+      // Tính tổng tiền mới
+      let newTotalPrice = 0;
+      cart.items.forEach(item => {
+          if (item.product_id && item.product_id.price) {  // Kiểm tra tránh lỗi undefined
+              newTotalPrice += item.product_id.price * item.quantity;
+          }
+      });
+
+      cart.total_price = newTotalPrice; // Gán tổng tiền mới
 
       await cart.save();
 

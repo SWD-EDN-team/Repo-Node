@@ -135,11 +135,49 @@ export const changeInfoAccountApi = async (req, res) => {
 };
 
 export const reset_Password = async (req, res) => {
-  let { userId, resetPassword, newPassWord } = req.body;
+    try {
+      const { oldPassword, newPassword, confirmNewPassword } = await req.body;
+      
+      if (!confirmNewPassword || !oldPassword || !newPassword) {
+        return res.status(400).json({errorCode:1, message: "Invalid"});
+      }
+      if (newPassword!== confirmNewPassword) {
+        return res.status(401).json({ message: "Password do not match"})
+      }
+      const user = await User.findById(req.user.id);
+      if (!user) return res.status(402).json({ message: "User not found"});
+      
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) return res.status(403).json({ message:"Incorrect current password"});
+  
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+  
+      await user.save();
+  
+      res.json({
+        success: true,
+        message: "Password updated successfully",
+      });
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      res.status(500).json({ errorCode: 2, message: "Internal server error" });
+    }
+  };
 
-  // ForgotPassword.find({ userId }).then((result) => {
-  //    if(result.length > 0) {
+export const getUserById = async (req, res) => {
+  try {
+      const { id } = req.params;
 
-  //    })
-  // });
+      const user = await User.findById(id).select("-password -refreshToken"); // Loại bỏ password & refreshToken
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" }); 
+      }
+
+      res.status(200).json(user); 
+  } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Server error" }); 
+  }
 };
