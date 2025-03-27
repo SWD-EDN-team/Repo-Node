@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
-  {{> header}}
-
   <div class="container my-5">
     <div class="row">
       <!-- Sidebar Filter -->
@@ -25,8 +23,8 @@
           </ul>
 
         <h5>Lọc theo giá</h5>
-        <input type="range" id="priceRange" min="0" max="2000" step="50" value="0">
-        <p>Giá tối đa: $<span id="priceValue">0</span></p>
+        <input type="range" id="priceRange" min="0" max="2000000" step="50" value="0">
+        <p>Giá tối đa:<span id="priceValue">0</span>₫</p>
 
         <h5>Lọc theo màu sắc</h5>
         <ul class="list-unstyled">

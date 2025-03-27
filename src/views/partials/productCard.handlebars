@@ -1,16 +1,14 @@
-<div class="col-md-3 col-sm-6 mb-4">
-   <div class="card border-0 shadow-sm product-card" data-id="{{_id}}" style="height: 400px;">
-        <div class="card-img-wrapper">
-            <img src="{{image.[0]}}" class="card-img-top" alt="{{product_name}}" style="height: 200px;">
-            <button class="btn btn-dark add-to-cart">Add to Cart</button>
+<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+    <div class="card border-0 shadow-sm product-card d-flex flex-column h-100" data-id="{{_id}}">
+        <div class="card-img-wrapper position-relative">
+            <img src="{{image.[0]}}" class="card-img-top w-100 object-fit-cover" alt="{{product_name}}">
+            <button class="btn btn-dark add-to-cart position-absolute bottom-0 w-100">Add to Cart</button>
         </div>
-        <div class="card-body">
+        <div class="card-body d-flex flex-column flex-grow-1">
             <h5 class="card-title">{{product_name}}</h5>
-            <p class="text-muted">{{description}}</p>
-            <p class="fw-bold">${{price}}</p>
-            <p class="stars">
-                {{#times rate}}★{{/times}}
-            </p>
+            <p class="text-muted flex-grow-1">{{description}}</p>
+            <p class="fw-bold">{{price}}₫</p>
+            <p class="stars">{{#times rate}}★{{/times}}</p>
         </div>
     </div>
 </div>
