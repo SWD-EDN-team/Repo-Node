@@ -40,15 +40,18 @@
         </div>
         <!-- Sidebar Menu -->
         <ul class="list-unstyled">
-          <li><a href="#" class="menu-item"><i class="bi bi-person"></i>
-              Personal Information</a></li>
+          <li>
+              <a href="/view/profile" id="UserProfile" class="menu-item">
+                  <i class="bi bi-person"></i> Personal Information
+              </a>
+          </li>
           <li><a href="#" class="menu-item"><i class="bi bi-box"></i>
               My Orders</a></li>
           <li><a href="/myWishList" class="menu-item"><i
                 class="bi bi-heart"
               ></i>
               My Wishlists</a></li>
-          <li><a href="/manageAddress" class="menu-item"><i
+          <li><a href="/view/manageAddress" id="ManageAddress" class="menu-item"><i
                 class="bi bi-geo-alt"
               ></i>
               Manage Addresses</a></li>
@@ -83,6 +86,77 @@
       // Ngăn trang tải lại setActive(this); window.location.href =
       this.getAttribute("href"); // Chuyển hướng thủ công }); }); });
 
+    document.getElementById("UserProfile").addEventListener("click", async () => {
+      try {
+          const token = getTokenFromCookies();
+
+          if (!token) {
+              alert("Bạn chưa đăng nhập!");
+              window.location.href = "/view/login"; // Chuyển hướng đến trang login nếu chưa đăng nhập
+              return;
+          }
+
+          const response = await fetchProfile(token);
+
+          if (response.ok) {
+              window.location.href = "/view/profile";
+          } else {
+              alert("Lỗi khi lấy thông tin tài khoản!");
+          }
+      } catch (error) {
+          console.error("Lỗi khi lấy profile:", error);
+          alert("Đã xảy ra lỗi, vui lòng thử lại!");
+      }
+  });
+
+  document.getElementById("ManageAddress").addEventListener("click", async () => {
+      try {
+          const token = getTokenFromCookies();
+
+          if (!token) {
+              alert("Bạn chưa đăng nhập!");
+              window.location.href = "/view/login";
+              return;
+          }
+
+          const response = await fetchAddress(token);
+
+          if (response.ok) {
+              window.location.href = "/view/manageAddress";
+          } else {
+              alert("Lỗi khi lấy thông tin địa chỉ!");
+          }
+      } catch (error) {
+          console.error("Lỗi khi lấy address:", error);
+          alert("Đã xảy ra lỗi, vui lòng thử lại!");
+      }
+  });
+
+  // Hàm lấy token từ cookies
+  function getTokenFromCookies() {
+      return document.cookie
+          .split("; ")
+          .find(row => row.startsWith("token="))
+          ?.split("=")[1];
+  }
+
+  // Hàm fetch thông tin profile
+  async function fetchProfile(token) {
+      return await fetch("/view/profile", {
+          method: "GET",
+          headers: {
+              "Authorization": `Bearer ${token}`
+          }
+      });
+  }
+    async function fetchProfile(token) {
+      return await fetch("/view/manageAddress", {
+          method: "GET",
+          headers: {
+              "Authorization": `Bearer ${token}`
+          }
+      });
+  }
     </script>
 
   </body>

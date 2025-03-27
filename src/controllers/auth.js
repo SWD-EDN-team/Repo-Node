@@ -61,7 +61,10 @@ const emailSchema = Joi.object({
     "string.email": "Email must be a valid email address",
   }),
 });
-
+const updateUserSchema = Joi.object({
+  name: Joi.string().min(3).max(30).optional(),
+  gender: Joi.string().valid("male", "female", "other").optional(),
+});
 export const signup = async (req, res) => {
   try {
     const { email, password, name, avatar, confirmPassword } = await req.body; //lấy dữ liệu
@@ -97,7 +100,7 @@ export const signup = async (req, res) => {
       await newCustomer.save();
     }
     const accessToken = jwt.sign(
-      { id: newUser._id, email: newUser.email, role: newUser.role },
+      { id: newUser._id, email: newUser.email,name:newUser.nama, role: newUser.role,verified:newUser.verified },
       process.env.JWT_SECRET,
       { expiresIn: process.env.TIME_TOKEN_EXPIRATION }
     );
@@ -164,7 +167,7 @@ export const signin = async (req, res) => {
   }
 
   const accessToken = jwt.sign(
-    { id: user._id, email: user.email, role: user.role },
+    { id: user._id, email: user.email,name: user.name, role: user.role,verified: user.verified },
     process.env.JWT_SECRET,
     { expiresIn: process.env.TIME_TOKEN_EXPIRATION }
   );
@@ -357,35 +360,102 @@ export const logout = async (req, res) => {
       .json({ message: "An error occurred during logout" });
   }
 };
+// export const updateUser = async (req, res) => {
+//   try {
+//     const token = req.headers.authorization?.split(" ")[1]; // Lấy token từ header
+
+//     if (!token) {
+//       return res
+//         .status(StatusCode.UNAUTHORIZED)
+//         .json({ message: "No token provided" });
+//     }
+
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     const user = await User.findById(decoded.id).select("-password");
+//     if (!user) {
+//       return res
+//         .status(StatusCode.NOT_FOUND)
+//         .json({ message: "User not found" });
+//     }
+//     const { error } = singupSchema.validate(req.body, {
+//       abortEarly: false,
+//     });
+
+//     if (error) {
+//       const message = error.details.map((err) => err.message);
+//       return res.status(StatusCode.BAD_REQUEST).json({ message });
+//     }
+
+//     const updatedUser = await User.findByIdAndUpdate(user._id, req.body, {
+//       new: true,
+//     });
+
+//     if (!updatedUser) {
+//       return res
+//         .status(StatusCode.NOT_FOUND)
+//         .json({ message: "User not found" });
+//     }
+
+//     res.json({ user: updatedUser });
+//     if (error) {
+//       const message = error.details.map((err) => err.message);
+//       return res.status(StatusCode.BAD_REQUEST).json({ message });
+//     }
+//   } catch (error) {
+//     console.error("Error during update user:", error);
+//     return res
+//       .status(StatusCode.INTERNAL_SERVER_ERROR)
+//       .json({ message: "An error occurred during update user" });
+//   }
+// };
 export const updateUser = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1]; // Lấy token từ header
-
+    // Lấy token từ header
+    const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res
         .status(StatusCode.UNAUTHORIZED)
         .json({ message: "No token provided" });
     }
 
+    // Giải mã token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    // Tìm user theo ID từ token
     const user = await User.findById(decoded.id).select("-password");
     if (!user) {
       return res
         .status(StatusCode.NOT_FOUND)
         .json({ message: "User not found" });
     }
-    const { error } = singupSchema.validate(req.body, {
-      abortEarly: false,
-    });
 
+    // Validate dữ liệu nhập vào
+    const { error } = updateUserSchema.validate(req.body, { abortEarly: false });
     if (error) {
       const message = error.details.map((err) => err.message);
       return res.status(StatusCode.BAD_REQUEST).json({ message });
     }
 
-    const updatedUser = await User.findByIdAndUpdate(user._id, req.body, {
+    // Chỉ cập nhật các trường hợp lệ (không cập nhật email & password)
+    const allowedUpdates = ["name", "gender"];
+    const updateData = Object.keys(req.body)
+      .filter((key) => allowedUpdates.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = req.body[key];
+        return obj;
+      }, {});
+
+    // Kiểm tra nếu không có trường hợp lệ để cập nhật
+    if (Object.keys(updateData).length === 0) {
+      return res
+        .status(StatusCode.BAD_REQUEST)
+        .json({ message: "No valid fields to update" });
+    }
+
+    // Cập nhật thông tin người dùng
+    const updatedUser = await User.findByIdAndUpdate(user._id, updateData, {
       new: true,
+      runValidators: true,
     });
 
     if (!updatedUser) {
@@ -395,10 +465,6 @@ export const updateUser = async (req, res) => {
     }
 
     res.json({ user: updatedUser });
-    if (error) {
-      const message = error.details.map((err) => err.message);
-      return res.status(StatusCode.BAD_REQUEST).json({ message });
-    }
   } catch (error) {
     console.error("Error during update user:", error);
     return res
@@ -406,6 +472,7 @@ export const updateUser = async (req, res) => {
       .json({ message: "An error occurred during update user" });
   }
 };
+
 
 export const verify_code = async (req, res) => {
   try {

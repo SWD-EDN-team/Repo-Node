@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import { uploadSingleFile } from "../services/fileService.js";
 import ForgotPassword from "../models/forgotPassword.js";
 import bcrypt from "bcrypt";
 import {
@@ -134,12 +135,95 @@ export const changeInfoAccountApi = async (req, res) => {
   }
 };
 
+export const updateUserProfile = async (req, res) => {
+  try {
+      const userId = req.user.id; // Lấy ID từ token
+      const { field, value } = req.body;
+
+      // Kiểm tra nếu trường hợp đặc biệt (email cần xác thực...)
+      if (field === "email") {
+          return res.status(400).json({ success: false, message: "Không thể thay đổi email tại đây." });
+      }
+
+      // Cập nhật dữ liệu
+      await User.findByIdAndUpdate(userId, { [field]: value });
+
+      res.json({ success: true, message: "Cập nhật thành công!" });
+  } catch (error) {
+      console.error("Lỗi cập nhật:", error);
+      res.status(500).json({ success: false, message: "Lỗi máy chủ" });
+  }
+};
+
 export const reset_Password = async (req, res) => {
-  let { userId, resetPassword, newPassWord } = req.body;
+    try {
+      const { oldPassword, newPassword, confirmNewPassword } = req.body;
+      
+      if (!confirmNewPassword || !oldPassword || !newPassword) {
+        return res.status(400).json({errorCode:1, message: "Invalid"});
+      }
+      if (newPassword!== confirmNewPassword) {
+        return res.status(401).json({ message: "Password do not match"})
+      }
+      const user = await User.findById(req.user.id);
+      if (!user) return res.status(402).json({ message: "User not found"});
+      
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) return res.status(403).json({ message:"Incorrect current password"});
+  
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+  
+      await user.save();
+  
+      res.json({
+        success: true,
+        message: "Password updated successfully",
+      });
+    } catch (error) {
+      console.error("Error resetting password:",{ message: error.message});
+      res.status(500).json({ errorCode: 2, message: "Internal server error" });
+    }
+  };
 
-  // ForgotPassword.find({ userId }).then((result) => {
-  //    if(result.length > 0) {
+export const getUserById = async (req, res) => {
+  try {
+      const { id } = req.params;
 
-  //    })
-  // });
+      const user = await User.findById(id).select("-password -refreshToken"); // Loại bỏ password & refreshToken
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" }); 
+      }
+
+      res.status(200).json(user); 
+  } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Server error" }); 
+  }
+};
+
+export const uploadAvatar = async (req, res) => {
+  if (!req.files || !req.files.avatar) {
+      return res.status(400).json({ success: false, error: "Không có file nào được tải lên!" });
+  }
+
+  try {
+      // Gửi file vào hàm upload
+      const fileObject = req.files.avatar;
+      const uploadResult = await uploadSingleFile(fileObject);
+      console.log("Upload result:", uploadResult);
+
+      if (uploadResult.status !== "success") {
+          return res.status(500).json({ success: false, error: uploadResult.error });
+      }
+
+      const userId = req.user.id; 
+      await User.findByIdAndUpdate(userId, { avatar: uploadResult.path });
+
+      res.json({ success: true, avatarPath: uploadResult.path });
+  } catch (error) {
+      console.error("Lỗi khi upload avatar:", error);
+      res.status(500).json({ success: false, error: "Lỗi máy chủ khi tải ảnh lên." });
+  }
 };

@@ -1,9 +1,10 @@
 import express from "express";
-import { user } from "../middlewares/auth.js";
-import { getOrderDetailByOrder } from "../controllers/OrderDetailController.js";
+import { customer, seller} from "../middlewares/auth.js";
+import { getOrderDetailByOrder, getOrderDetailsBySeller } from "../controllers/OrderDetailController.js";
 
 const router = express.Router();
 
-router.get("/:order_id", user, getOrderDetailByOrder);
+router.get("/seller", seller, getOrderDetailsBySeller);
+router.get("/orderDetail/:order_id", customer, getOrderDetailByOrder);
 
 export default router;
