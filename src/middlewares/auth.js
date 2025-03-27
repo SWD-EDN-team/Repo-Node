@@ -44,7 +44,21 @@ const auth = ({ requiredRole = null } = {}) => {
     }
 }
 }
- export const admin = auth({role: 'user'})
- export const customer = auth({role: 'customer'})
- export const seller = auth({role: 'seller'})
- export const manager = auth({role: 'manager'})
+export const authMiddleware = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ errorCode: 1, message: "Unauthorized" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // Gán user vào req
+    next();
+  } catch (error) {
+    return res.status(403).json({ errorCode: 1, message: "Invalid token" });
+  }
+};
+ export const admin = auth({requiredRole: 'user'})
+ export const customer = auth({requiredRole: 'customer'})
+ export const seller = auth({requiredRole: 'seller'})
+ export const manager = auth({requiredRole: 'manager'})

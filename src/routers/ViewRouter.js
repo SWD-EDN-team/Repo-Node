@@ -1,5 +1,5 @@
 import express from "express";
-import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart, viewProfile, viewShippingAddress, viewAddProduct, viewManageProduct, viewManageReview } from "../controllers/viewsController.js";
+import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart, viewProfile, viewShippingAddress, viewAddProduct, viewManageProduct, viewManageReview, viewProfileSeller } from "../controllers/viewsController.js";
 import {searchProduct} from '../controllers/ProductController.js'
 import { customer, seller} from "../middlewares/auth.js"
 import { viewOrderDetailsBySeller } from "../controllers/OrderDetailController.js";
@@ -30,5 +30,6 @@ viewRouter.get("/addProduct", viewAddProduct);
 viewRouter.get("/manageProduct", viewManageProduct);
 viewRouter.get("/manageOrder",seller,viewOrderDetailsBySeller)
 viewRouter.get("/manageReview", viewManageReview);
+viewRouter.get("/profileSeller",seller,viewProfileSeller);
 
 export default viewRouter;

@@ -136,7 +136,7 @@ export const changeInfoAccountApi = async (req, res) => {
 
 export const reset_Password = async (req, res) => {
     try {
-      const { oldPassword, newPassword, confirmNewPassword } = await req.body;
+      const { oldPassword, newPassword, confirmNewPassword } = req.body;
       
       if (!confirmNewPassword || !oldPassword || !newPassword) {
         return res.status(400).json({errorCode:1, message: "Invalid"});
@@ -160,7 +160,7 @@ export const reset_Password = async (req, res) => {
         message: "Password updated successfully",
       });
     } catch (error) {
-      console.error("Error resetting password:", error);
+      console.error("Error resetting password:",{ message: error.message});
       res.status(500).json({ errorCode: 2, message: "Internal server error" });
     }
   };
@@ -179,5 +179,29 @@ export const getUserById = async (req, res) => {
   } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Server error" }); 
+  }
+};
+
+export const uploadAvatar = async (req, res) => {
+  if (!req.files || !req.files.avatar) {
+      return res.status(400).json({ success: false, error: "Không có file nào được tải lên!" });
+  }
+
+  try {
+      // Gửi file vào hàm upload
+      const fileObject = req.files.avatar;
+      const uploadResult = await uploadSingleFile(fileObject);
+
+      if (uploadResult.status !== "success") {
+          return res.status(500).json({ success: false, error: uploadResult.error });
+      }
+
+      const userId = req.user.id; 
+      await User.findByIdAndUpdate(userId, { avatar: uploadResult.path });
+
+      res.json({ success: true, avatarPath: uploadResult.path });
+  } catch (error) {
+      console.error("Lỗi khi upload avatar:", error);
+      res.status(500).json({ success: false, error: "Lỗi máy chủ khi tải ảnh lên." });
   }
 };

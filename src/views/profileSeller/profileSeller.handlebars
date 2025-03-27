@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #eef2f7;
+            font-family: 'Poppins', sans-serif;
+        }
+        .profile-card {
+            max-width: 420px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .profile-card:hover {
+            transform: scale(1.02);
+        }
+        .profile-img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #007bff;
+        }
+        .btn-primary {
+            border-radius: 30px;
+            padding: 12px 24px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #007bff, #00b4db);
+            border: none;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div id="profile-container" class="profile-card">
+            {{!-- <img src="https://i.pravatar.cc/60" class="profile-img" id="profile-img"> --}}
+            <div class="avatar-container">
+            <div class="avatar-wrapper">
+                <img id="profile-img" src="{{user.avatar}}" alt="Profile Picture" class="profile-img" />
+                <label for="avatar-input" class="upload-overlay">
+                    <i class="fas fa-camera"></i>
+                </label>
+            </div>
+            <input type="file" id="avatar-input" name="avatar" accept="image/*">
+        </div>
+            <p class="mt-2"><strong>Name:</strong> <span id="profile-name">{{user.name}}</span></p>
+            <p><strong>Email:</strong> <span id="profile-email">{{user.email}}</span></p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal" onclick="fillEditForm()">Edit profile</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change password</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editProfileModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" id="editName" class="form-control">
+                    </div>
+                    {{!-- <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="phoneNumber" id="editPhone" class="form-control">
+                    </div> --}}
+                    <div class="mb-3">
+                        <label class="form-label">Gender</label>
+                        <input type="gender" id="editGender" class="form-control">
+                    </div>
+                    {{!-- <div class="mb-3">
+                        <label class="form-label">Avatar</label>
+                        <input type="file" id="editAvatar" class="form-control" accept="image/*">
+                         <img id="profile-img" src="{{user.avatar}}" class="mt-2 rounded-circle" style="width: 80px; height: 80px; border: 2px solid #007bff;">
+                    </div> --}}
+                    
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="updateProfile()">Update</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changePasswordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Change password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Current Password</label>
+                        <input type="password" id="currentPassword" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <input type="password" id="newPassword" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Re-enter password</label>
+                        <input type="password" id="confirmNewPassword" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="changePassword()">Change Password</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      let profileData;
+      const TOKEN = localStorage.getItem("token"); 
+
+      async function fetchProfileData() {
+        const inputFile = document.getElementById("profile-img");
+        inputFile.addEventListener("change", function(e) {
+            const file = event.target.files[0];
+            if (file){
+                // Hiển thị ảnh mới ngay lập tức
+                avatarImg.src = URL.createObjectURL(file);
+
+                // Tạo FormData để gửi file lên server
+                const formData = new FormData();
+                formData.append("avatar", file);
+                // Lấy token từ LocalStorage hoặc sessionStorage
+                const token = localStorage.getItem("token"); 
+
+                // Gửi ảnh lên server bằng Fetch API
+                fetch("/api/v1/users/upload-avatar", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                    "Authorization": `Bearer ${token}` 
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        avatarImg.src = data.avatarPath;
+                        alert("Cập nhật Avatar thành công");
+                    } else {
+                        alert("Lỗi khi cập nhật avatar.");
+                    }
+                })
+                .catch(error => console.error("Lỗi:", error));
+            }
+        })
+        try {
+          if (!TOKEN) {
+              throw new Error("Token không tồn tại, vui lòng đăng nhập lại!");
+          }
+
+          const storedProfile = localStorage.getItem("profile");
+          if (storedProfile) {
+              profileData = JSON.parse(storedProfile);
+          } else {
+              const response = await axios.get("http://localhost:8081/api/v1/auth/getCurrentUser", {
+                  headers: { Authorization: `Bearer ${TOKEN}` }
+              });
+              profileData = response.data.user;
+              localStorage.setItem("profile", JSON.stringify(profileData));
+          }
+          console.log("Profile data:", profileData)
+
+          updateProfileUI();
+        } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu:", error);
+            alert("Không thể tải dữ liệu hồ sơ.");
+        }
+      }
+
+      function updateProfileUI() {
+        document.getElementById("profile-name").textContent = profileData.name || "Chưa có dữ liệu";
+        document.getElementById("profile-img").src = profileData.avatar || "https://i.pravatar.cc/140"; 
+      }
+
+      function fillEditForm() {
+        document.getElementById("editName").value = profileData.name || "";
+        document.getElementById("editGender").value = profileData.gender || "";
+        const avatarPreview = document.getElementById("avatarPreview");
+        if (avatarPreview) {
+            avatarPreview.src = profileData.avatar || "https://i.pravatar.cc/140";
+        }
+        console.log(avatarPreview);
+    }
+
+      async function updateProfile() {
+          const updatedData = {
+              name: document.getElementById("editName").value,
+              gender: document.getElementById("editGender").value,
+              {{!-- avatar: document.getElementById("editAvatar").files[0] --}}
+          };
+
+          try {
+              if (!TOKEN) {
+                  throw new Error("Token không tồn tại, vui lòng đăng nhập lại!");
+              }
+              await axios.put("http://localhost:8081/api/v1/auth/update", updatedData, {
+                  headers: { Authorization: `Bearer ${TOKEN}` }
+              });
+
+              profileData = updatedData;
+              console.log(profileData);
+              localStorage.setItem("profile", JSON.stringify(profileData));
+
+              updateProfileUI();
+              bootstrap.Modal.getInstance(document.getElementById("editProfileModal")).hide();
+              alert("Cập nhật thành công!");
+              window.location.reload();
+          } catch (error) {
+              console.error("Lỗi khi cập nhật hồ sơ:", error);
+              alert("Không thể cập nhật hồ sơ.");
+          }
+      }
+      async function changePassword() {
+    const currentPassword = document.getElementById("currentPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmNewPassword = document.getElementById("confirmNewPassword").value;
+    const TOKEN = localStorage.getItem("token");
+
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+        alert("Vui lòng nhập đầy đủ thông tin!");
+        return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+        alert("Mật khẩu mới và nhập lại mật khẩu không khớp!");
+        return;
+    }
+
+    try {
+        const response = await axios.post("http://localhost:8081/api/v1/auth/reset_password", {
+            oldPassword:currentPassword,
+            newPassword,
+            confirmNewPassword
+        }, {
+            headers: { Authorization: `Bearer ${TOKEN}` }
+        });
+
+        if (response.data.success) {
+            alert("Mật khẩu đã được thay đổi thành công!");
+            window.location.reload();
+        } else {
+            alert(response.data.message || "Có lỗi xảy ra, vui lòng thử lại!");
+        }
+    } catch (error) {
+        console.error("Lỗi khi đổi mật khẩu:", {message: error.message});
+        alert(error.response?.data?.message || "Mật khẩu cũ không đúng!");
+    }
+}
+
+      document.addEventListener("DOMContentLoaded", fetchProfileData);
+    </script>
+</body>
+</html>

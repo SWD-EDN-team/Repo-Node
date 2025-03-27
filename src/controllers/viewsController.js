@@ -327,3 +327,15 @@ export const viewProfile = async (req, res) => {
       res.status(500).json({ message: "Server error" });
   }
 };
+export const viewProfileSeller = async (req,res)=>{
+  try {
+    res.render("profileSeller/profileSeller",{
+      title: "Giới thiệu",
+      layout:"sidebarDashboard",
+      user: req.user,
+    });
+    } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching shipping address" });
+    }
+};

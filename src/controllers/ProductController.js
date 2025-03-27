@@ -73,7 +73,7 @@ export const createProduct = async (req, res) => {
       product_name: Joi.string().required(),
       category_id: Joi.string().required(),
       description: Joi.string().min(10).max(1000).required(),
-      price: Joi.number().required(),
+      price: Joi.number().min(0).required(),
       rate: Joi.number().min(1).max(5),
       stoke_quantity: Joi.number().min(0).required(),
       image: Joi.array().items(Joi.string()),
@@ -104,10 +104,10 @@ export const createProduct = async (req, res) => {
         }
       }
     }
-    console.log("req.seller.seller_id",req.seller.seller_id);
+    console.log("req.seller.seller_id",req.user.id);
     
   try {
-    const product = new Product({ ...req.body, seller_id: req.seller.seller_id, image: imagePaths });
+    const product = new Product({ ...req.body, seller_id: req.user.id, image: imagePaths });
 
     await product.save();
     res.status(StatusCode.CREATED).json(product);
