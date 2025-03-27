@@ -1,7 +1,8 @@
 import express from "express";
 import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart, viewProfile, viewShippingAddress, viewAddProduct, viewManageProduct, viewManageReview } from "../controllers/viewsController.js";
 import {searchProduct} from '../controllers/ProductController.js'
-import { customer, seller} from "../middlewares/auth.js"
+import { viewSellerAccount } from "../controllers/SellerController.js";
+import { admin, customer, seller} from "../middlewares/auth.js"
 import { viewOrderDetailsBySeller } from "../controllers/OrderDetailController.js";
 const viewRouter = express.Router();
 
@@ -24,11 +25,14 @@ viewRouter.get("/otp",customer, viewOTP);
 viewRouter.get("/successful", viewSuccessful);
 viewRouter.get("/payment", viewPayment);
 viewRouter.get("/reviewProduct", viewReview);
+viewRouter.get("/sellerAccount",admin, viewSellerAccount);
 viewRouter.get("/shippingAddress",customer, viewShippingAddress);
 viewRouter.get("/profile", customer, viewProfile);
 viewRouter.get("/addProduct", viewAddProduct);
 viewRouter.get("/manageProduct", viewManageProduct);
 viewRouter.get("/manageOrder",seller,viewOrderDetailsBySeller)
 viewRouter.get("/manageReview", viewManageReview);
+// viewRouter.get("/manageSeller", viewManageReview);
+
 
 export default viewRouter;

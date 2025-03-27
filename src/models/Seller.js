@@ -24,6 +24,9 @@ const sellerSchema = new Schema(
     verify:{
       type: Boolean,
       default: false,
+    },
+    requestDate:{
+      type: Date,
     }
   },
   { timestamps: false, versionKey: false }

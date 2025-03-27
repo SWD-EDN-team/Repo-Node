@@ -1,7 +1,8 @@
-import {product,categories,productById,productpage,reviews} from "../utils/api.js"
 import Cart from "../models/Cart.js"
 import axios from "axios";
 import User from "../models/User.js";
+import Seller from "../models/Seller.js";
+import {product,categories,productById,productpage,reviews, listPedding} from "../utils/api.js"
 export const viewLogin = (req, res) => {
   res.render("login/login", { layout: "auth" });
 };
