@@ -7,15 +7,22 @@ const sellerSchema = new Schema(
       ref: 'User',
       required: true,
       unique: true,
+      index: true 
     },
     store_name:{
       type: String,
       required: true,
     },
+    store_decription:{
+      type: String,
+    },
+    store_banner:{
+      type: String,
+      default: "../upload/avatar.jpg",
+    },
     store_address:{
       type: Schema.Types.ObjectId,
       ref: 'Address',
-      required: true,
     },
     store_phone:{
       type: String,
@@ -27,6 +34,12 @@ const sellerSchema = new Schema(
     },
     requestDate:{
       type: Date,
+    },
+    Tax_Information:{
+      type: String,
+    },
+    Identity_Verification:{
+      type: String,
     }
   },
   { timestamps: false, versionKey: false }

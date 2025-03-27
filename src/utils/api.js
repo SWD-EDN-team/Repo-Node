@@ -42,7 +42,11 @@ export const productpage = (page) => {
     return axios.get(url);
   };
   
-
+export const reviewById = (id) => {
+  const url = `http://localhost:8081/api/v1/review/${id}`
+  return axios.get(url);
+};
+  
 export const listPedding = () => {
   return axios.get("/seller/pending");
 }

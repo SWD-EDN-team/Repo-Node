@@ -52,7 +52,7 @@ export const createAddress = async (req, res) => {
     newAddress.user = decoded.id;
     const savedAddress = await newAddress.save();
 
-    user.address.push(savedAddress._id); // Add the address ID to the user's addresses array
+    user.address.push(savedAddress._id); 
     await user.save();
     res.status(201).json(savedAddress);
   } catch (error) {
@@ -110,15 +110,22 @@ export const deleteAddress = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Kiểm tra xem người dùng có sở hữu address này hay không
+
     if (!user.address.some((address) => address.equals(req.params.id))) {
       return res
         .status(403)
         .json({ message: "Unauthorized to update this address" });
     }
 
+    // Xóa địa chỉ khỏi bảng Address
     const deletedAddress = await Address.findByIdAndDelete(req.params.id);
-    if (!deletedAddress) res.status(404).json({ message: "Address not found" });
+    if (!deletedAddress) {
+      return res.status(404).json({ message: "Address not found" });
+    }
+
+    // Xóa ObjectId khỏi mảng address của user
+    user.address = user.address.filter((addr) => !addr.equals(req.params.id));
+    await user.save();
     res.status(200).json({ message: "Address deleted successfull" });
   } catch (error) {
     res.status(500).json({ message: error.message });

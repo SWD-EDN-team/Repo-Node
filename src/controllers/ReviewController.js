@@ -32,9 +32,26 @@ export const getAllReview = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
-}
+};
+export const getAllReviewByProductId = async (req, res) => {
+  try {
+    const { product_id } = req.params;
 
+    const reviews = await Review.find({ product_id })
+      .select("_id product_id rate comment user_id createdAt updatedAt")
+      .populate("user_id", "name") // Chỉ lấy tên của user
+      .lean();
 
+    if (!reviews.length) {
+      return res.status(404).json({ message: "No reviews found" });
+    }
+
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 export const createReview = async (req, res) =>{
   try {
     const { error } = reviewSchema.validate(req.body);
@@ -81,3 +98,4 @@ export const deleteReview = async (req, res) => {
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: "Server error" });
   }
 };
+

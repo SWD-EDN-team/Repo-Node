@@ -102,6 +102,53 @@
         </div>
       </div>
     </div>
+
+    <div class="container">
+    <h2>Customer Reviews</h2>
+
+    {{#each reviews}}
+    <div class="review">
+        <div class="review-header">
+     <img src="/images/upload/avatar.jpg" alt="{{this.user_id.name}}" class="avatar">
+    <strong>{{this.user_id.name}}</strong>
+            <div>
+                <div class="stars">
+                    {{#repeat this.rate}}
+                        <span>⭐</span>
+                    {{/repeat}}
+                </div>
+        </div>
+        <p><strong>{{this.title}}</strong></p>
+        <p><strong>{{this.comment}}</strong></p>
+        <small><b>Review by {{this.user_id.name}}</b> | <b>Posted on {{this.createdAt}}</b></small>
+
+    </div>
+    {{/each}}
+
+    <hr>
+    <h3>Add Your Review</h3>
+    <form action="/submit-review" method="POST">
+        <label>Your Rating</label>
+        <div class="rating">
+            <input type="radio" name="rating" value="5" id="star5"><label for="star5">★</label>
+            <input type="radio" name="rating" value="4" id="star4"><label for="star4">★</label>
+            <input type="radio" name="rating" value="3" id="star3"><label for="star3">★</label>
+            <input type="radio" name="rating" value="2" id="star2"><label for="star2">★</label>
+            <input type="radio" name="rating" value="1" id="star1"><label for="star1">★</label>
+        </div>
+
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" placeholder="Enter Your Name" required>
+
+        <label for="email">Email Address</label>
+        <input type="email" name="email" id="email" placeholder="Enter Your Email" required>
+
+        <label for="review">Your Review</label>
+        <textarea name="review" id="review" placeholder="Enter Your Review" required></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.3/antd.min.js"></script>
 
     <script>

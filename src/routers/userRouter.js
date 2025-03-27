@@ -4,6 +4,8 @@ import {
   createUserApi,
   changeInfoAccountApi,
   getUserById,
+  uploadAvatar,
+  updateUserProfile
 } from "../controllers/userController.js";
 import { customer } from "../middlewares/auth.js";
 
@@ -13,5 +15,6 @@ userRouter.get("/", getUserApi);
 userRouter.post("/", createUserApi);
 userRouter.put("/update-info", customer, changeInfoAccountApi);
 userRouter.get("/:id", getUserById);
+userRouter.post("/upload-avatar", customer, uploadAvatar);
 
 export default userRouter;

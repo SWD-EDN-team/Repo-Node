@@ -17,25 +17,17 @@ const createSellerSchema = Joi.object({
 
 export const createSeller = async (req, res) => {
   try {
-    
-    const seller = await req.body;
-    const { error } = createSellerSchema.validate({...req.body,seller_id:req.user.id }, {
-      abortEarly: false,
-    });
-    if (error) {
-      const message = error.details.map((err) => err.message);
-      return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({
-        message,
-      });
+    const seller = await Seller.findOne({seller_id:req.user.id})
+    if(seller){
+      return res.status(StatusCode.CONFLICT).json({message: "Seller already exists"});
     }
-    //gui email confirm
-    const newSeller = new Seller({...seller,requestDate:Date.now()});
+    const newSeller = new Seller({...req.body,seller_id:req.user.id,requestDate:Date.now()});
     await newSeller.save();
     
     res.status(201).json(newSeller);
   } catch (error) {
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({
-      message: "An error occurred during signup Seller. Please try again later.",
+      message: error.message,
     });
   }
 }
@@ -88,9 +80,26 @@ export const getAllSellerAccounts = async (req, res) => {
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json({message: error.message});
   }
 }
-export const viewSellerAccount = async (req,res)=>{
+export const ViewAllSellerAccount = async (req, res) => {
   try {
-    const sellers = await Seller.find({verify:true}).populate("seller_id").sort({ requestDate: -1 })
+    const sellers = await Seller.find({verify:true}).populate("seller_id");
+    if(!sellers){
+      return res.status(StatusCode.NOT_FOUND).json({message: "Seller not found"});
+    }
+    const plainSellers = sellers.map(seller => seller.toObject ? seller.toObject() : seller);
+
+    res.render("adminManager/pending",{
+      title: "handle Pending seller",
+      layout:"adminManager",
+      sellers: plainSellers
+    })
+  } catch (error) {
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({message: error.message});
+  }
+}
+export const viewSellerRequest = async (req,res)=>{
+  try {
+    const sellers = await Seller.find({verify:false}).populate("seller_id").sort({ requestDate: -1 })
     console.log(sellers);
     const plainSellers = sellers.map(seller => seller.toObject ? seller.toObject() : seller);
     res.render("adminManager/seller",{
@@ -99,11 +108,30 @@ export const viewSellerAccount = async (req,res)=>{
       sellers: plainSellers
     })
   } catch (error) {
-    res.render("adminManager/pending",{
-      title: "handle Pending seller",
-      layout:"adminManager",
-    })
+    console.error( error.message);
+            alert("send faild: " + (error.response?.data?.message || error.message))
   }
 }
 
 
+export const uploadAvatar = async (req, res) => {
+  if (!req.files || !req.files.avatar) {
+      return res.status(400).json({ success: false, error: "Không có file nào được tải lên!" });
+  }
+  try {
+      // Gửi file vào hàm upload
+      const fileObject = req.files.avatar;
+      const uploadResult = await uploadSingleFile(fileObject);
+
+      if (uploadResult.status !== "success") {
+          return res.status(500).json({ success: false, error: uploadResult.error });
+      }
+      const seller = await Seller.findOne({seller_id:req.user.id})
+      await Seller.findByIdAndUpdate(seller._id, { store_banner: uploadResult.path });
+
+      res.json({ success: true, avatarPath: uploadResult.path });
+  } catch (error) {
+      console.error("Lỗi khi upload avatar:", error);
+      res.status(500).json({ success: false, error: "Lỗi máy chủ khi tải ảnh lên." });
+  }
+};

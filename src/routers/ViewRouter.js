@@ -1,7 +1,7 @@
 import express from "express";
 import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart, viewProfile, viewShippingAddress, viewAddProduct, viewManageProduct, viewManageReview } from "../controllers/viewsController.js";
 import {searchProduct} from '../controllers/ProductController.js'
-import { viewSellerAccount } from "../controllers/SellerController.js";
+import { ViewAllSellerAccount, viewSellerRequest } from "../controllers/SellerController.js";
 import { admin, customer, seller} from "../middlewares/auth.js"
 import { viewOrderDetailsBySeller } from "../controllers/OrderDetailController.js";
 const viewRouter = express.Router();
@@ -24,8 +24,9 @@ viewRouter.get("/forgotpassword", viewForgotPassword);
 viewRouter.get("/otp",customer, viewOTP);
 viewRouter.get("/successful", viewSuccessful);
 viewRouter.get("/payment", viewPayment);
-viewRouter.get("/reviewProduct", viewReview);
-viewRouter.get("/sellerAccount",admin, viewSellerAccount);
+viewRouter.get("/reviewProduct/:product_id", viewReview);
+viewRouter.get("/sellerAccountRequest",admin, viewSellerRequest);
+viewRouter.get("/sellerAccount",admin, ViewAllSellerAccount);
 viewRouter.get("/shippingAddress",customer, viewShippingAddress);
 viewRouter.get("/profile", customer, viewProfile);
 viewRouter.get("/addProduct", viewAddProduct);
