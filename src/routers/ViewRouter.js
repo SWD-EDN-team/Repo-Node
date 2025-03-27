@@ -1,5 +1,5 @@
 import express from "express";
-import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart, viewProfile, viewShippingAddress, viewAddProduct, viewManageProduct, viewManageReview, viewProfileSeller } from "../controllers/viewsController.js";
+import { viewDetailProdct, viewForgotPassword, viewHome, viewLogin, viewManageAddress, viewMyOrder, viewMyWishList, viewOTP, viewProductList,viewReview, viewSaveCard, viewSignup, viewSuccessful,viewPayment, viewCart, viewProfile, viewShippingAddress, viewAddProduct, viewManageProduct, viewManageReview, viewProfileSeller, paymentView } from "../controllers/viewsController.js";
 import {searchProduct} from '../controllers/ProductController.js'
 import { customer, seller} from "../middlewares/auth.js"
 import { viewOrderDetailsBySeller } from "../controllers/OrderDetailController.js";
@@ -24,8 +24,9 @@ viewRouter.get("/otp",customer, viewOTP);
 viewRouter.get("/successful", viewSuccessful);
 viewRouter.get("/payment", viewPayment);
 viewRouter.get("/reviewProduct", viewReview);
-viewRouter.get("/shippingAddress",customer, viewShippingAddress);
+viewRouter.get("/paymentView", customer, paymentView);
 viewRouter.get("/profile", customer, viewProfile);
+viewRouter.get("/shippingAddress", customer, viewShippingAddress);
 viewRouter.get("/addProduct", viewAddProduct);
 viewRouter.get("/manageProduct", viewManageProduct);
 viewRouter.get("/manageOrder",seller,viewOrderDetailsBySeller)

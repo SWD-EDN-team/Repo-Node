@@ -7,7 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-
+    .sidebar {
+        display: none !important;
+    }
     .checkout-container {
 
     margin: auto;
@@ -133,9 +135,6 @@
 </head>
 <body>
 <div class="checkout-container">
-    {{!-- <aside class="sidebar p-3 border rounded shadow-sm me-4" style="width: 250px; background-color: #f4f4f4;">
-      {{> sidebar}}
-    </aside> --}}
     <h1>My Cart</h1>
 <div class="checkout-content">
         <table class="checkout-table">
@@ -153,6 +152,7 @@
                     {{#if cart.items}}
                     {{#if cart.items.length}}
                         <tbody>
+                              <input type="hidden" id="cart_id" value="{{cart._id}}" />
                             {{#each cart.items}}
                             <tr>
                                 <td class="product-info">
@@ -195,7 +195,9 @@
             <h5>Subtotal: <span id="subtotal-value">0.00₫</span></h5>
             <p>Delivery Charge: <span id="delivery-charge">5000₫</span></p>
             <h2>Grand Total: <span id="grand-total">0.00₫</span></h2>
-            <button class="checkout-btn">Proceed to Checkout</button>
+            <a>
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </a>
         </div>
     </div>
 </div>
@@ -230,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateSubtotal() {
         let subtotal = 0;
         document.querySelectorAll("tbody tr").forEach(row => {
-            const priceText = row.querySelector("td:nth-child(2)").textContent.replace(/\D/g, ""); // Lấy số từ giá
+            const priceText = row.querySelector("td:nth-child(2)").textContent.replace(/\D/g, ""); 
             const price = parseInt(priceText, 10) || 0;  
             const quantityInput = row.querySelector(".input-box");
             const quantity = parseInt(quantityInput.value, 10) || 1;  
@@ -243,57 +245,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Cập nhật tổng tiền
         document.getElementById("subtotal-value").textContent = formatCurrency(subtotal);
-        document.getElementById("grand-total").textContent = formatCurrency(subtotal + deliveryCharge);
+        const priceOrder = document.getElementById("grand-total").textContent = formatCurrency(subtotal + deliveryCharge);
+        console.log(">>>",priceOrder)
+
+        // trueyen data
+    document.querySelector(".checkout-btn").addEventListener("click", () => {
+
+    const priceOrder = document.getElementById("grand-total").textContent.trim();
+    const des = document.getElementById("cart_id").value;
+    window.location.href = `/view/paymentView?total=${encodeURIComponent(priceOrder)}&des=${des}`;
+});
     }
 
         function formatCurrency(value) {
             if (typeof value !== "number" || isNaN(value)) {
-                return "0₫"; 
+                return "0"; 
             }
-            return value.toLocaleString("vi-VN") + "₫";
+            return value.toLocaleString("vi-VN") + "";
         }
     updateSubtotal();
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const removeButtons = document.querySelectorAll(".remove-item");
 
-    removeButtons.forEach((button) => {
-        button.addEventListener("click", async function () {
-            const itemId = this.getAttribute("data-id");
-            console.log(itemId);
-
-            if (!itemId) {
-                console.error("Không tìm thấy ID sản phẩm để xóa.");
-                return;
-            }
-
-            const confirmDelete = confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?");
-            if (!confirmDelete) return;
-
-            try {
-                const response = await fetch(`/api/v1/cart/remove/${itemId}`, {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    },
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    alert(result.message);
-                    window.location.reload(); // Load lại trang sau khi xóa
-                } else {
-                    alert("Lỗi: " + result.error);
-                }
-            } catch (error) {
-                console.error("Lỗi khi xóa sản phẩm:", error);
-            }
-        });
-    });
-});
 
 
 </script>
