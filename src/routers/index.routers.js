@@ -12,6 +12,7 @@ import WishlistRouter from "../routers/WishlistRouter.js"
 import PaymentMethodRouter from "../routers/PaymentMethodRouter.js"
 import OrderRouter from "../routers/OrderRouter.js"
 import OrderDetailRouter from "../routers/OrderDetailRouter.js"
+import ManagerRouter from "../routers/ManagerRouter.js"
 const rootRouter = express.Router();
 
 rootRouter.use("/users", userRouter);
@@ -27,6 +28,7 @@ rootRouter.use("/wishlist", WishlistRouter);
 rootRouter.use("/paymentMethod", PaymentMethodRouter);
 rootRouter.use("/order", OrderRouter);
 rootRouter.use("/orderDetail", OrderDetailRouter);
+rootRouter.use("/manager", ManagerRouter);
 
 export default rootRouter;
 

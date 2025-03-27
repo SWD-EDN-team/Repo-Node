@@ -14,7 +14,7 @@ import { admin, customer } from "../middlewares/auth.js";
 import { verifyEmail, reset_Password } from "../controllers/userController.js";
 
 const authRouter = express.Router();
-authRouter.post("/reset_password", user,reset_Password);
+authRouter.post("/reset_password", customer, reset_Password);
 
 authRouter.post("/signup", signup);
 authRouter.post("/signin", signin);
