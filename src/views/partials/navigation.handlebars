@@ -1,163 +1,158 @@
+<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/navigation.css" />
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <title>Document</title>
-  </head>
-  <body>
+</head>
+<body>
+    <!-- Navbar -->
     <div class="nav_container">
-      <img class="nav-logo" src="/assets/images/Logowhite.png" alt />
-      <div class="nav_container-menulist">
-        <i class="fa-solid fa-bars nav_container__menu"></i>
-        <ul class="nav_container-showlist">
-          <li><a href="/view/home">Home</a></li>
-          <li><a href="#" class="shope__modal">Shop
-            </a></li>
-          <li><a href="#">Our Story</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Contact Us</a></li>
-        </ul>
-      </div>
-      <div class="nav-feature">
-        <i class="fa-solid fa-magnifying-glass nav-feature__search">
-          <input class="search_input" type="text" placeholder="Search..." />
-        </i>
-        <i class="fa-regular fa-heart"></i>
-        <a href="" id="cart-link" class="icon"><i class="fas fa-shopping-bag"></i></a>
-      </div>
-      <button>Login</button>
+        <img class="nav-logo" src="/assets/images/Logowhite.png" alt="Logo" />
+        <div class="nav_container-menulist">
+            <i class="fa-solid fa-bars nav_container__menu"></i>
+            <ul class="nav_container-showlist">
+                <li><a href="/view/home">Home</a></li>
+                <li><a href="#" class="shop__modal">Shop</a></li>
+                <li><a href="#">Our Story</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="/view/manageOrder" class="dashboard-link">Dashboard</a></li>
+            </ul>
+        </div>
+        <div class="nav-feature">
+            <i class="fa-solid fa-magnifying-glass nav-feature__search">
+                <input class="search_input" type="text" placeholder="Search..." />
+            </i>
+            <i class="fa-regular fa-heart"></i>
+            <a href="" id="cart-link" class="icon"><i class="fas fa-shopping-bag"></i></a>
+        </div>
+        <button id="auth-button">Login</button>
     </div>
 
-    <!--SHOP-->
+    <!-- SHOP Modal -->
     <div class="modal">
-      <div class="modal__body">
-        <div class="modal__list">
-          <ul>
-            <h4>Menu</h4>
-            <li><a href="#">T-shirts</a></li>
-            <li><a href="#">Casual Shirts</a></li>
-            <li><a href="#">Formal Shirts</a></li>
-            <li><a href="#">Jackets</a></li>
-            <li><a href="#">Blazers & Coats</a></li>
-          </ul>
-          <ul>
-            <h4>Indian & Festive Wear</h4>
-            <li><a href>Kurtas & Kurta Sets</a></li>
-            <li><a href>Sherwains</a></li>
-          </ul>
+        <div class="modal__body">
+            <div class="modal__list">
+                <ul>
+                    <h4>Menu</h4>
+                    <li><a href="#">T-shirts</a></li>
+                    <li><a href="#">Casual Shirts</a></li>
+                    <li><a href="#">Formal Shirts</a></li>
+                    <li><a href="#">Jackets</a></li>
+                    <li><a href="#">Blazers & Coats</a></li>
+                </ul>
+                <ul>
+                    <h4>Indian & Festive Wear</h4>
+                    <li><a href="#">Kurtas & Kurta Sets</a></li>
+                    <li><a href="#">Sherwanis</a></li>
+                </ul>
+            </div>
+            <div class="modal__list">
+                <ul>
+                    <h4>Women</h4>
+                    <li><a href="#">Kurtas & Suits</a></li>
+                    <li><a href="#">Sarees</a></li>
+                    <li><a href="#">Ethnic Wear</a></li>
+                    <li><a href="#">Lehenga Cholis</a></li>
+                    <li><a href="#">Jackets</a></li>
+                </ul>
+                <ul>
+                    <h4>Western Wear</h4>
+                    <li><a href="#">Dresses</a></li>
+                    <li><a href="#">Jumpsuits</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="modal__list">
-          <ul>
-            <h4>Women</h4>
-            <li><a href="#">Kurtas & Suits</a></li>
-            <li><a href="#">Sarees</a></li>
-            <li><a href="#">Ethnic Wear</a></li>
-            <li><a href="#">Lehenga Cholis</a></li>
-            <li><a href="#">Jackets</a></li>
-          </ul>
-          <ul>
-            <h4>Western Wear</h4>
-            <li><a href>Dresses</a></li>
-            <li><a href>Jumpsuits</a></li>
-          </ul>
-        </div>
-        <div class="modal__list">
-          <ul>
-            <h4>Footwear</h4>
-            <li><a href="#">Flats</a></li>
-            <li><a href="#">Casual Shoes</a></li>
-            <li><a href="#">Heels</a></li>
-            <li><a href="#">Boots</a></li>
-            <li><a href="#">Sports Shoes & Floaters</a></li>
-          </ul>
-          <ul>
-            <h4>Product Features</h4>
-            <li><a href>360 Product Viewer</a></li>
-            <li><a href>Product with Video</a></li>
-          </ul>
-        </div>
-        <div class="modal__list-lastchild">
-          <ul>
-            <h4>Kids</h4>
-            <li><a href="#">T-Shirts</a></li>
-            <li><a href="#">Shirts</a></li>
-            <li><a href="#">Jeans</a></li>
-            <li><a href="#">Trousers</a></li>
-            <li><a href="#">Party Wear</a></li>
-            <li><a href="#">Innerwear & Thermal</a></li>
-            <li><a href="#">Track Pants</a></li>
-            <li><a href="#">Value Pack</a></li>
-          </ul>
-        </div>
-      </div>
     </div>
-  </body>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const authButton = document.getElementById("auth-button");
+            const dashboardLink = document.querySelector(".dashboard-link");
+            const cartLink = document.getElementById("cart-link");
+
+            let token = localStorage.getItem("token");
+            let userRole = localStorage.getItem("role");
+            console.log(userRole)
+
+            if (token) {
+                authButton.textContent = "Logout";
+                authButton.addEventListener("click", () => {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("role");
+                    alert("Bạn đã đăng xuất!");
+                    window.location.reload();
+                });
+            } else {
+                authButton.addEventListener("click", () => {
+                    window.location.href = "/view/login";
+                });
+            }
+
+            dashboardLink.addEventListener("click", (e) => {
+                if (!token) {
+                    alert("Vui lòng đăng nhập để truy cập Dashboard!");
+                    e.preventDefault();
+                    window.location.href = "/view/login";
+                    return;
+                }
+
+                if (!userRole) {
+                    alert("Lỗi xác thực! Vui lòng đăng nhập lại.");
+                    localStorage.removeItem("token");
+                    window.location.href = "/view/login";
+                    return;
+                }
+
+                userRole = userRole.trim().toLowerCase();
+                const validRoles = ["seller", "admin"];
+
+                if (!validRoles.includes(userRole)) {
+                    alert("Bạn không có quyền truy cập Dashboard!");
+                    e.preventDefault();
+                    window.location.href = "/view/home";
+                } 
+                if (userRole === "seller"){
+                    window.location.href = "/view/manageOrder";
+                }
+                else if (userRole === "admin"){
+                    window.location.href = "/view/manageUser";
+                }
+            });
+
+            cartLink.addEventListener("click", async (e) => {
+                e.preventDefault();
+
+                if (!token) {
+                    alert("Vui lòng đăng nhập để xem giỏ hàng!");
+                    return;
+                }
+
+                try {
+                    const response = await fetch("/view/cart", {
+                        method: "GET",
+                        credentials: "include",
+                        headers: { "Content-Type": "application/json" },
+                    });
+
+                    if (response.status === 401 || response.status === 403) {
+                        alert("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
+                        localStorage.removeItem("token");
+                        window.location.href = "/view/login";
+                    } else if (response.status === 200) {
+                        window.location.href = "/view/cart";
+                    } else {
+                        alert("Lỗi không xác định, vui lòng thử lại sau!");
+                    }
+                } catch (error) {
+                    console.error("Lỗi khi gửi yêu cầu:", error);
+                    alert("Lỗi kết nối, vui lòng kiểm tra lại mạng!");
+                }
+            });
+        });
+    </script>
+</body>
 </html>
-<script>
-  /*Shop*/ const shopLink = document.querySelector(".shope__modal"); const modal
-  = document.querySelector(".modal"); const modalBody =
-  document.querySelector(".modal__body");
-  shopLink.addEventListener("mouseenter",()=>{ modal.style.display = "block";
-  }); modalBody.addEventListener("mouseleave",()=>{ modal.style.display =
-  "none"; }); modal.addEventListener("mouseleave",()=>{ modal.style.display =
-  "none"; }); /*Search*/ /*const searchContainer = }}
-  document.querySelector(".nav-feature__search"); const searchInput =
-  document.querySelector(".search_input");
-  searchContainer.addEventListener("mouseenter", () => {
-  searchInput.style.display = "block"; searchInput.focus(); });
-  searchInput.addEventListener("blur", () => { searchInput.style.display =
-  "none"; }); */ const menuIcon =
-  document.querySelector(".nav_container__menu"); const menuList =
-  document.querySelector(".nav_container-showlist");
-  menuIcon.addEventListener("click",()=>{ menuList.classList.toggle("show"); });
-  console.log(menuList, menuIcon)
-
-document.getElementById("cart-link").addEventListener("click", async (e) => {
-  e.preventDefault();
-
-  const token = localStorage.getItem("token");
-  if (!token) {
-    alert("Vui lòng đăng nhập để xem giỏ hàng!");
-    return;
-  }
-
-  try {
-  const response = await fetch("/view/cart", {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-
-    console.log("Response status:", response.status);
-
-    switch (response.status) {
-      case 401:
-        alert("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!");
-        localStorage.removeItem("token");
-        window.location.href = "/login";
-        break;
-
-      case 403:
-        alert("Token không hợp lệ, vui lòng đăng nhập lại!");
-        localStorage.removeItem("token");
-        window.location.href = "/login";
-        break;
-
-      case 200:
-        window.location.href = "/view/cart";
-        break;
-
-      default:
-        alert("Lỗi không xác định, vui lòng thử lại sau!");
-    }
-  } catch (error) {
-    console.error("Lỗi khi gửi yêu cầu:", error);
-    alert("Lỗi kết nối, vui lòng kiểm tra lại mạng!");
-  }
-});
-
-</script>

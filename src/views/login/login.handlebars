@@ -11,6 +11,29 @@
     <title>Login</title>
   <link rel="stylesheet" href="/assets/css/login.css">
 </head>
+<style>
+    .register-link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    }
+
+    .register-link:hover {
+        color: #0056b3;
+    }
+    .register{
+        color: #2f6cae;
+
+    }
+    .register:hover{
+        text-decoration: underline;
+        color: red;
+    }
+</style>
 <body>
     <div class="container">
         <!-- Cột trái: Hình ảnh -->
@@ -36,6 +59,8 @@
                 </div>
 
                 <button onclick="handleLogin()">Login</button>
+                <p class="register-link">Don't have an account? <a href="/view/register" class="register">Register</a></p>
+
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -47,7 +72,9 @@
 
             try{
                 const response = await axios.post('/api/v1/auth/signin', { email, password });
+                console.log(response.data.user.role)
                 localStorage.setItem('token', response.data.accessToken);
+                localStorage.setItem('role', response.data.user.role)
                 window.location.href = "/view/home";
             }
             catch(error){
