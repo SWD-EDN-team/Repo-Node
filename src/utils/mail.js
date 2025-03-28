@@ -64,3 +64,6 @@ export const generateEmailTemplate = (OTP, name) => {
 </html>
 `;
 };
+
+
+//
